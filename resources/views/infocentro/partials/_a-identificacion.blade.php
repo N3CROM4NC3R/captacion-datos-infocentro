@@ -3,32 +3,12 @@
         {{ __('Sección A. Identificación del infocentro') }}
     </h3>
 
-    <dl class="mt-4 grid gap-4 rounded-lg bg-gray-50 dark:bg-gray-700/40 p-4 sm:grid-cols-3">
+    <dl class="mt-4 rounded-lg bg-gray-50 dark:bg-gray-700/40 p-4">
         <div>
             <dt class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Código') }}</dt>
             <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $infocentro->codigo }}</dd>
         </div>
-        <div>
-            <dt class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Estatus') }}</dt>
-            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                @if ($infocentro->activo)
-                    <span class="text-green-600 dark:text-green-400">{{ __('Activo') }}</span>
-                @else
-                    <span class="text-red-600 dark:text-red-400">{{ __('Inactivo') }}</span>
-                @endif
-            </dd>
-        </div>
-        <div>
-            <dt class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Teléfono de contacto') }}</dt>
-            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $infocentro->telefono ?: '—' }}</dd>
-        </div>
     </dl>
-
-    @if (! $infocentro->activo && $infocentro->razon_cierre)
-        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">
-            <span class="font-medium">{{ __('Razón de cierre') }}:</span> {{ $infocentro->razon_cierre }}
-        </p>
-    @endif
 
     <div class="mt-6 grid gap-6 sm:grid-cols-2">
         <div>
@@ -95,31 +75,52 @@
         </div>
 
         <div>
-            <x-input-label for="latitud" :value="__('A.9. Coordenadas GPS — Latitud')" />
+            <x-input-label for="telefono" :value="__('A.9. Teléfono de contacto')" />
+            <x-text-input id="telefono" name="telefono" type="text" class="mt-1 block w-full" :value="old('telefono', $infocentro->telefono)" />
+            <x-input-error class="mt-2" :messages="$errors->get('telefono')" />
+        </div>
+
+        <div>
+            <x-input-label for="activo" :value="__('A.10. Estatus')" />
+            <x-select-input id="activo" name="activo" class="mt-1 block w-full" x-model="activo">
+                <option value="1">{{ __('Activo') }}</option>
+                <option value="0">{{ __('Inactivo') }}</option>
+            </x-select-input>
+            <x-input-error class="mt-2" :messages="$errors->get('activo')" />
+        </div>
+
+        <div x-show="activo === '0'" x-cloak>
+            <x-input-label for="razon_cierre" :value="__('A.11. Razón del estatus inactivo')" />
+            <x-text-input id="razon_cierre" name="razon_cierre" type="text" class="mt-1 block w-full" :value="old('razon_cierre', $infocentro->razon_cierre)" />
+            <x-input-error class="mt-2" :messages="$errors->get('razon_cierre')" />
+        </div>
+
+        <div>
+            <x-input-label for="latitud" :value="__('A.12. Coordenadas GPS — Latitud')" />
             <x-text-input id="latitud" name="latitud" type="number" step="any" min="-90" max="90" class="mt-1 block w-full" :value="old('latitud', $infocentro->latitud)" />
             <x-input-error class="mt-2" :messages="$errors->get('latitud')" />
         </div>
 
         <div>
-            <x-input-label for="longitud" :value="__('A.10. Coordenadas GPS — Longitud')" />
+            <x-input-label for="longitud" :value="__('A.13. Coordenadas GPS — Longitud')" />
             <x-text-input id="longitud" name="longitud" type="number" step="any" min="-180" max="180" class="mt-1 block w-full" :value="old('longitud', $infocentro->longitud)" />
             <x-input-error class="mt-2" :messages="$errors->get('longitud')" />
         </div>
 
         <div>
-            <x-input-label for="fecha_diagnostico" :value="__('A.11. Fecha del diagnóstico')" />
+            <x-input-label for="fecha_diagnostico" :value="__('A.14. Fecha del diagnóstico')" />
             <x-text-input id="fecha_diagnostico" name="fecha_diagnostico" type="date" class="mt-1 block w-full" :value="old('fecha_diagnostico', $infocentro->fecha_diagnostico?->format('Y-m-d'))" />
             <x-input-error class="mt-2" :messages="$errors->get('fecha_diagnostico')" />
         </div>
 
         <div>
-            <x-input-label for="nombre_diagnosticador" :value="__('A.12. Nombre del diagnosticador')" />
+            <x-input-label for="nombre_diagnosticador" :value="__('A.15. Nombre del diagnosticador')" />
             <x-text-input id="nombre_diagnosticador" name="nombre_diagnosticador" type="text" class="mt-1 block w-full" :value="old('nombre_diagnosticador', $infocentro->nombre_diagnosticador)" />
             <x-input-error class="mt-2" :messages="$errors->get('nombre_diagnosticador')" />
         </div>
 
         <div>
-            <x-input-label for="cargo_institucion" :value="__('A.13. Cargo / Institución')" />
+            <x-input-label for="cargo_institucion" :value="__('A.16. Cargo / Institución')" />
             <x-text-input id="cargo_institucion" name="cargo_institucion" type="text" class="mt-1 block w-full" :value="old('cargo_institucion', $infocentro->cargo_institucion)" />
             <x-input-error class="mt-2" :messages="$errors->get('cargo_institucion')" />
         </div>

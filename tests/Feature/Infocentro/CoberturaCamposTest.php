@@ -7,10 +7,11 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Campos que la ficha muestra pero no debe escribir.
  *
- * Los gestiona el panel de administración: el código identifica el registro y
- * el estatus con su razón de cierre es un control administrativo.
+ * El código identifica el registro y no se edita desde ningún formulario: lo
+ * asigna el archivo maestro y por eso queda fuera del alcance de quien llena la
+ * ficha, tanto en el panel de administración como aquí.
  */
-$camposSoloAdmin = ['codigo', 'activo', 'razon_cierre'];
+$camposSoloAdmin = ['codigo'];
 
 test('todo campo que la ficha edita tiene regla de validación', function () use ($camposSoloAdmin) {
     $editables = collect((new Infocentro)->getFillable())

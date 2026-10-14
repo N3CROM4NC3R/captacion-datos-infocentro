@@ -44,6 +44,15 @@ class GuardarDiagnosticoRequest extends FormRequest
             'nombre' => ['required', 'string', 'max:255'],
             'direccion' => ['nullable', 'string', 'max:255'],
             'telefono' => ['nullable', 'string', 'max:20'],
+            'activo' => ['required', 'boolean'],
+            // Un infocentro inactivo necesita motivo: sin él el panel de
+            // administración no puede distinguir un cierre de una baja temporal.
+            'razon_cierre' => [
+                Rule::requiredIf(fn (): bool => ! $this->boolean('activo')),
+                'nullable',
+                'string',
+                'max:255',
+            ],
             'estado_id' => ['nullable', 'integer', 'exists:estados,id'],
             'municipio_id' => [
                 'nullable',
@@ -304,6 +313,7 @@ class GuardarDiagnosticoRequest extends FormRequest
             'acomp_fundacite_detalle.required' => 'Indica en qué Consistió el acompañamiento de Fundacite.',
             'ciencia_ciudadana_detalle.required' => 'Indica cuáles son esas experiencias previas.',
             'problemas_otros.required' => 'Especifica cuáles son los otros problemas identificados.',
+            'razon_cierre.required' => 'Indica por qué el infocentro está inactivo.',
         ];
     }
 

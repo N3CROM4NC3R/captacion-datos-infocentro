@@ -177,6 +177,13 @@ class DiagnosticoController extends Controller
                 'vinculacion_mincyt' => $request->boolean('vinculacion_mincyt'),
                 'acomp_fundacite' => $request->boolean('acomp_fundacite'),
                 'ciencia_ciudadana' => $request->boolean('ciencia_ciudadana'),
+                // El select de estatus llega como "1" o "0", así que el booleano
+                // hay que resolverlo a mano. La razón solo aplica mientras el
+                // infocentro esté inactivo: reactivarlo la deja obsoleta.
+                'activo' => $request->boolean('activo'),
+                'razon_cierre' => $request->boolean('activo')
+                    ? null
+                    : $this->textoOpcional($request->input('razon_cierre')),
             ]);
 
             // La ficha captura el estado completo en cada guardado, así que cada

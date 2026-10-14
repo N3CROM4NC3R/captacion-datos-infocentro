@@ -130,6 +130,9 @@
                 vinculacionMincyt: @json((bool) old('vinculacion_mincyt', $infocentro->vinculacion_mincyt)),
                 acompFundacite: @json((bool) old('acomp_fundacite', $infocentro->acomp_fundacite)),
                 cienciaCiudadana: @json((bool) old('ciencia_ciudadana', $infocentro->ciencia_ciudadana)),
+                // El select de estatus manda "1" o "0" como texto, no como
+                // booleano: Alpine tiene que comparar contra el string real.
+                estatusActivo: @js((string) old('activo', $infocentro->activo ? '1' : '0')),
                 vinculos: @js($vinculaciones),
                 estadosProyecto: @js(\App\Enums\EstadoProyectoMincytEnum::options()),
                 problemas: @js(old('problemas', $infocentro->problemas ?? [])),

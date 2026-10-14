@@ -31,6 +31,7 @@ function ficha(array $campos = []): array
         'estado_id' => $estado->id,
         'municipio_id' => $municipio->id,
         'parroquia_id' => $parroquia->id,
+        'activo' => '1',
         'tiene_facilitador_titular' => '0',
     ], $campos);
 }
@@ -151,24 +152,58 @@ test('se guardan los datos de identificación', function () {
         ->and($infocentro->cargo_institucion)->toBe('Facilitadora');
 });
 
-test('el código y el estatus se muestran pero no se editan desde la ficha', function () {
+test('el código se muestra pero no se edita desde la ficha', function () {
     $user = InfocentroUserFactory::new()->create();
-    $user->infocentro->update(['activo' => false, 'razon_cierre' => 'Incendio']);
 
-    $response = $this->actingAs($user)->get('/infocentro/diagnostico');
-
-    $response->assertOk()->assertSee('INF-', false);
-    $response->assertSee(__('Incendio'));
+    $this->actingAs($user)->get('/infocentro/diagnostico')
+        ->assertOk()
+        ->assertSee('INF-', false);
 
     $this->actingAs($user)->put('/infocentro/diagnostico', ficha([
         'codigo' => 'HACKED',
-        'activo' => '1',
+    ]))->assertSessionHasNoErrors();
+
+    expect($user->infocentro->refresh()->codigo)->not->toBe('HACKED');
+});
+
+test('el estatus y el teléfono de contacto se editan desde la ficha', function () {
+    $user = InfocentroUserFactory::new()->create();
+
+    $this->actingAs($user)->put('/infocentro/diagnostico', ficha([
+        'telefono' => '04121234567',
+        'activo' => '0',
+        'razon_cierre' => 'Incendio',
     ]))->assertSessionHasNoErrors();
 
     $infocentro = $user->infocentro->refresh();
 
-    expect($infocentro->codigo)->not->toBe('HACKED')
-        ->and($infocentro->activo)->toBeFalse();
+    expect($infocentro->telefono)->toBe('04121234567')
+        ->and($infocentro->activo)->toBeFalse()
+        ->and($infocentro->razon_cierre)->toBe('Incendio');
+});
+
+test('marcar el infocentro inactivo exige indicar la razón del cierre', function () {
+    $user = InfocentroUserFactory::new()->create();
+
+    $this->actingAs($user)->put('/infocentro/diagnostico', ficha([
+        'activo' => '0',
+        'razon_cierre' => '',
+    ]))->assertSessionHasErrors([
+        'razon_cierre' => 'Indica por qué el infocentro está inactivo.',
+    ]);
+});
+
+test('reactivar el infocentro deja la razón de cierre sin valor', function () {
+    $user = InfocentroUserFactory::new()->create();
+    $user->infocentro->update(['activo' => false, 'razon_cierre' => 'Incendio']);
+
+    $this->actingAs($user)->put('/infocentro/diagnostico', ficha([
+        'activo' => '1',
+    ]))->assertSessionHasNoErrors();
+
+    expect($user->infocentro->refresh())
+        ->activo->toBeTrue()
+        ->razon_cierre->toBeNull();
 });
 
 test('el municipio debe pertenecer al estado seleccionado', function () {

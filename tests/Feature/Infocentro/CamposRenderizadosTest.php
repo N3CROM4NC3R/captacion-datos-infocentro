@@ -158,6 +158,7 @@ test('los campos numéricos y de texto de F y G aceptan el valor guardado', func
     $this->actingAs($user)->put('/infocentro/diagnostico', [
         'nombre' => 'Infocentro',
         'estado_id' => Estado::factory()->create()->id,
+        'activo' => '1',
         'equipos' => [
             'cantidad' => ['computadoras' => 12],
             'funcionando' => ['computadoras' => 9],

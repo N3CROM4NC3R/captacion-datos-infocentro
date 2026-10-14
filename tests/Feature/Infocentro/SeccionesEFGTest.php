@@ -29,6 +29,7 @@ function fichaExtendida(array $campos = []): array
     return array_merge([
         'nombre' => 'Infocentro',
         'estado_id' => $estado->id,
+        'activo' => '1',
     ], $campos);
 }
 

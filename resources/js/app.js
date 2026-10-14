@@ -113,6 +113,7 @@ document.addEventListener('alpine:init', () => {
             consultasPopulares: config.consultasPopulares ?? '',
             ofertaAnual: config.ofertaAnual ?? '',
             suficienciaEquipo: config.suficienciaEquipo ?? '',
+            activo: config.estatusActivo ?? '1',
 
             get proveedorNecesitaNombre() {
                 return requiereNombre(this.proveedor);

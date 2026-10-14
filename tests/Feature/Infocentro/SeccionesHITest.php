@@ -17,6 +17,7 @@ function fichaHI(array $campos = []): array
     return array_merge([
         'nombre' => 'Infocentro',
         'estado_id' => Estado::factory()->create()->id,
+        'activo' => '1',
     ], $campos);
 }
 
