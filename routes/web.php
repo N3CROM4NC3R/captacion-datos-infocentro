@@ -9,9 +9,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// La raíz es solo la puerta de entrada: la aplicación no tiene landing
+// pública, así que se manda al login.
+Route::get('/', fn () => redirect()->route('login'));
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function (Request $request) {
