@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Enums;
+
+use App\Enums\Concerns\ProvidesOptions;
+
+/**
+ * Tipos de equipamiento inventariado en la sección G.
+ */
+enum TipoEquipoEnum: string
+{
+    use ProvidesOptions;
+
+    case Computadoras = 'computadoras';
+    case TelescopiosPortatiles = 'telescopios_portatiles';
+    case KitsRobotica = 'kits_robotica';
+    case ModemRouter = 'modem_router';
+    case Otros = 'otros';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::Computadoras => 'Computadoras',
+            self::TelescopiosPortatiles => 'Telescopios portátiles',
+            self::KitsRobotica => 'Kits de robótica',
+            self::ModemRouter => 'Modem / Router',
+            self::Otros => 'Otros equipos',
+        };
+    }
+
+    /**
+     * Determine whether this equipment tracks working vs out-of-service units.
+     */
+    public function tieneDesglose(): bool
+    {
+        return $this === self::Computadoras;
+    }
+
+    /**
+     * Get the label of the variable field this equipment asks for.
+     */
+    public function etiquetaDetalle(): string
+    {
+        return match ($this) {
+            self::Computadoras => 'Sistema operativo / tipo de equipos',
+            self::KitsRobotica => 'Tipo de kits',
+            self::Otros => 'Especificar',
+            default => 'Detalle',
+        };
+    }
+
+    /**
+     * Determine whether "no tiene" is a valid state for this equipment.
+     */
+    public function admiteNoTiene(): bool
+    {
+        return $this !== self::Computadoras;
+    }
+}

@@ -1,0 +1,2933 @@
+[
+  {
+    "nombre": "Amazonas",
+    "municipios": [
+      {
+        "nombre": "Alto Orinoco",
+        "parroquias": [
+          "Alto Orinoco",
+          "Huachamacare Acanaña",
+          "Marawaka Toky Shamanaña",
+          "Mavaka Mavaka",
+          "Sierra Parima Parimabé"
+        ]
+      },
+      {
+        "nombre": "Atabapo",
+        "parroquias": [
+          "Ucata Laja Lisa",
+          "Yapacana Macuruco",
+          "Caname Guarinuma"
+        ]
+      },
+      {
+        "nombre": "Atures",
+        "parroquias": [
+          "Fernando Girón Tovar",
+          "Luis Alberto Gómez",
+          "Pahueña Limón de Parhueña",
+          "Platanillal Platanillal"
+        ]
+      },
+      {
+        "nombre": "Autana",
+        "parroquias": [
+          "Samariapo",
+          "Sipapo",
+          "Munduapo",
+          "Guayapo"
+        ]
+      },
+      {
+        "nombre": "Manapiare",
+        "parroquias": [
+          "Alto Ventuari",
+          "Medio Ventuari",
+          "Bajo Ventuari"
+        ]
+      },
+      {
+        "nombre": "Maroa",
+        "parroquias": [
+          "Victorino",
+          "Comunidad"
+        ]
+      },
+      {
+        "nombre": "Río Negro",
+        "parroquias": [
+          "Casiquiare",
+          "Cocuy",
+          "San Carlos de Río Negro",
+          "Solano"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Anzoátegui",
+    "municipios": [
+      {
+        "nombre": "Anaco",
+        "parroquias": [
+          "Anaco",
+          "San Joaquín"
+        ]
+      },
+      {
+        "nombre": "Aragua",
+        "parroquias": [
+          "Cachipo",
+          "Aragua de Barcelona"
+        ]
+      },
+      {
+        "nombre": "Manuel Ezequiel Bruzual",
+        "parroquias": [
+          "Clarines",
+          "Guanape",
+          "Sabana de Uchire"
+        ]
+      },
+      {
+        "nombre": "Diego Bautista Urbaneja",
+        "parroquias": [
+          "Lechería",
+          "El Morro"
+        ]
+      },
+      {
+        "nombre": "Fernando Peñalver",
+        "parroquias": [
+          "Puerto Píritu",
+          "San Miguel",
+          "Sucre"
+        ]
+      },
+      {
+        "nombre": "Francisco Del Carmen Carvajal",
+        "parroquias": [
+          "Valle de Guanape",
+          "Santa Bárbara"
+        ]
+      },
+      {
+        "nombre": "General Sir Arthur McGregor",
+        "parroquias": [
+          "El Chaparro",
+          "Tomás Alfaro",
+          "Calatrava"
+        ]
+      },
+      {
+        "nombre": "Guanta",
+        "parroquias": [
+          "Guanta",
+          "Chorrerón"
+        ]
+      },
+      {
+        "nombre": "Independencia",
+        "parroquias": [
+          "Mamo",
+          "Soledad"
+        ]
+      },
+      {
+        "nombre": "José Gregorio Monagas",
+        "parroquias": [
+          "Mapire",
+          "Piar",
+          "Santa Clara",
+          "San Diego de Cabrutica",
+          "Uverito",
+          "Zuata"
+        ]
+      },
+      {
+        "nombre": "Juan Antonio Sotillo",
+        "parroquias": [
+          "Puerto La Cruz",
+          "Pozuelos"
+        ]
+      },
+      {
+        "nombre": "Juan Manuel Cajigal",
+        "parroquias": [
+          "Onoto",
+          "San Pablo"
+        ]
+      },
+      {
+        "nombre": "Libertad",
+        "parroquias": [
+          "San Mateo",
+          "El Carito",
+          "Santa Inés",
+          "La Romereña"
+        ]
+      },
+      {
+        "nombre": "Francisco de Miranda",
+        "parroquias": [
+          "Atapirire",
+          "Boca del Pao",
+          "El Pao",
+          "Pariaguán"
+        ]
+      },
+      {
+        "nombre": "Pedro María Freites",
+        "parroquias": [
+          "Cantaura",
+          "Libertador",
+          "Santa Rosa",
+          "Urica"
+        ]
+      },
+      {
+        "nombre": "Píritu",
+        "parroquias": [
+          "Píritu",
+          "San Francisco"
+        ]
+      },
+      {
+        "nombre": "San José de Guanipa",
+        "parroquias": [
+          "San José de Guanipa"
+        ]
+      },
+      {
+        "nombre": "San Juan de Capistrano",
+        "parroquias": [
+          "Boca de Uchire",
+          "Boca de Chávez"
+        ]
+      },
+      {
+        "nombre": "Santa Ana",
+        "parroquias": [
+          "Pueblo Nuevo",
+          "Santa Ana"
+        ]
+      },
+      {
+        "nombre": "Simón Bolívar",
+        "parroquias": [
+          "Bergantín",
+          "Caigua",
+          "El Carmen",
+          "El Pilar",
+          "Naricual",
+          "San Crsitóbal"
+        ]
+      },
+      {
+        "nombre": "Simón Rodríguez",
+        "parroquias": [
+          "Edmundo Barrios",
+          "Miguel Otero Silva"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Apure",
+    "municipios": [
+      {
+        "nombre": "Achaguas",
+        "parroquias": [
+          "Achaguas",
+          "Apurito",
+          "El Yagual",
+          "Guachara",
+          "Mucuritas",
+          "Queseras del medio"
+        ]
+      },
+      {
+        "nombre": "Biruaca",
+        "parroquias": [
+          "Biruaca"
+        ]
+      },
+      {
+        "nombre": "Muñóz",
+        "parroquias": [
+          "Bruzual",
+          "Mantecal",
+          "Quintero",
+          "Rincón Hondo",
+          "San Vicente"
+        ]
+      },
+      {
+        "nombre": "Páez",
+        "parroquias": [
+          "Guasdualito",
+          "Aramendi",
+          "El Amparo",
+          "San Camilo",
+          "Urdaneta"
+        ]
+      },
+      {
+        "nombre": "Pedro Camejo",
+        "parroquias": [
+          "San Juan de Payara",
+          "Codazzi",
+          "Cunaviche"
+        ]
+      },
+      {
+        "nombre": "Rómulo Gallegos",
+        "parroquias": [
+          "Elorza",
+          "La Trinidad"
+        ]
+      },
+      {
+        "nombre": "San Fernando",
+        "parroquias": [
+          "San Fernando",
+          "El Recreo",
+          "Peñalver",
+          "San Rafael de Atamaica"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Aragua",
+    "municipios": [
+      {
+        "nombre": "Atanasio Girardot",
+        "parroquias": [
+          "Pedro José Ovalles",
+          "Joaquín Crespo",
+          "José Casanova Godoy",
+          "Madre María de San José",
+          "Andrés Eloy Blanco",
+          "Los Tacarigua",
+          "Las Delicias",
+          "Choroní"
+        ]
+      },
+      {
+        "nombre": "Bolívar",
+        "parroquias": [
+          "Bolívar"
+        ]
+      },
+      {
+        "nombre": "Camatagua",
+        "parroquias": [
+          "Camatagua",
+          "Carmen de Cura"
+        ]
+      },
+      {
+        "nombre": "Francisco Linares Alcántara",
+        "parroquias": [
+          "Santa Rita",
+          "Francisco de Miranda",
+          "Moseñor Feliciano González"
+        ]
+      },
+      {
+        "nombre": "José Ángel Lamas",
+        "parroquias": [
+          "Santa Cruz"
+        ]
+      },
+      {
+        "nombre": "José Félix Ribas",
+        "parroquias": [
+          "José Félix Ribas",
+          "Castor Nieves Ríos",
+          "Las Guacamayas",
+          "Pao de Zárate",
+          "Zuata"
+        ]
+      },
+      {
+        "nombre": "José Rafael Revenga",
+        "parroquias": [
+          "José Rafael Revenga"
+        ]
+      },
+      {
+        "nombre": "Libertador",
+        "parroquias": [
+          "Palo Negro",
+          "San Martín de Porres"
+        ]
+      },
+      {
+        "nombre": "Mario Briceño Iragorry",
+        "parroquias": [
+          "El Limón",
+          "Caña de Azúcar"
+        ]
+      },
+      {
+        "nombre": "Ocumare de la Costa de Oro",
+        "parroquias": [
+          "Ocumare de la Costa"
+        ]
+      },
+      {
+        "nombre": "San Casimiro",
+        "parroquias": [
+          "San Casimiro",
+          "Güiripa",
+          "Ollas de Caramacate",
+          "Valle Morín"
+        ]
+      },
+      {
+        "nombre": "San Sebastián",
+        "parroquias": [
+          "San Sebastían"
+        ]
+      },
+      {
+        "nombre": "Santiago Mariño",
+        "parroquias": [
+          "Turmero",
+          "Arevalo Aponte",
+          "Chuao",
+          "Samán de Güere",
+          "Alfredo Pacheco Miranda"
+        ]
+      },
+      {
+        "nombre": "Santos Michelena",
+        "parroquias": [
+          "Santos Michelena",
+          "Tiara"
+        ]
+      },
+      {
+        "nombre": "Sucre",
+        "parroquias": [
+          "Cagua",
+          "Bella Vista"
+        ]
+      },
+      {
+        "nombre": "Tovar",
+        "parroquias": [
+          "Tovar"
+        ]
+      },
+      {
+        "nombre": "Urdaneta",
+        "parroquias": [
+          "Urdaneta",
+          "Las Peñitas",
+          "San Francisco de Cara",
+          "Taguay"
+        ]
+      },
+      {
+        "nombre": "Zamora",
+        "parroquias": [
+          "Zamora",
+          "Magdaleno",
+          "San Francisco de Asís",
+          "Valles de Tucutunemo",
+          "Augusto Mijares"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Barinas",
+    "municipios": [
+      {
+        "nombre": "Alberto Arvelo Torrealba",
+        "parroquias": [
+          "Sabaneta",
+          "Juan Antonio Rodríguez Domínguez"
+        ]
+      },
+      {
+        "nombre": "Andrés Eloy Blanco",
+        "parroquias": [
+          "El Cantón",
+          "Santa Cruz de Guacas",
+          "Puerto Vivas"
+        ]
+      },
+      {
+        "nombre": "Antonio José de Sucre",
+        "parroquias": [
+          "Ticoporo",
+          "Nicolás Pulido",
+          "Andrés Bello"
+        ]
+      },
+      {
+        "nombre": "Arismendi",
+        "parroquias": [
+          "Arismendi",
+          "Guadarrama",
+          "La Unión",
+          "San Antonio"
+        ]
+      },
+      {
+        "nombre": "Barinas",
+        "parroquias": [
+          "Barinas",
+          "Alberto Arvelo Larriva",
+          "San Silvestre",
+          "Santa Inés",
+          "Santa Lucía",
+          "Torumos",
+          "El Carmen",
+          "Rómulo Betancourt",
+          "Corazón de Jesús",
+          "Ramón Ignacio Méndez",
+          "Alto Barinas",
+          "Manuel Palacio Fajardo",
+          "Juan Antonio Rodríguez Domínguez",
+          "Dominga Ortiz de Páez"
+        ]
+      },
+      {
+        "nombre": "Bolívar",
+        "parroquias": [
+          "Barinitas",
+          "Altamira de Cáceres",
+          "Calderas"
+        ]
+      },
+      {
+        "nombre": "Cruz Paredes",
+        "parroquias": [
+          "Barrancas",
+          "El Socorro",
+          "Mazparrito"
+        ]
+      },
+      {
+        "nombre": "Ezequiel Zamora",
+        "parroquias": [
+          "Santa Bárbara",
+          "Pedro Briceño Méndez",
+          "Ramón Ignacio Méndez",
+          "José Ignacio del Pumar"
+        ]
+      },
+      {
+        "nombre": "Obispos",
+        "parroquias": [
+          "Obispos",
+          "Guasimitos",
+          "El Real",
+          "La Luz"
+        ]
+      },
+      {
+        "nombre": "Pedraza",
+        "parroquias": [
+          "Ciudad Bolívia",
+          "José Ignacio Briceño",
+          "José Félix Ribas",
+          "Páez"
+        ]
+      },
+      {
+        "nombre": "Rojas",
+        "parroquias": [
+          "Libertad",
+          "Dolores",
+          "Santa Rosa",
+          "Palacio Fajardo"
+        ]
+      },
+      {
+        "nombre": "Sosa",
+        "parroquias": [
+          "Ciudad de Nutrias",
+          "El Regalo",
+          "Puerto Nutrias",
+          "Santa Catalina"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Bolívar",
+    "municipios": [
+      {
+        "nombre": "Caroní",
+        "parroquias": [
+          "Cachamay",
+          "Chirica",
+          "Dalla Costa",
+          "Once de Abril",
+          "Simón Bolívar",
+          "Unare",
+          "Universidad",
+          "Vista al Sol",
+          "Pozo Verde",
+          "Yocoima",
+          "5 de Julio"
+        ]
+      },
+      {
+        "nombre": "Cedeño",
+        "parroquias": [
+          "Cedeño",
+          "Altagracia",
+          "Ascensión Farreras",
+          "Guaniamo",
+          "La Urbana",
+          "Pijiguaos"
+        ]
+      },
+      {
+        "nombre": "El Callao",
+        "parroquias": [
+          "El Callao"
+        ]
+      },
+      {
+        "nombre": "Gran Sabana",
+        "parroquias": [
+          "Gran Sabana",
+          "Ikabarú"
+        ]
+      },
+      {
+        "nombre": "Heres",
+        "parroquias": [
+          "Catedral",
+          "Zea",
+          "Orinoco",
+          "José Antonio Páez",
+          "Marhuanta",
+          "Agua Salada",
+          "Vista Hermosa",
+          "La Sabanita",
+          "Panapana"
+        ]
+      },
+      {
+        "nombre": "Piar",
+        "parroquias": [
+          "Andrés Eloy Blanco",
+          "Pedro Cova"
+        ]
+      },
+      {
+        "nombre": "Angostura (Raúl Leoni)",
+        "parroquias": [
+          "Raúl Leoni",
+          "Barceloneta",
+          "Santa Bárbara",
+          "San Francisco"
+        ]
+      },
+      {
+        "nombre": "Roscio",
+        "parroquias": [
+          "Roscio",
+          "Salóm"
+        ]
+      },
+      {
+        "nombre": "Sifontes",
+        "parroquias": [
+          "Sifontes",
+          "Dalla Costa",
+          "San Isidro"
+        ]
+      },
+      {
+        "nombre": "Sucre",
+        "parroquias": [
+          "Sucre",
+          "Aripao",
+          "Guarataro",
+          "Las Majadas",
+          "Moitaco"
+        ]
+      },
+      {
+        "nombre": "Padre Pedro Chien",
+        "parroquias": [
+          "Padre Pedro Chien",
+          "Río Grande"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Carabobo",
+    "municipios": [
+      {
+        "nombre": "Bejuma",
+        "parroquias": [
+          "Bejuma",
+          "Canoabo",
+          "Simón Bolívar"
+        ]
+      },
+      {
+        "nombre": "Carlos Arvelo",
+        "parroquias": [
+          "Güigüe",
+          "Carabobo",
+          "Tacarigua"
+        ]
+      },
+      {
+        "nombre": "Diego Ibarra",
+        "parroquias": [
+          "Mariara",
+          "Aguas Calientes"
+        ]
+      },
+      {
+        "nombre": "Guacara",
+        "parroquias": [
+          "Ciudad Alianza",
+          "Guacara",
+          "Yagua"
+        ]
+      },
+      {
+        "nombre": "Juan José Mora",
+        "parroquias": [
+          "Morón",
+          "Yagua"
+        ]
+      },
+      {
+        "nombre": "Libertador",
+        "parroquias": [
+          "Tocuyito",
+          "Independencia"
+        ]
+      },
+      {
+        "nombre": "Los Guayos",
+        "parroquias": [
+          "Los Guayos"
+        ]
+      },
+      {
+        "nombre": "Miranda",
+        "parroquias": [
+          "Miranda"
+        ]
+      },
+      {
+        "nombre": "Montalbán",
+        "parroquias": [
+          "Montalbán"
+        ]
+      },
+      {
+        "nombre": "Naguanagua",
+        "parroquias": [
+          "Naguanagua"
+        ]
+      },
+      {
+        "nombre": "Puerto Cabello",
+        "parroquias": [
+          "Bartolomé Salóm",
+          "Democracia",
+          "Fraternidad",
+          "Goaigoaza",
+          "Juan José Flores",
+          "Unión",
+          "Borburata",
+          "Patanemo"
+        ]
+      },
+      {
+        "nombre": "San Diego",
+        "parroquias": [
+          "San Diego"
+        ]
+      },
+      {
+        "nombre": "San Joaquín",
+        "parroquias": [
+          "San Joaquín"
+        ]
+      },
+      {
+        "nombre": "Valencia",
+        "parroquias": [
+          "Candelaria",
+          "Catedral",
+          "El Socorro",
+          "Miguel Peña",
+          "Rafael Urdaneta",
+          "San Blas",
+          "San José",
+          "Santa Rosa",
+          "Negro Primero"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Cojedes",
+    "municipios": [
+      {
+        "nombre": "Anzoátegui",
+        "parroquias": [
+          "Cojedes",
+          "Juan de Mata Suárez"
+        ]
+      },
+      {
+        "nombre": "Tinaquillo",
+        "parroquias": [
+          "Tinaquillo"
+        ]
+      },
+      {
+        "nombre": "Girardot",
+        "parroquias": [
+          "El Baúl",
+          "Sucre"
+        ]
+      },
+      {
+        "nombre": "Lima Blanco",
+        "parroquias": [
+          "La Aguadita",
+          "Macapo"
+        ]
+      },
+      {
+        "nombre": "Pao de San Juan Bautista",
+        "parroquias": [
+          "El Pao"
+        ]
+      },
+      {
+        "nombre": "Ricaurte",
+        "parroquias": [
+          "El Amparo",
+          "Libertad de Cojedes"
+        ]
+      },
+      {
+        "nombre": "Rómulo Gallegos",
+        "parroquias": [
+          "Rómulo Gallegos"
+        ]
+      },
+      {
+        "nombre": "San Carlos",
+        "parroquias": [
+          "San Carlos de Austria",
+          "Juan Ángel Bravo",
+          "Manuel Manrique"
+        ]
+      },
+      {
+        "nombre": "Tinaco",
+        "parroquias": [
+          "General en Jefe José Laurencio Silva"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Delta Amacuro",
+    "municipios": [
+      {
+        "nombre": "Antonio Díaz",
+        "parroquias": [
+          "Curiapo",
+          "Almirante Luis Brión",
+          "Francisco Aniceto Lugo",
+          "Manuel Renaud",
+          "Padre Barral",
+          "Santos de Abelgas"
+        ]
+      },
+      {
+        "nombre": "Casacoima",
+        "parroquias": [
+          "Imataca",
+          "Cinco de Julio",
+          "Juan Bautista Arismendi",
+          "Manuel Piar",
+          "Rómulo Gallegos"
+        ]
+      },
+      {
+        "nombre": "Pedernales",
+        "parroquias": [
+          "Pedernales",
+          "Luis Beltrán Prieto Figueroa"
+        ]
+      },
+      {
+        "nombre": "Tucupita",
+        "parroquias": [
+          "San José (Delta Amacuro)",
+          "José Vidal Marcano",
+          "Juan Millán",
+          "Leonardo Ruíz Pineda",
+          "Mariscal Antonio José de Sucre",
+          "Monseñor Argimiro García",
+          "San Rafael (Delta Amacuro)",
+          "Virgen del Valle"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Falcón",
+    "municipios": [
+      {
+        "nombre": "Acosta",
+        "parroquias": [
+          "Capadare",
+          "La Pastora",
+          "Libertador",
+          "San Juan de los Cayos"
+        ]
+      },
+      {
+        "nombre": "Bolívar",
+        "parroquias": [
+          "Aracua",
+          "La Peña",
+          "San Luis"
+        ]
+      },
+      {
+        "nombre": "Buchivacoa",
+        "parroquias": [
+          "Bariro",
+          "Borojó",
+          "Capatárida",
+          "Guajiro",
+          "Seque",
+          "Zazárida",
+          "Valle de Eroa"
+        ]
+      },
+      {
+        "nombre": "Cacique Manaure",
+        "parroquias": [
+          "Cacique Manaure"
+        ]
+      },
+      {
+        "nombre": "Carirubana",
+        "parroquias": [
+          "Norte",
+          "Carirubana",
+          "Santa Ana",
+          "Urbana Punta Cardón"
+        ]
+      },
+      {
+        "nombre": "Colina",
+        "parroquias": [
+          "La Vela de Coro",
+          "Acurigua",
+          "Guaibacoa",
+          "Las Calderas",
+          "Macoruca"
+        ]
+      },
+      {
+        "nombre": "Dabajuro",
+        "parroquias": [
+          "Dabajuro"
+        ]
+      },
+      {
+        "nombre": "Democracia",
+        "parroquias": [
+          "Agua Clara",
+          "Avaria",
+          "Pedregal",
+          "Piedra Grande",
+          "Purureche"
+        ]
+      },
+      {
+        "nombre": "Falcón",
+        "parroquias": [
+          "Adaure",
+          "Adícora",
+          "Baraived",
+          "Buena Vista",
+          "Jadacaquiva",
+          "El Vínculo",
+          "El Hato",
+          "Moruy",
+          "Pueblo Nuevo"
+        ]
+      },
+      {
+        "nombre": "Federación",
+        "parroquias": [
+          "Agua Larga",
+          "El Paují",
+          "Independencia",
+          "Mapararí",
+          "Churuguara"
+        ]
+      },
+      {
+        "nombre": "Jacura",
+        "parroquias": [
+          "Agua Linda",
+          "Araurima",
+          "Jacura"
+        ]
+      },
+      {
+        "nombre": "José Laurencio Silva",
+        "parroquias": [
+          "Tucacas",
+          "Boca de Aroa"
+        ]
+      },
+      {
+        "nombre": "Los Taques",
+        "parroquias": [
+          "Los Taques",
+          "Judibana"
+        ]
+      },
+      {
+        "nombre": "Mauroa",
+        "parroquias": [
+          "Mene de Mauroa",
+          "San Félix",
+          "Casigua"
+        ]
+      },
+      {
+        "nombre": "Miranda",
+        "parroquias": [
+          "Guzmán Guillermo",
+          "Mitare",
+          "Río Seco",
+          "Sabaneta",
+          "San Antonio",
+          "San Gabriel",
+          "Santa Ana"
+        ]
+      },
+      {
+        "nombre": "Monseñor Iturriza",
+        "parroquias": [
+          "Boca del Tocuyo",
+          "Chichiriviche",
+          "Tocuyo de la Costa"
+        ]
+      },
+      {
+        "nombre": "Palmasola",
+        "parroquias": [
+          "Palmasola"
+        ]
+      },
+      {
+        "nombre": "Petit",
+        "parroquias": [
+          "Cabure",
+          "Colina",
+          "Curimagua"
+        ]
+      },
+      {
+        "nombre": "Píritu",
+        "parroquias": [
+          "San José de la Costa",
+          "Píritu"
+        ]
+      },
+      {
+        "nombre": "San Francisco",
+        "parroquias": [
+          "San Francisco"
+        ]
+      },
+      {
+        "nombre": "Sucre",
+        "parroquias": [
+          "Sucre",
+          "Pecaya"
+        ]
+      },
+      {
+        "nombre": "Tocópero",
+        "parroquias": [
+          "Tocópero"
+        ]
+      },
+      {
+        "nombre": "Unión",
+        "parroquias": [
+          "El Charal",
+          "Las Vegas del Tuy",
+          "Santa Cruz de Bucaral"
+        ]
+      },
+      {
+        "nombre": "Urumaco",
+        "parroquias": [
+          "Bruzual",
+          "Urumaco"
+        ]
+      },
+      {
+        "nombre": "Zamora",
+        "parroquias": [
+          "Puerto Cumarebo",
+          "La Ciénaga",
+          "La Soledad",
+          "Pueblo Cumarebo",
+          "Zazárida"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Guárico",
+    "municipios": [
+      {
+        "nombre": "Camaguán",
+        "parroquias": [
+          "Camaguán",
+          "Puerto Miranda",
+          "Uverito"
+        ]
+      },
+      {
+        "nombre": "Chaguaramas",
+        "parroquias": [
+          "Chaguaramas"
+        ]
+      },
+      {
+        "nombre": "El Socorro",
+        "parroquias": [
+          "El Socorro"
+        ]
+      },
+      {
+        "nombre": "José Félix Ribas",
+        "parroquias": [
+          "Tucupido",
+          "San Rafael de Laya"
+        ]
+      },
+      {
+        "nombre": "José Tadeo Monagas",
+        "parroquias": [
+          "Altagracia de Orituco",
+          "San Rafael de Orituco",
+          "San Francisco Javier de Lezama",
+          "Paso Real de Macaira",
+          "Carlos Soublette",
+          "San Francisco de Macaira",
+          "Libertad de Orituco"
+        ]
+      },
+      {
+        "nombre": "Juan Germán Roscio",
+        "parroquias": [
+          "Cantaclaro",
+          "San Juan de los Morros",
+          "Parapara"
+        ]
+      },
+      {
+        "nombre": "Julián Mellado",
+        "parroquias": [
+          "El Sombrero",
+          "Sosa"
+        ]
+      },
+      {
+        "nombre": "Las Mercedes",
+        "parroquias": [
+          "Las Mercedes",
+          "Cabruta",
+          "Santa Rita de Manapire"
+        ]
+      },
+      {
+        "nombre": "Leonardo Infante",
+        "parroquias": [
+          "Valle de la Pascua",
+          "Espino"
+        ]
+      },
+      {
+        "nombre": "Pedro Zaraza",
+        "parroquias": [
+          "San José de Unare",
+          "Zaraza"
+        ]
+      },
+      {
+        "nombre": "Ortíz",
+        "parroquias": [
+          "San José de Tiznados",
+          "San Francisco de Tiznados",
+          "San Lorenzo de Tiznados",
+          "Ortiz"
+        ]
+      },
+      {
+        "nombre": "San Gerónimo de Guayabal",
+        "parroquias": [
+          "Guayabal",
+          "Cazorla"
+        ]
+      },
+      {
+        "nombre": "San José de Guaribe",
+        "parroquias": [
+          "San José de Guaribe",
+          "Uveral"
+        ]
+      },
+      {
+        "nombre": "Santa María de Ipire",
+        "parroquias": [
+          "Santa María de Ipire",
+          "Altamira"
+        ]
+      },
+      {
+        "nombre": "Sebastián Francisco de Miranda",
+        "parroquias": [
+          "El Calvario",
+          "El Rastro",
+          "Guardatinajas",
+          "Capital Urbana Calabozo"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Lara",
+    "municipios": [
+      {
+        "nombre": "Andrés Eloy Blanco",
+        "parroquias": [
+          "Quebrada Honda de Guache",
+          "Pío Tamayo",
+          "Yacambú"
+        ]
+      },
+      {
+        "nombre": "Crespo",
+        "parroquias": [
+          "Fréitez",
+          "José María Blanco"
+        ]
+      },
+      {
+        "nombre": "Iribarren",
+        "parroquias": [
+          "Catedral",
+          "Concepción",
+          "El Cují",
+          "Juan de Villegas",
+          "Santa Rosa",
+          "Tamaca",
+          "Unión",
+          "Aguedo Felipe Alvarado",
+          "Buena Vista",
+          "Juárez"
+        ]
+      },
+      {
+        "nombre": "Jiménez",
+        "parroquias": [
+          "Juan Bautista Rodríguez",
+          "Cuara",
+          "Diego de Lozada",
+          "Paraíso de San José",
+          "San Miguel",
+          "Tintorero",
+          "José Bernardo Dorante",
+          "Coronel Mariano Peraza "
+        ]
+      },
+      {
+        "nombre": "Morán",
+        "parroquias": [
+          "Bolívar",
+          "Anzoátegui",
+          "Guarico",
+          "Hilario Luna y Luna",
+          "Humocaro Alto",
+          "Humocaro Bajo",
+          "La Candelaria",
+          "Morán"
+        ]
+      },
+      {
+        "nombre": "Palavecino",
+        "parroquias": [
+          "Cabudare",
+          "José Gregorio Bastidas",
+          "Agua Viva"
+        ]
+      },
+      {
+        "nombre": "Simón Planas",
+        "parroquias": [
+          "Sarare",
+          "Buría",
+          "Gustavo Vegas León"
+        ]
+      },
+      {
+        "nombre": "Torres",
+        "parroquias": [
+          "Trinidad Samuel",
+          "Antonio Díaz",
+          "Camacaro",
+          "Castañeda",
+          "Cecilio Zubillaga",
+          "Chiquinquirá",
+          "El Blanco",
+          "Espinoza de los Monteros",
+          "Lara",
+          "Las Mercedes",
+          "Manuel Morillo",
+          "Montaña Verde",
+          "Montes de Oca",
+          "Torres",
+          "Heriberto Arroyo",
+          "Reyes Vargas",
+          "Altagracia"
+        ]
+      },
+      {
+        "nombre": "Urdaneta",
+        "parroquias": [
+          "Siquisique",
+          "Moroturo",
+          "San Miguel",
+          "Xaguas"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Mérida",
+    "municipios": [
+      {
+        "nombre": "Alberto Adriani",
+        "parroquias": [
+          "Presidente Betancourt",
+          "Presidente Páez",
+          "Presidente Rómulo Gallegos",
+          "Gabriel Picón González",
+          "Héctor Amable Mora",
+          "José Nucete Sardi",
+          "Pulido Méndez"
+        ]
+      },
+      {
+        "nombre": "Andrés Bello",
+        "parroquias": [
+          "La Azulita"
+        ]
+      },
+      {
+        "nombre": "Antonio Pinto Salinas",
+        "parroquias": [
+          "Santa Cruz de Mora",
+          "Mesa Bolívar",
+          "Mesa de Las Palmas"
+        ]
+      },
+      {
+        "nombre": "Aricagua",
+        "parroquias": [
+          "Aricagua",
+          "San Antonio"
+        ]
+      },
+      {
+        "nombre": "Arzobispo Chacón",
+        "parroquias": [
+          "Canagua",
+          "Capurí",
+          "Chacantá",
+          "El Molino",
+          "Guaimaral",
+          "Mucutuy",
+          "Mucuchachí"
+        ]
+      },
+      {
+        "nombre": "Campo Elías",
+        "parroquias": [
+          "Fernández Peña",
+          "Matriz",
+          "Montalbán",
+          "Acequias",
+          "Jají",
+          "La Mesa",
+          "San José del Sur"
+        ]
+      },
+      {
+        "nombre": "Caracciolo Parra Olmedo",
+        "parroquias": [
+          "Tucaní",
+          "Florencio Ramírez"
+        ]
+      },
+      {
+        "nombre": "Cardenal Quintero",
+        "parroquias": [
+          "Santo Domingo",
+          "Las Piedras"
+        ]
+      },
+      {
+        "nombre": "Guaraque",
+        "parroquias": [
+          "Guaraque",
+          "Mesa de Quintero",
+          "Río Negro"
+        ]
+      },
+      {
+        "nombre": "Julio César Salas",
+        "parroquias": [
+          "Arapuey",
+          "Palmira"
+        ]
+      },
+      {
+        "nombre": "Justo Briceño",
+        "parroquias": [
+          "San Cristóbal de Torondoy",
+          "Torondoy"
+        ]
+      },
+      {
+        "nombre": "Libertador",
+        "parroquias": [
+          "Antonio Spinetti Dini",
+          "Arias",
+          "Caracciolo Parra Pérez",
+          "Domingo Peña",
+          "El Llano",
+          "Gonzalo Picón Febres",
+          "Jacinto Plaza",
+          "Juan Rodríguez Suárez",
+          "Lasso de la Vega",
+          "Mariano Picón Salas",
+          "Milla",
+          "Osuna Rodríguez",
+          "Sagrario",
+          "El Morro",
+          "Los Nevados"
+        ]
+      },
+      {
+        "nombre": "Miranda",
+        "parroquias": [
+          "Andrés Eloy Blanco",
+          "La Venta",
+          "Piñango",
+          "Timotes"
+        ]
+      },
+      {
+        "nombre": "Obispo Ramos de Lora",
+        "parroquias": [
+          "Eloy Paredes",
+          "San Rafael de Alcázar",
+          "Santa Elena de Arenales"
+        ]
+      },
+      {
+        "nombre": "Padre Noguera",
+        "parroquias": [
+          "Santa María de Caparo"
+        ]
+      },
+      {
+        "nombre": "Pueblo Llano",
+        "parroquias": [
+          "Pueblo Llano"
+        ]
+      },
+      {
+        "nombre": "Rangel",
+        "parroquias": [
+          "Cacute",
+          "La Toma",
+          "Mucuchíes",
+          "Mucurubá",
+          "San Rafael"
+        ]
+      },
+      {
+        "nombre": "Rivas Dávila",
+        "parroquias": [
+          "Gerónimo Maldonado",
+          "Bailadores"
+        ]
+      },
+      {
+        "nombre": "Santos Marquina",
+        "parroquias": [
+          "Tabay"
+        ]
+      },
+      {
+        "nombre": "Sucre",
+        "parroquias": [
+          "Chiguará",
+          "Estánquez",
+          "Lagunillas",
+          "La Trampa",
+          "Pueblo Nuevo del Sur",
+          "San Juan"
+        ]
+      },
+      {
+        "nombre": "Tovar",
+        "parroquias": [
+          "El Amparo",
+          "El Llano",
+          "San Francisco",
+          "Tovar"
+        ]
+      },
+      {
+        "nombre": "Tulio Febres Cordero",
+        "parroquias": [
+          "Independencia",
+          "María de la Concepción Palacios Blanco",
+          "Nueva Bolivia",
+          "Santa Apolonia"
+        ]
+      },
+      {
+        "nombre": "Zea",
+        "parroquias": [
+          "Caño El Tigre",
+          "Zea"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Miranda",
+    "municipios": [
+      {
+        "nombre": "Acevedo",
+        "parroquias": [
+          "Aragüita",
+          "Arévalo González",
+          "Capaya",
+          "Caucagua",
+          "Panaquire",
+          "Ribas",
+          "El Café",
+          "Marizapa"
+        ]
+      },
+      {
+        "nombre": "Andrés Bello",
+        "parroquias": [
+          "Cumbo",
+          "San José de Barlovento"
+        ]
+      },
+      {
+        "nombre": "Baruta",
+        "parroquias": [
+          "El Cafetal",
+          "Las Minas",
+          "Nuestra Señora del Rosario"
+        ]
+      },
+      {
+        "nombre": "Brión",
+        "parroquias": [
+          "Higuerote",
+          "Curiepe",
+          "Tacarigua de Brión"
+        ]
+      },
+      {
+        "nombre": "Buroz",
+        "parroquias": [
+          "Mamporal"
+        ]
+      },
+      {
+        "nombre": "Carrizal",
+        "parroquias": [
+          "Carrizal"
+        ]
+      },
+      {
+        "nombre": "Chacao",
+        "parroquias": [
+          "Chacao"
+        ]
+      },
+      {
+        "nombre": "Cristóbal Rojas",
+        "parroquias": [
+          "Charallave",
+          "Las Brisas"
+        ]
+      },
+      {
+        "nombre": "El Hatillo",
+        "parroquias": [
+          "El Hatillo"
+        ]
+      },
+      {
+        "nombre": "Guaicaipuro",
+        "parroquias": [
+          "Altagracia de la Montaña",
+          "Cecilio Acosta",
+          "Los Teques",
+          "El Jarillo",
+          "San Pedro",
+          "Tácata",
+          "Paracotos"
+        ]
+      },
+      {
+        "nombre": "Independencia",
+        "parroquias": [
+          "Cartanal",
+          "Santa Teresa del Tuy"
+        ]
+      },
+      {
+        "nombre": "Lander",
+        "parroquias": [
+          "La Democracia",
+          "Ocumare del Tuy",
+          "Santa Bárbara"
+        ]
+      },
+      {
+        "nombre": "Los Salias",
+        "parroquias": [
+          "San Antonio de los Altos"
+        ]
+      },
+      {
+        "nombre": "Páez",
+        "parroquias": [
+          "Río Chico",
+          "El Guapo",
+          "Tacarigua de la Laguna",
+          "Paparo",
+          "San Fernando del Guapo"
+        ]
+      },
+      {
+        "nombre": "Paz Castillo",
+        "parroquias": [
+          "Santa Lucía del Tuy"
+        ]
+      },
+      {
+        "nombre": "Pedro Gual",
+        "parroquias": [
+          "Cúpira",
+          "Machurucuto"
+        ]
+      },
+      {
+        "nombre": "Plaza",
+        "parroquias": [
+          "Guarenas"
+        ]
+      },
+      {
+        "nombre": "Simón Bolívar",
+        "parroquias": [
+          "San Antonio de Yare",
+          "San Francisco de Yare"
+        ]
+      },
+      {
+        "nombre": "Sucre",
+        "parroquias": [
+          "Leoncio Martínez",
+          "Petare",
+          "Caucagüita",
+          "Filas de Mariche",
+          "La Dolorita"
+        ]
+      },
+      {
+        "nombre": "Urdaneta",
+        "parroquias": [
+          "Cúa",
+          "Nueva Cúa"
+        ]
+      },
+      {
+        "nombre": "Zamora",
+        "parroquias": [
+          "Guatire",
+          "Bolívar"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Monagas",
+    "municipios": [
+      {
+        "nombre": "Acosta",
+        "parroquias": [
+          "San Antonio de Maturín",
+          "San Francisco de Maturín"
+        ]
+      },
+      {
+        "nombre": "Aguasay",
+        "parroquias": [
+          "Aguasay"
+        ]
+      },
+      {
+        "nombre": "Bolívar",
+        "parroquias": [
+          "Caripito"
+        ]
+      },
+      {
+        "nombre": "Caripe",
+        "parroquias": [
+          "El Guácharo",
+          "La Guanota",
+          "Sabana de Piedra",
+          "San Agustín",
+          "Teresen",
+          "Caripe"
+        ]
+      },
+      {
+        "nombre": "Cedeño",
+        "parroquias": [
+          "Areo",
+          "Capital Cedeño",
+          "San Félix de Cantalicio",
+          "Viento Fresco"
+        ]
+      },
+      {
+        "nombre": "Ezequiel Zamora",
+        "parroquias": [
+          "El Tejero",
+          "Punta de Mata"
+        ]
+      },
+      {
+        "nombre": "Libertador",
+        "parroquias": [
+          "Chaguaramas",
+          "Las Alhuacas",
+          "Tabasca",
+          "Temblador"
+        ]
+      },
+      {
+        "nombre": "Maturín",
+        "parroquias": [
+          "Alto de los Godos",
+          "Boquerón",
+          "Las Cocuizas",
+          "La Cruz",
+          "San Simón",
+          "El Corozo",
+          "El Furrial",
+          "Jusepín",
+          "La Pica",
+          "San Vicente"
+        ]
+      },
+      {
+        "nombre": "Piar",
+        "parroquias": [
+          "Aparicio",
+          "Aragua de Maturín",
+          "Chaguamal",
+          "El Pinto",
+          "Guanaguana",
+          "La Toscana",
+          "Taguaya"
+        ]
+      },
+      {
+        "nombre": "Punceres",
+        "parroquias": [
+          "Cachipo",
+          "Quiriquire"
+        ]
+      },
+      {
+        "nombre": "Santa Bárbara",
+        "parroquias": [
+          "Santa Bárbara"
+        ]
+      },
+      {
+        "nombre": "Sotillo",
+        "parroquias": [
+          "Barrancas",
+          "Los Barrancos de Fajardo"
+        ]
+      },
+      {
+        "nombre": "Uracoa",
+        "parroquias": [
+          "Uracoa"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Nueva Esparta",
+    "municipios": [
+      {
+        "nombre": "Antolín del Campo",
+        "parroquias": [
+          "Antolín del Campo"
+        ]
+      },
+      {
+        "nombre": "Arismendi",
+        "parroquias": [
+          "Arismendi"
+        ]
+      },
+      {
+        "nombre": "García",
+        "parroquias": [
+          "García",
+          "Francisco Fajardo"
+        ]
+      },
+      {
+        "nombre": "Gómez",
+        "parroquias": [
+          "Bolívar",
+          "Guevara",
+          "Matasiete",
+          "Santa Ana",
+          "Sucre"
+        ]
+      },
+      {
+        "nombre": "Maneiro",
+        "parroquias": [
+          "Aguirre",
+          "Maneiro"
+        ]
+      },
+      {
+        "nombre": "Marcano",
+        "parroquias": [
+          "Adrián",
+          "Juan Griego",
+          "Yaguaraparo"
+        ]
+      },
+      {
+        "nombre": "Mariño",
+        "parroquias": [
+          "Porlamar"
+        ]
+      },
+      {
+        "nombre": "Península de Macanao",
+        "parroquias": [
+          "San Francisco de Macanao",
+          "Boca de Río"
+        ]
+      },
+      {
+        "nombre": "Tubores",
+        "parroquias": [
+          "Tubores",
+          "Los Baleales"
+        ]
+      },
+      {
+        "nombre": "Villalba",
+        "parroquias": [
+          "Vicente Fuentes",
+          "Villalba"
+        ]
+      },
+      {
+        "nombre": "Díaz",
+        "parroquias": [
+          "San Juan Bautista",
+          "Zabala"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Portuguesa",
+    "municipios": [
+      {
+        "nombre": "Agua Blanca",
+        "parroquias": []
+      },
+      {
+        "nombre": "Araure",
+        "parroquias": [
+          "Capital Araure",
+          "Río Acarigua"
+        ]
+      },
+      {
+        "nombre": "Esteller",
+        "parroquias": [
+          "Capital Esteller",
+          "Uveral"
+        ]
+      },
+      {
+        "nombre": "Guanare",
+        "parroquias": [
+          "Guanare",
+          "Córdoba",
+          "San José de la Montaña",
+          "San Juan de Guanaguanare",
+          "Virgen de la Coromoto"
+        ]
+      },
+      {
+        "nombre": "Guanarito",
+        "parroquias": [
+          "Guanarito",
+          "Trinidad de la Capilla",
+          "Divina Pastora"
+        ]
+      },
+      {
+        "nombre": "Monseñor José Vicente de Unda",
+        "parroquias": [
+          "Monseñor José Vicente de Unda",
+          "Peña Blanca"
+        ]
+      },
+      {
+        "nombre": "Ospino",
+        "parroquias": [
+          "Capital Ospino",
+          "Aparición",
+          "La Estación"
+        ]
+      },
+      {
+        "nombre": "Páez",
+        "parroquias": [
+          "Páez",
+          "Payara",
+          "Pimpinela",
+          "Ramón Peraza"
+        ]
+      },
+      {
+        "nombre": "Papelón",
+        "parroquias": [
+          "Papelón",
+          "Caño Delgadito"
+        ]
+      },
+      {
+        "nombre": "San Genaro de Boconoíto",
+        "parroquias": [
+          "San Genaro de Boconoito",
+          "Antolín Tovar"
+        ]
+      },
+      {
+        "nombre": "San Rafael de Onoto",
+        "parroquias": [
+          "San Rafael de Onoto",
+          "Santa Fe",
+          "Thermo Morles"
+        ]
+      },
+      {
+        "nombre": "Santa Rosalía",
+        "parroquias": [
+          "Santa Rosalía",
+          "Florida"
+        ]
+      },
+      {
+        "nombre": "Sucre",
+        "parroquias": [
+          "Sucre",
+          "Concepción",
+          "San Rafael de Palo Alzado",
+          "Uvencio Antonio Velásquez",
+          "San José de Saguaz",
+          "Villa Rosa"
+        ]
+      },
+      {
+        "nombre": "Turén",
+        "parroquias": [
+          "Turén",
+          "Canelones",
+          "Santa Cruz",
+          "San Isidro Labrador"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Sucre",
+    "municipios": [
+      {
+        "nombre": "Andrés Eloy Blanco",
+        "parroquias": [
+          "Mariño",
+          "Rómulo Gallegos"
+        ]
+      },
+      {
+        "nombre": "Andrés Mata",
+        "parroquias": [
+          "San José de Aerocuar",
+          "Tavera Acosta"
+        ]
+      },
+      {
+        "nombre": "Arismendi",
+        "parroquias": [
+          "Río Caribe",
+          "Antonio José de Sucre",
+          "El Morro de Puerto Santo",
+          "Puerto Santo",
+          "San Juan de las Galdonas"
+        ]
+      },
+      {
+        "nombre": "Benítez",
+        "parroquias": [
+          "El Pilar",
+          "El Rincón",
+          "General Francisco Antonio Váquez",
+          "Guaraúnos",
+          "Tunapuicito",
+          "Unión"
+        ]
+      },
+      {
+        "nombre": "Bermúdez",
+        "parroquias": [
+          "Santa Catalina",
+          "Santa Rosa",
+          "Santa Teresa",
+          "Bolívar",
+          "Maracapana"
+        ]
+      },
+      {
+        "nombre": "Bolívar",
+        "parroquias": []
+      },
+      {
+        "nombre": "Cajigal",
+        "parroquias": [
+          "Libertad",
+          "El Paujil",
+          "Yaguaraparo"
+        ]
+      },
+      {
+        "nombre": "Cruz Salmerón Acosta",
+        "parroquias": [
+          "Cruz Salmerón Acosta",
+          "Chacopata",
+          "Manicuare"
+        ]
+      },
+      {
+        "nombre": "Libertador",
+        "parroquias": [
+          "Tunapuy",
+          "Campo Elías"
+        ]
+      },
+      {
+        "nombre": "Mariño",
+        "parroquias": [
+          "Irapa",
+          "Campo Claro",
+          "Maraval",
+          "San Antonio de Irapa",
+          "Soro"
+        ]
+      },
+      {
+        "nombre": "Mejía",
+        "parroquias": [
+          "Mejía"
+        ]
+      },
+      {
+        "nombre": "Montes",
+        "parroquias": [
+          "Cumanacoa",
+          "Arenas",
+          "Aricagua",
+          "Cogollar",
+          "San Fernando",
+          "San Lorenzo"
+        ]
+      },
+      {
+        "nombre": "Ribero",
+        "parroquias": [
+          "Villa Frontado (Muelle de Cariaco)",
+          "Catuaro",
+          "Rendón",
+          "San Cruz",
+          "Santa María"
+        ]
+      },
+      {
+        "nombre": "Sucre",
+        "parroquias": [
+          "Altagracia",
+          "Santa Inés",
+          "Valentín Valiente",
+          "Ayacucho",
+          "San Juan",
+          "Raúl Leoni",
+          "Gran Mariscal"
+        ]
+      },
+      {
+        "nombre": "Valdéz",
+        "parroquias": [
+          "Cristóbal Colón",
+          "Bideau",
+          "Punta de Piedras",
+          "Güiria"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Táchira",
+    "municipios": [
+      {
+        "nombre": "Andrés Bello",
+        "parroquias": [
+          "Andrés Bello"
+        ]
+      },
+      {
+        "nombre": "Antonio Rómulo Costa",
+        "parroquias": [
+          "Antonio Rómulo Costa"
+        ]
+      },
+      {
+        "nombre": "Ayacucho",
+        "parroquias": [
+          "Ayacucho",
+          "Rivas Berti",
+          "San Pedro del Río"
+        ]
+      },
+      {
+        "nombre": "Bolívar",
+        "parroquias": [
+          "Bolívar",
+          "Palotal",
+          "General Juan Vicente Gómez",
+          "Isaías Medina Angarita"
+        ]
+      },
+      {
+        "nombre": "Cárdenas",
+        "parroquias": [
+          "Cárdenas",
+          "Amenodoro Ángel Lamus",
+          "La Florida"
+        ]
+      },
+      {
+        "nombre": "Córdoba",
+        "parroquias": [
+          "Córdoba"
+        ]
+      },
+      {
+        "nombre": "Fernández Feo",
+        "parroquias": [
+          "Fernández Feo",
+          "Alberto Adriani",
+          "Santo Domingo"
+        ]
+      },
+      {
+        "nombre": "Francisco de Miranda",
+        "parroquias": [
+          "Francisco de Miranda"
+        ]
+      },
+      {
+        "nombre": "García de Hevia",
+        "parroquias": [
+          "García de Hevia",
+          "Boca de Grita",
+          "José Antonio Páez"
+        ]
+      },
+      {
+        "nombre": "Guásimos",
+        "parroquias": [
+          "Guásimos"
+        ]
+      },
+      {
+        "nombre": "Independencia",
+        "parroquias": [
+          "Independencia",
+          "Juan Germán Roscio",
+          "Román Cárdenas"
+        ]
+      },
+      {
+        "nombre": "Jáuregui",
+        "parroquias": [
+          "Jáuregui",
+          "Emilio Constantino Guerrero",
+          "Monseñor Miguel Antonio Salas"
+        ]
+      },
+      {
+        "nombre": "José María Vargas",
+        "parroquias": [
+          "José María Vargas"
+        ]
+      },
+      {
+        "nombre": "Junín",
+        "parroquias": [
+          "Junín",
+          "La Petrólea",
+          "Quinimarí",
+          "Bramón"
+        ]
+      },
+      {
+        "nombre": "Libertad",
+        "parroquias": [
+          "Libertad",
+          "Cipriano Castro",
+          "Manuel Felipe Rugeles"
+        ]
+      },
+      {
+        "nombre": "Libertador",
+        "parroquias": [
+          "Libertador",
+          "Doradas",
+          "Emeterio Ochoa",
+          "San Joaquín de Navay"
+        ]
+      },
+      {
+        "nombre": "Lobatera",
+        "parroquias": [
+          "Lobatera",
+          "Constitución"
+        ]
+      },
+      {
+        "nombre": "Michelena",
+        "parroquias": [
+          "Michelena"
+        ]
+      },
+      {
+        "nombre": "Panamericano",
+        "parroquias": [
+          "Panamericano",
+          "La Palmita"
+        ]
+      },
+      {
+        "nombre": "Pedro María Ureña",
+        "parroquias": [
+          "Pedro María Ureña",
+          "Nueva Arcadia"
+        ]
+      },
+      {
+        "nombre": "Rafael Urdaneta",
+        "parroquias": [
+          "Delicias",
+          "Pecaya"
+        ]
+      },
+      {
+        "nombre": "Samuel Darío Maldonado",
+        "parroquias": [
+          "Samuel Darío Maldonado",
+          "Boconó",
+          "Hernández"
+        ]
+      },
+      {
+        "nombre": "San Cristóbal",
+        "parroquias": [
+          "La Concordia",
+          "San Juan Bautista",
+          "Pedro María Morantes",
+          "San Sebastián",
+          "Dr. Francisco Romero Lobo"
+        ]
+      },
+      {
+        "nombre": "Seboruco",
+        "parroquias": [
+          "Seboruco"
+        ]
+      },
+      {
+        "nombre": "Simón Rodríguez",
+        "parroquias": [
+          "Simón Rodríguez"
+        ]
+      },
+      {
+        "nombre": "Sucre",
+        "parroquias": [
+          "Sucre",
+          "Eleazar López Contreras",
+          "San Pablo"
+        ]
+      },
+      {
+        "nombre": "Torbes",
+        "parroquias": [
+          "Torbes"
+        ]
+      },
+      {
+        "nombre": "Uribante",
+        "parroquias": [
+          "Uribante",
+          "Cárdenas",
+          "Juan Pablo Peñalosa",
+          "Potosí"
+        ]
+      },
+      {
+        "nombre": "San Judas Tadeo",
+        "parroquias": [
+          "San Judas Tadeo"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Trujillo",
+    "municipios": [
+      {
+        "nombre": "Andrés Bello",
+        "parroquias": [
+          "Araguaney",
+          "El Jaguito",
+          "La Esperanza",
+          "Santa Isabel"
+        ]
+      },
+      {
+        "nombre": "Boconó",
+        "parroquias": [
+          "Boconó",
+          "El Carmen",
+          "Mosquey",
+          "Ayacucho",
+          "Burbusay",
+          "General Ribas",
+          "Guaramacal",
+          "Vega de Guaramacal",
+          "Monseñor Jáuregui",
+          "Rafael Rangel",
+          "San Miguel",
+          "San José"
+        ]
+      },
+      {
+        "nombre": "Bolívar",
+        "parroquias": [
+          "Sabana Grande",
+          "Cheregüé",
+          "Granados"
+        ]
+      },
+      {
+        "nombre": "Candelaria",
+        "parroquias": [
+          "Arnoldo Gabaldón",
+          "Bolivia",
+          "Carrillo",
+          "Cegarra",
+          "Chejendé",
+          "Manuel Salvador Ulloa",
+          "San José"
+        ]
+      },
+      {
+        "nombre": "Carache",
+        "parroquias": [
+          "Carache",
+          "La Concepción",
+          "Cuicas",
+          "Panamericana",
+          "Santa Cruz"
+        ]
+      },
+      {
+        "nombre": "Escuque",
+        "parroquias": [
+          "Escuque",
+          "La Unión",
+          "Santa Rita",
+          "Sabana Libre"
+        ]
+      },
+      {
+        "nombre": "José Felipe Márquez Cañizalez",
+        "parroquias": [
+          "El Socorro",
+          "Los Caprichos",
+          "Antonio José de Sucre"
+        ]
+      },
+      {
+        "nombre": "Juan Vicente Campos Elías",
+        "parroquias": [
+          "Campo Elías",
+          "Arnoldo Gabaldón"
+        ]
+      },
+      {
+        "nombre": "La Ceiba",
+        "parroquias": [
+          "Santa Apolonia",
+          "El Progreso",
+          "La Ceiba",
+          "Tres de Febrero"
+        ]
+      },
+      {
+        "nombre": "Miranda",
+        "parroquias": [
+          "El Dividive",
+          "Agua Santa",
+          "Agua Caliente",
+          "El Cenizo",
+          "Valerita"
+        ]
+      },
+      {
+        "nombre": "Monte Carmelo",
+        "parroquias": [
+          "Monte Carmelo",
+          "Buena Vista",
+          "Santa María del Horcón"
+        ]
+      },
+      {
+        "nombre": "Motatán",
+        "parroquias": [
+          "Motatán",
+          "El Baño",
+          "Jalisco"
+        ]
+      },
+      {
+        "nombre": "Pampán",
+        "parroquias": [
+          "Pampán",
+          "Flor de Patria",
+          "La Paz",
+          "Santa Ana"
+        ]
+      },
+      {
+        "nombre": "Pampanito",
+        "parroquias": [
+          "Pampanito",
+          "La Concepción",
+          "Pampanito II"
+        ]
+      },
+      {
+        "nombre": "Rafael Rangel",
+        "parroquias": [
+          "Betijoque",
+          "José Gregorio Hernández",
+          "La Pueblita",
+          "Los Cedros"
+        ]
+      },
+      {
+        "nombre": "San Rafael de Carvajal",
+        "parroquias": [
+          "Carvajal",
+          "Campo Alegre",
+          "Antonio Nicolás Briceño",
+          "José Leonardo Suárez"
+        ]
+      },
+      {
+        "nombre": "Sucre",
+        "parroquias": [
+          "Sabana de Mendoza",
+          "Junín",
+          "Valmore Rodríguez",
+          "El Paraíso"
+        ]
+      },
+      {
+        "nombre": "Trujillo",
+        "parroquias": [
+          "Andrés Linares",
+          "Chiquinquirá",
+          "Cristóbal Mendoza",
+          "Cruz Carrillo",
+          "Matriz",
+          "Monseñor Carrillo",
+          "Tres Esquinas"
+        ]
+      },
+      {
+        "nombre": "Urdaneta",
+        "parroquias": [
+          "Cabimbú",
+          "Jajó",
+          "La Mesa de Esnujaque",
+          "Santiago",
+          "Tuñame",
+          "La Quebrada"
+        ]
+      },
+      {
+        "nombre": "Valera",
+        "parroquias": [
+          "Juan Ignacio Montilla",
+          "La Beatriz",
+          "La Puerta",
+          "Mendoza del Valle de Momboy",
+          "Mercedes Díaz",
+          "San Luis"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "La Guaira",
+    "municipios": [
+      {
+        "nombre": "Vargas",
+        "parroquias": [
+          "Caraballeda",
+          "Carayaca",
+          "Carlos Soublette",
+          "Caruao Chuspa",
+          "Catia La Mar",
+          "El Junko",
+          "La Guaira",
+          "Macuto",
+          "Maiquetía",
+          "Naiguatá",
+          "Urimare"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Yaracuy",
+    "municipios": [
+      {
+        "nombre": "Arístides Bastidas",
+        "parroquias": [
+          "Arístides Bastidas"
+        ]
+      },
+      {
+        "nombre": "Bolívar",
+        "parroquias": [
+          "Bolívar"
+        ]
+      },
+      {
+        "nombre": "Bruzual",
+        "parroquias": [
+          "Chivacoa",
+          "Campo Elías"
+        ]
+      },
+      {
+        "nombre": "Cocorote",
+        "parroquias": [
+          "Cocorote"
+        ]
+      },
+      {
+        "nombre": "Independencia",
+        "parroquias": [
+          "Independencia"
+        ]
+      },
+      {
+        "nombre": "José Antonio Páez",
+        "parroquias": [
+          "José Antonio Páez"
+        ]
+      },
+      {
+        "nombre": "La Trinidad",
+        "parroquias": [
+          "La Trinidad"
+        ]
+      },
+      {
+        "nombre": "Manuel Monge",
+        "parroquias": [
+          "Manuel Monge"
+        ]
+      },
+      {
+        "nombre": "Nirgua",
+        "parroquias": [
+          "Salóm",
+          "Temerla",
+          "Nirgua"
+        ]
+      },
+      {
+        "nombre": "Peña",
+        "parroquias": [
+          "San Andrés",
+          "Yaritagua"
+        ]
+      },
+      {
+        "nombre": "San Felipe",
+        "parroquias": [
+          "San Javier",
+          "Albarico",
+          "San Felipe"
+        ]
+      },
+      {
+        "nombre": "Sucre",
+        "parroquias": [
+          "Sucre"
+        ]
+      },
+      {
+        "nombre": "Urachiche",
+        "parroquias": [
+          "Urachiche"
+        ]
+      },
+      {
+        "nombre": "José Joaquín Veroes",
+        "parroquias": [
+          "El Guayabo",
+          "Farriar"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Zulia",
+    "municipios": [
+      {
+        "nombre": "Almirante Padilla",
+        "parroquias": [
+          "Isla de Toas",
+          "Monagas"
+        ]
+      },
+      {
+        "nombre": "Baralt",
+        "parroquias": [
+          "San Timoteo",
+          "General Urdaneta",
+          "Libertador",
+          "Marcelino Briceño",
+          "Pueblo Nuevo",
+          "Manuel Guanipa Matos"
+        ]
+      },
+      {
+        "nombre": "Cabimas",
+        "parroquias": [
+          "Ambrosio",
+          "Carmen Herrera",
+          "La Rosa",
+          "Germán Ríos Linares",
+          "San Benito",
+          "Rómulo Betancourt",
+          "Jorge Hernández",
+          "Punta Gorda",
+          "Arístides Calvani"
+        ]
+      },
+      {
+        "nombre": "Catatumbo",
+        "parroquias": [
+          "Encontrados",
+          "Udón Pérez"
+        ]
+      },
+      {
+        "nombre": "Colón",
+        "parroquias": [
+          "Moralito",
+          "San Carlos del Zulia",
+          "Santa Cruz del Zulia",
+          "Santa Bárbara",
+          "Urribarrí"
+        ]
+      },
+      {
+        "nombre": "Francisco Javier Pulgar",
+        "parroquias": [
+          "Carlos Quevedo",
+          "Francisco Javier Pulgar",
+          "Simón Rodríguez",
+          "Guamo-Gavilanes"
+        ]
+      },
+      {
+        "nombre": "Páez",
+        "parroquias": [
+          "Sinamaica",
+          "Alta Guajira",
+          "Elías Sánchez Rubio",
+          "Guajira"
+        ]
+      },
+      {
+        "nombre": "Jesús Enrique Losada",
+        "parroquias": [
+          "La Concepción",
+          "San José",
+          "Mariano Parra León",
+          "José Ramón Yépez"
+        ]
+      },
+      {
+        "nombre": "Jesús María Semprún",
+        "parroquias": [
+          "Jesús María Semprún",
+          "Barí"
+        ]
+      },
+      {
+        "nombre": "La Cañada de Urdaneta",
+        "parroquias": [
+          "Concepción",
+          "Andrés Bello",
+          "Chiquinquirá",
+          "El Carmelo",
+          "Potreritos"
+        ]
+      },
+      {
+        "nombre": "Lagunillas",
+        "parroquias": [
+          "Libertad",
+          "Alonso de Ojeda",
+          "Venezuela",
+          "Eleazar López Contreras",
+          "Campo Lara"
+        ]
+      },
+      {
+        "nombre": "Machiques de Perijá",
+        "parroquias": [
+          "Bartolomé de las Casas",
+          "Libertad",
+          "Río Negro",
+          "San José de Perijá"
+        ]
+      },
+      {
+        "nombre": "Mara",
+        "parroquias": [
+          "San Rafael",
+          "La Sierrita",
+          "Las Parcelas",
+          "Luis de Vicente",
+          "Monseñor Marcos Sergio Godoy",
+          "Ricaurte",
+          "Tamare"
+        ]
+      },
+      {
+        "nombre": "Maracaibo",
+        "parroquias": [
+          "Antonio Borjas Romero",
+          "Bolívar",
+          "Cacique Mara",
+          "Carracciolo Parra Pérez",
+          "Cecilio Acosta",
+          "Cristo de Aranza",
+          "Coquivacoa",
+          "Chiquinquirá",
+          "Francisco Eugenio Bustamante",
+          "Idelfonzo Vásquez",
+          "Juana de Ávila",
+          "Luis Hurtado Higuera",
+          "Manuel Dagnino",
+          "Olegario Villalobos",
+          "Raúl Leoni",
+          "Santa Lucía",
+          "Venancio Pulgar",
+          "San Isidro"
+        ]
+      },
+      {
+        "nombre": "Miranda",
+        "parroquias": [
+          "Altagracia",
+          "Faría",
+          "Ana María Campos",
+          "San Antonio",
+          "San José"
+        ]
+      },
+      {
+        "nombre": "Rosario de Perijá",
+        "parroquias": [
+          "Donaldo García",
+          "El Rosario",
+          "Sixto Zambrano"
+        ]
+      },
+      {
+        "nombre": "San Francisco",
+        "parroquias": [
+          "San Francisco",
+          "El Bajo",
+          "Domitila Flores",
+          "Francisco Ochoa",
+          "Los Cortijos",
+          "Marcial Hernández"
+        ]
+      },
+      {
+        "nombre": "Santa Rita",
+        "parroquias": [
+          "Santa Rita",
+          "El Mene",
+          "Pedro Lucas Urribarrí",
+          "José Cenobio Urribarrí"
+        ]
+      },
+      {
+        "nombre": "Simón Bolívar",
+        "parroquias": [
+          "Rafael Maria Baralt",
+          "Manuel Manrique",
+          "Rafael Urdaneta"
+        ]
+      },
+      {
+        "nombre": "Sucre",
+        "parroquias": [
+          "Bobures",
+          "Gibraltar",
+          "Heras",
+          "Monseñor Arturo Álvarez",
+          "Rómulo Gallegos",
+          "El Batey"
+        ]
+      },
+      {
+        "nombre": "Valmore Rodríguez",
+        "parroquias": [
+          "Rafael Urdaneta",
+          "La Victoria",
+          "Raúl Cuenca"
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Distrito Capital",
+    "municipios": [
+      {
+        "nombre": "Libertador",
+        "parroquias": [
+          "Altagracia",
+          "Antímano",
+          "Caricuao",
+          "Catedral",
+          "Coche",
+          "El Junquito",
+          "El Paraíso",
+          "El Recreo",
+          "El Valle",
+          "La Candelaria",
+          "La Pastora",
+          "La Vega",
+          "Macarao",
+          "San Agustín",
+          "San Bernardino",
+          "San José",
+          "San Juan",
+          "San Pedro",
+          "Santa Rosalía",
+          "Santa Teresa",
+          "Sucre (Catia)",
+          "23 de enero"
+        ]
+      }
+    ]
+  }
+]
