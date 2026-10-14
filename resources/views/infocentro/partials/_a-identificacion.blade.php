@@ -3,10 +3,18 @@
         {{ __('Sección A. Identificación del infocentro') }}
     </h3>
 
-    <dl class="mt-4 rounded-lg bg-gray-50 dark:bg-gray-700/40 p-4">
-        <div>
+    <dl class="mt-4 rounded-lg bg-gray-50 dark:bg-gray-700/40 p-4 flex">
+        <div class="mx-5">
             <dt class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Código') }}</dt>
             <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $infocentro->codigo }}</dd>
+        </div>
+        <div class="mx-5">
+            <dt class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Nombre') }}</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $infocentro->nombre }}</dd>
+        </div>
+        <div class="mx-5">
+            <dt class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Estatus') }}</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $infocentro->activo?"Activo":"Inactivo" }}</dd>
         </div>
     </dl>
 
