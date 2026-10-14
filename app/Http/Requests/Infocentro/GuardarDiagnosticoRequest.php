@@ -25,6 +25,7 @@ use App\Enums\SuficienciaHorarioEnum;
 use App\Enums\TipoActividadEnum;
 use App\Enums\TipoEnergiaEnum;
 use App\Enums\TipoEquipoEnum;
+use App\Enums\TipoServicioCantvEnum;
 use App\Enums\VinculacionEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -86,7 +87,11 @@ class GuardarDiagnosticoRequest extends FormRequest
                 'string',
                 'max:255',
             ],
-            'proveedor_detalle' => ['nullable', 'string', 'max:255'],
+            'proveedor_detalle' => [
+                Rule::requiredIf(fn (): bool => $this->proveedorEsCantv()),
+                'nullable',
+                Rule::enum(TipoServicioCantvEnum::class),
+            ],
             'observaciones_conectividad' => ['nullable', 'string', 'max:2000'],
 
             // C. Operatividad
@@ -303,6 +308,7 @@ class GuardarDiagnosticoRequest extends FormRequest
             'parroquia_id.exists' => 'La parroquia seleccionada no pertenece al municipio elegido.',
             'horario_fin.after' => 'La hora de fin debe ser posterior a la hora de inicio.',
             'proveedor_nombre.required' => 'Indica el nombre de la empresa o de la red comunitaria.',
+            'proveedor_detalle.required' => 'Indica el tipo de servicio de CANTV: fibra óptica, ABA o satelital.',
             'operatividad_detalle.required' => 'Especifica la limitación o la causa por la que no está operativo.',
             'horario_suficiente_motivo.required' => 'Explica por qué el horario no responde a las necesidades de la comunidad.',
             'vinculacion_sac_desde.required' => 'Indica desde cuándo está vinculado a la Sala de Autogobierno Comunal.',
@@ -489,6 +495,15 @@ class GuardarDiagnosticoRequest extends FormRequest
     {
         return ProveedorInternetEnum::tryFrom((string) $this->input('proveedor_internet'))
             ?->requiereNombre() ?? false;
+    }
+
+    /**
+     * Determine whether the chosen provider is CANTV, whose service type is
+     * one of the listed modalities and not free text.
+     */
+    private function proveedorEsCantv(): bool
+    {
+        return (string) $this->input('proveedor_internet') === ProveedorInternetEnum::Cantv->value;
     }
 
     /**

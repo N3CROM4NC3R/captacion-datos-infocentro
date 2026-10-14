@@ -7,6 +7,7 @@ use App\Enums\OperatividadEnum;
 use App\Enums\ProveedorInternetEnum;
 use App\Enums\ServicioInternetEnum;
 use App\Enums\SuficienciaHorarioEnum;
+use App\Enums\TipoServicioCantvEnum;
 use App\Models\Estado;
 use App\Models\Facilitador;
 use App\Models\Municipio;
@@ -243,7 +244,7 @@ test('se guardan la conectividad como enums', function () {
     $this->actingAs($user)->put('/infocentro/diagnostico', ficha([
         'servicio_internet' => ServicioInternetEnum::SiIntermitente->value,
         'proveedor_internet' => ProveedorInternetEnum::Cantv->value,
-        'proveedor_detalle' => 'Fibra óptica',
+        'proveedor_detalle' => TipoServicioCantvEnum::FibraOptica->value,
         'observaciones_conectividad' => 'Se corta en las tardes',
     ]))->assertSessionHasNoErrors();
 
@@ -251,6 +252,7 @@ test('se guardan la conectividad como enums', function () {
 
     expect($infocentro->servicio_internet)->toBe(ServicioInternetEnum::SiIntermitente)
         ->and($infocentro->proveedor_internet)->toBe(ProveedorInternetEnum::Cantv)
+        ->and($infocentro->proveedor_detalle)->toBe(TipoServicioCantvEnum::FibraOptica)
         ->and($infocentro->observaciones_conectividad)->toBe('Se corta en las tardes');
 });
 
@@ -272,7 +274,37 @@ test('el nombre del proveedor no se exige para CANTV', function () {
 
     $this->actingAs($user)->put('/infocentro/diagnostico', ficha([
         'proveedor_internet' => ProveedorInternetEnum::Cantv->value,
+        'proveedor_detalle' => TipoServicioCantvEnum::Aba->value,
     ]))->assertSessionHasNoErrors();
+});
+
+test('el tipo de servicio de CANTV es obligatorio', function () {
+    $user = InfocentroUserFactory::new()->create();
+
+    $this->actingAs($user)->put('/infocentro/diagnostico', ficha([
+        'proveedor_internet' => ProveedorInternetEnum::Cantv->value,
+    ]))->assertSessionHasErrors([
+        'proveedor_detalle' => 'Indica el tipo de servicio de CANTV: fibra óptica, ABA o satelital.',
+    ]);
+});
+
+test('el tipo de servicio no se exige con proveedores que no son CANTV', function () {
+    $user = InfocentroUserFactory::new()->create();
+
+    $this->actingAs($user)->put('/infocentro/diagnostico', ficha([
+        'proveedor_internet' => ProveedorInternetEnum::Movilnet->value,
+    ]))->assertSessionHasNoErrors();
+
+    expect($user->infocentro->refresh()->proveedor_detalle)->toBeNull();
+});
+
+test('un tipo de servicio fuera del enum es rechazado', function () {
+    $user = InfocentroUserFactory::new()->create();
+
+    $this->actingAs($user)->put('/infocentro/diagnostico', ficha([
+        'proveedor_internet' => ProveedorInternetEnum::Cantv->value,
+        'proveedor_detalle' => 'Fibra óptica',
+    ]))->assertSessionHasErrors('proveedor_detalle');
 });
 
 test('un valor fuera del enum es rechazado', function () {

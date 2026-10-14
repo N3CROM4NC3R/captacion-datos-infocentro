@@ -35,8 +35,14 @@
         </div>
 
         <div x-show="proveedor === 'cantv'" x-cloak>
-            <x-input-label for="proveedor_detalle" :value="__('Tipo de servicio (fibra óptica / ABA / otro)')" />
-            <x-text-input id="proveedor_detalle" name="proveedor_detalle" type="text" class="mt-1 block w-full" :value="old('proveedor_detalle', $infocentro->proveedor_detalle)" />
+            <x-input-label for="proveedor_detalle" :value="__('Tipo de servicio de CANTV')" />
+            @php($detalleActual = old('proveedor_detalle', $infocentro->proveedor_detalle?->value))
+            <x-select-input id="proveedor_detalle" name="proveedor_detalle" class="mt-1 block w-full">
+                <option value="">{{ __('Seleccione') }}</option>
+                @foreach (\App\Enums\TipoServicioCantvEnum::options() as $valor => $etiqueta)
+                    <option value="{{ $valor }}" @selected($detalleActual === $valor)>{{ $etiqueta }}</option>
+                @endforeach
+            </x-select-input>
             <x-input-error class="mt-2" :messages="$errors->get('proveedor_detalle')" />
         </div>
 

@@ -15,6 +15,7 @@ use App\Enums\ProveedorInternetEnum;
 use App\Enums\ServicioInternetEnum;
 use App\Enums\SuficienciaEquipamientoEnum;
 use App\Enums\SuficienciaHorarioEnum;
+use App\Enums\TipoServicioCantvEnum;
 use App\Enums\VinculacionEnum;
 use Database\Factories\InfocentroFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -185,6 +186,7 @@ class Infocentro extends Model
             'horario_fin' => 'datetime:H:i',
             'servicio_internet' => ServicioInternetEnum::class,
             'proveedor_internet' => ProveedorInternetEnum::class,
+            'proveedor_detalle' => TipoServicioCantvEnum::class,
             'operatividad' => OperatividadEnum::class,
             'horario_suficiente' => SuficienciaHorarioEnum::class,
             'condicion_espacio' => CondicionEspacioEnum::class,

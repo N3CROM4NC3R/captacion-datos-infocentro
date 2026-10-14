@@ -206,3 +206,20 @@ test('los campos numéricos y de texto de F y G aceptan el valor guardado', func
 
     expect($ausentes)->toBe([], 'Campos que no se repoblaron: '.implode(', ', $ausentes));
 });
+
+test('el desplegable de tipo de servicio ofrece las tres modalidades de CANTV', function (string $valor, string $etiqueta) {
+    $html = htmlDeLaFicha($this, InfocentroUserFactory::new()->create());
+
+    // El valor y la etiqueta se escriben a mano. Leer la etiqueta del enum para
+    // compararla con el HTML que ese mismo enum genera la haría tautológica:
+    // una etiqueta mal escrita cambiaría los dos lados y el test pasaría igual.
+    expect(str_contains($html, '<option value="'.$valor.'"'))
+        ->toBeTrue('El desplegable de tipo de servicio no ofrece el valor «'.$valor.'».');
+
+    expect(str_contains($html, '>'.$etiqueta.'</option>'))
+        ->toBeTrue('El desplegable de tipo de servicio no muestra la opción «'.$etiqueta.'».');
+})->with([
+    ['fibra_optica', 'Fibra óptica'],
+    ['aba', 'ABA'],
+    ['satelital', 'Satelital'],
+]);
