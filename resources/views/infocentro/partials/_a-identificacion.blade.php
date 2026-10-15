@@ -6,15 +6,19 @@
     <dl class="mt-4 rounded-lg bg-gray-50 dark:bg-gray-700/40 p-4 flex">
         <div class="mx-5">
             <dt class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Código') }}</dt>
-            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $infocentro->codigo }}</dd>
+            <dd class="bg-green-200 mt-1 rounded-md p-4 text-sm font-bold text-gray-900 dark:text-gray-100">{{ $infocentro->codigo }}</dd>
         </div>
         <div class="mx-5">
             <dt class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Nombre') }}</dt>
-            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $infocentro->nombre }}</dd>
+            <dd class="bg-green-200 mt-1 rounded-md p-4 text-sm font-bold text-gray-900 dark:text-gray-100">{{ $infocentro->nombre }}</dd>
         </div>
         <div class="mx-5">
-            <dt class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Estatus') }}</dt>
-            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $infocentro->activo?"Activo":"Inactivo" }}</dd>
+            <x-input-label for="activo" class="text-gray-500" :value="__('Estatus')" />
+            <x-select-input id="activo" name="activo" class="mt-1 block w-full" x-model="activo">
+                <option value="1">{{ __('Activo') }}</option>
+                <option value="0">{{ __('Inactivo') }}</option>
+            </x-select-input>
+            <x-input-error class="mt-2" :messages="$errors->get('activo')" />
         </div>
     </dl>
 
@@ -88,14 +92,7 @@
             <x-input-error class="mt-2" :messages="$errors->get('telefono')" />
         </div>
 
-        <div>
-            <x-input-label for="activo" :value="__('A.10. Estatus')" />
-            <x-select-input id="activo" name="activo" class="mt-1 block w-full" x-model="activo">
-                <option value="1">{{ __('Activo') }}</option>
-                <option value="0">{{ __('Inactivo') }}</option>
-            </x-select-input>
-            <x-input-error class="mt-2" :messages="$errors->get('activo')" />
-        </div>
+
 
         <div x-show="activo === '0'" x-cloak>
             <x-input-label for="razon_cierre" :value="__('A.11. Razón del estatus inactivo')" />
