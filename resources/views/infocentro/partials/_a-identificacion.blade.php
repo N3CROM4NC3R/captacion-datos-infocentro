@@ -3,18 +3,31 @@
         {{ __('Sección A. Identificación del infocentro') }}
     </h3>
 
-    <dl class="mt-4 rounded-lg bg-gray-50 dark:bg-gray-700/40 p-4 flex">
-        <div class="mx-5">
+    {{-- Caja de identidad: código, nombre y estatus.
+         Va con `grid` y no con `flex` por dos razones. La primera es el reflujo:
+         un `flex` sin `flex-wrap` no pasa a columna en móvil, solo aprieta, y el
+         desplegable de estatus acababa con 54 px de ancho y su borde derecho
+         fuera de la pantalla. La segunda es el reparto del espacio: en un grid
+         la columna del nombre es `minmax(0,1fr)`, que es lo que permite que un
+         nombre largo envuelva en vez de ensanchar la fila y desalinear los tres
+         bloques. `min-h-11` en los tres les da la misma altura. --}}
+    <dl class="mt-4 grid gap-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-700/40 sm:grid-cols-[7rem_minmax(0,1fr)_10rem]">
+        <div class="min-w-0">
             <dt class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Código') }}</dt>
-            <dd class="bg-green-200 mt-1 rounded-md p-4 text-sm font-bold text-gray-900 dark:text-gray-100">{{ $infocentro->codigo }}</dd>
+            <dd class="mt-1 flex min-h-11 items-center rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-semibold break-words text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">{{ $infocentro->codigo }}</dd>
         </div>
-        <div class="mx-5">
+
+        <div class="min-w-0">
             <dt class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Nombre') }}</dt>
-            <dd class="bg-green-200 mt-1 rounded-md p-4 text-sm font-bold text-gray-900 dark:text-gray-100">{{ $infocentro->nombre }}</dd>
+            <dd class="mt-1 flex min-h-11 items-center rounded-md border border-gray-200 bg-white px-3 py-2 text-sm break-words text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">{{ $infocentro->nombre }}</dd>
         </div>
-        <div class="mx-5">
-            <x-input-label for="activo" class="text-gray-500" :value="__('Estatus')" />
-            <x-select-input id="activo" name="activo" class="mt-1 block w-full" x-model="activo">
+
+        <div class="min-w-0">
+            {{-- Un `label` a secas y no `x-input-label`: ese componente trae
+                 `text-sm` y no deja sustituirlo limpio, así que las tres
+                 etiquetas quedaban con tamaños distintos. --}}
+            <label for="activo" class="block text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ __('Estatus') }}</label>
+            <x-select-input id="activo" name="activo" class="mt-1 block min-h-11 w-full" x-model="activo">
                 <option value="1">{{ __('Activo') }}</option>
                 <option value="0">{{ __('Inactivo') }}</option>
             </x-select-input>

@@ -88,6 +88,69 @@ test('la ficha se muestra con las cuatro secciones', function () {
     $response->assertSee(__('Sección D. Facilitadores'));
 });
 
+test('la caja de identidad muestra código, nombre y estatus', function () {
+    $user = InfocentroUserFactory::new()->create();
+    $infocentro = $user->infocentro;
+    $infocentro->update(['nombre' => 'Infocentro de la Iglesia']);
+
+    $html = $this->actingAs($user)->get('/infocentro/diagnostico')
+        ->assertOk()
+        ->getContent();
+
+    // Los tres bloques viven en el mismo `dl` de identidad.
+    expect(str_contains($html, $infocentro->codigo))->toBeTrue()
+        ->and(str_contains($html, 'Infocentro de la Iglesia'))->toBeTrue()
+        ->and(str_contains($html, '<label for="activo"'))->toBeTrue(
+            'El estatus necesita su etiqueta asociada al select para que el nombre del campo sea accesible.',
+        )
+        ->and(str_contains($html, 'name="activo"'))->toBeTrue()
+        ->and(str_contains($html, '>'.__('Activo').'</option>'))->toBeTrue();
+});
+
+test('la caja de identidad se reparte con un grid adaptable', function () {
+    $user = InfocentroUserFactory::new()->create();
+
+    $html = $this->actingAs($user)->get('/infocentro/diagnostico')
+        ->assertOk()
+        ->getContent();
+
+    preg_match('/<dl class="([^"]*grid[^"]*)">/', $html, $caja);
+
+    $clases = $caja[1] ?? '';
+
+    // Un `flex` de anchos fijos no refluye: en móvil solo apretaba el
+    // desplegable de estatus hasta dejarlo ilegible. El grid devuelve el
+    // control a una columna por debajo de `sm` y reparte el resto con
+    // `minmax(0,1fr)`, que es lo que deja envolver un nombre largo en vez de
+    // ensanchar la fila.
+    expect($clases)->not->toBe('')
+        ->and(str_contains($clases, 'grid'))->toBeTrue('La caja de identidad debe usar grid.')
+        ->and(str_contains($clases, 'flex'))->toBeFalse('Sin flex: no hay reflujo a columna.')
+        ->and(str_contains($clases, 'sm:grid-cols-'))->toBeTrue(
+            'Debe declarar sus columnas a partir de sm.',
+        )
+        ->and(str_contains($clases, 'minmax(0,1fr)'))->toBeTrue(
+            'La columna del nombre necesita minmax(0,1fr) para que el texto largo envuelva.',
+        );
+
+    // Los tres bloques comparten altura: si no, el select descuadra la fila.
+    expect(substr_count($html, 'min-h-11'))->toBe(3);
+});
+
+test('el nombre largo no rompe la caja de identidad', function () {
+    $user = InfocentroUserFactory::new()->create();
+    $user->infocentro->update([
+        'nombre' => 'Infocentro Comunitario de la Parroquia San Juan de los Morros del Municipio Miranda',
+    ]);
+
+    // Que el texto llegue entero a la vista. Que no desborde el ancho no se
+    // puede comprobar sin un motor de layout, así que lo que se fija aquí es
+    // que el nombre ni se trunca ni se inyecta.
+    $this->actingAs($user)->get('/infocentro/diagnostico')
+        ->assertOk()
+        ->assertSee('Infocentro Comunitario de la Parroquia San Juan de los Morros del Municipio Miranda');
+});
+
 test('el administrador no puede ver la ficha', function () {
     $admin = AdminFactory::new()->create();
 
