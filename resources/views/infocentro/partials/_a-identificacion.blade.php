@@ -24,7 +24,7 @@
             <x-select-input id="estado_id" name="estado_id" class="mt-1 block w-full" x-model="estadoId" @change="cargarMunicipios()">
                 <option value="">{{ __('Seleccione un estado') }}</option>
                 @foreach ($estados as $estado)
-                    <option value="{{ $estado->id }}">{{ $estado->nombre }}</option>
+                    <option value="{{ $estado->id }}" @selected((string) $estadoId === (string) $estado->id)>{{ $estado->nombre }}</option>
                 @endforeach
             </x-select-input>
             <x-input-error class="mt-2" :messages="$errors->get('estado_id')" />
@@ -32,7 +32,7 @@
 
         <div>
             <x-input-label for="municipio_id" :value="__('A.2. Municipio')" />
-            <x-select-input id="municipio_id" name="municipio_id" class="mt-1 block w-full" x-model="municipioId" @change="cargarParroquias()" :disabled="blank($estadoId)">
+            <x-select-input id="municipio_id" name="municipio_id" class="mt-1 block w-full" x-model="municipioId" @change="cargarParroquias()" x-bind:disabled="!estadoId">
                 <option value="">{{ __('Seleccione un municipio') }}</option>
                 <template x-for="(nombre, id) in municipios" :key="id">
                     <option :value="id" x-text="nombre"></option>
@@ -43,7 +43,7 @@
 
         <div>
             <x-input-label for="parroquia_id" :value="__('A.3. Parroquia')" />
-            <x-select-input id="parroquia_id" name="parroquia_id" class="mt-1 block w-full" x-model="parroquiaId" :disabled="blank($municipioId)">
+            <x-select-input id="parroquia_id" name="parroquia_id" class="mt-1 block w-full" x-model="parroquiaId" x-bind:disabled="!municipioId">
                 <option value="">{{ __('Seleccione una parroquia') }}</option>
                 <template x-for="(nombre, id) in parroquias" :key="id">
                     <option :value="id" x-text="nombre"></option>
