@@ -5,22 +5,33 @@
 
     <div class="mt-4 space-y-6">
         <div>
-            <input type="hidden" name="vinculacion_mincyt" value="0" />
-            <label for="vinculacion_mincyt" class="inline-flex items-center">
-                <input id="vinculacion_mincyt" type="checkbox" name="vinculacion_mincyt" value="1" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
-                    x-model="vinculado" @checked(old('vinculacion_mincyt', $infocentro->vinculacion_mincyt)) />
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">
-                    {{ __('H.1. ¿El infocentro tiene vinculación con instituciones del Ministerio de Ciencia y Tecnología?') }}
-                </span>
-            </label>
-            <x-input-error class="mt-2" :messages="$errors->get('vinculacion_mincyt')" />
+            <x-si-no
+                name="vinculacion_mincyt"
+                id="vinculacion_mincyt"
+                :pregunta="__('H.1. ¿El infocentro tiene vinculación con instituciones del Ministerio de Ciencia y Tecnología?')"
+                model="vinculado"
+                :valor="(bool) old('vinculacion_mincyt', $infocentro->vinculacion_mincyt)"
+            />
         </div>
 
         <div x-show="vinculado" x-cloak class="space-y-4">
+            <div>
+                <x-input-label for="cantidad_vinculaciones" :value="__('H.2. Número de instituciones vinculadas')" />
+                <x-text-input id="cantidad_vinculaciones" type="number" min="0" max="20" class="mt-1 block w-32"
+                    x-model.number="cantidad" />
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    {{ __('Al cambiar la cantidad se ajustan los bloques del formulario.') }}
+                </p>
+            </div>
+
+            <p x-show="cantidad === 0" x-cloak class="text-sm text-gray-500 dark:text-gray-400">
+                {{ __('No se registraron instituciones. Aumente la cantidad para agregarlas.') }}
+            </p>
+
             <template x-for="(fila, indice) in filas" :key="indice">
                 <fieldset class="rounded-lg border border-gray-200 dark:border-gray-700 p-4 space-y-4">
                     <legend class="px-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                        <span x-text="__('Institución')"></span>
+                        <span>Institucion</span>
                         <span x-text="indice + 1"></span>
                     </legend>
 
@@ -71,9 +82,17 @@
                 </fieldset>
             </template>
 
-            <button type="button" class="text-sm text-indigo-600 dark:text-indigo-400 underline" @click="agregar()">
-                <span x-text="__('Agregar institución')"></span>
-            </button>
+            <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" disabled
+                        class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-400 shadow-sm opacity-60"
+                        x-model="sinInstituciones" />
+                    <span class="ms-2 text-sm text-gray-500 dark:text-gray-500">{{ __('No') }}</span>
+                </label>
+                <p class="text-sm text-gray-500 dark:text-gray-400" x-show="sinInstituciones" x-cloak>
+                    {{ __('Mientras no agregues ninguna institución, aquí no hay vinculación que registrar.') }}
+                </p>
+            </div>
         </div>
     </div>
 

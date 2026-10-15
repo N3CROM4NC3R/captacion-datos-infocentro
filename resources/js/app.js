@@ -18,6 +18,7 @@ const datos = () =>
         vinculos: [],
         estadosProyecto: {},
         problemas: [],
+        actividades: {},
         niveles: {},
         errores: {},
         vinculacionMincyt: false,
@@ -29,6 +30,7 @@ const datos = () =>
         vinculacionSac: '',
         vinculacionConsejos: '',
         vinculacionAutoridad: false,
+        tieneFacilitadorTitular: false,
         consultasPopulares: '',
         ofertaAnual: '',
         suficienciaEquipo: '',
@@ -110,8 +112,13 @@ document.addEventListener('alpine:init', () => {
             vinculacionSac: config.vinculacionSac ?? '',
             vinculacionConsejos: config.vinculacionConsejos ?? '',
             vinculacionAutoridad: config.vinculacionAutoridad ?? false,
+            tieneTitular: config.tieneFacilitadorTitular ?? false,
             consultasPopulares: config.consultasPopulares ?? '',
             ofertaAnual: config.ofertaAnual ?? '',
+
+            // Estado de cada tipo de actividad: al marcar «Sí» se muestran sus
+            // campos de frecuencia, participantes y detalle sin recargar.
+            actividades: config.actividades ?? {},
             suficienciaEquipo: config.suficienciaEquipo ?? '',
             activo: config.estatusActivo ?? '1',
 
@@ -215,8 +222,10 @@ document.addEventListener('alpine:init', () => {
     });
 
     /**
-     * Repeatable MINCYT institution blocks (H.2). No hay tope: el PDF propone
-     * tres pero el formulario deja agregar más.
+     * Repeatable MINCYT institution blocks (H.2).
+     *
+     * El número de bloques lo fija el contador, igual que en los facilitadores
+     * de la sección D. El PDF no trae ese contador: propone tres bloques fijos.
      */
     Alpine.data('vinculacionesMincyt', () => {
         const config = datos();
@@ -224,14 +233,31 @@ document.addEventListener('alpine:init', () => {
         return {
             vinculado: config.vinculacionMincyt ?? false,
             fundacite: config.acompFundacite ?? false,
-            filas: (config.vinculos ?? []).filter(Boolean).length
-                ? config.vinculos.filter(Boolean)
-                : [vacioVinculacion()],
+            filas: (config.vinculos ?? []).filter(Boolean),
             estados: config.estadosProyecto ?? {},
             errores: config.errores ?? {},
 
-            agregar() {
-                this.filas.push(vacioVinculacion());
+            get cantidad() {
+                return this.filas.length;
+            },
+
+            set cantidad(valor) {
+                const objetivo = Math.min(20, Math.max(0, parseInt(valor, 10) || 0));
+
+                while (this.filas.length < objetivo) {
+                    this.filas.push(vacioVinculacion());
+                }
+
+                if (this.filas.length > objetivo) {
+                    this.filas = this.filas.slice(0, objetivo);
+                }
+            },
+
+            get sinInstituciones() {
+                // Pode haber filas abiertas por el contador que aún no se han
+                // rellenado, así que «no hay vinculación» se deduce de que
+                // ninguna tenga el nombre informado.
+                return this.filas.every((fila) => !fila.institucion);
             },
 
             eliminar(indice) {

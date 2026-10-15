@@ -61,15 +61,13 @@
 
     <div class="mt-6 grid gap-6 sm:grid-cols-2">
         <div>
-            <input type="hidden" name="ciencia_ciudadana" value="0" />
-            <label for="ciencia_ciudadana" class="inline-flex items-center">
-                <input id="ciencia_ciudadana" type="checkbox" name="ciencia_ciudadana" value="1" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
-                    x-model="cienciaCiudadana" @checked(old('ciencia_ciudadana', $infocentro->ciencia_ciudadana)) />
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">
-                    {{ __('I.5. ¿La comunidad tiene experiencias previas de ciencia ciudadana?') }}
-                </span>
-            </label>
-            <x-input-error class="mt-2" :messages="$errors->get('ciencia_ciudadana')" />
+            <x-si-no
+                name="ciencia_ciudadana"
+                id="ciencia_ciudadana"
+                :pregunta="__('I.5. ¿La comunidad tiene experiencias previas de ciencia ciudadana?')"
+                model="cienciaCiudadana"
+                :valor="(bool) old('ciencia_ciudadana', $infocentro->ciencia_ciudadana)"
+            />
         </div>
 
         <div x-show="cienciaCiudadana" x-cloak>

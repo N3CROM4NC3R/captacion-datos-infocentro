@@ -37,15 +37,28 @@ enum TipoEquipoEnum: string
     }
 
     /**
-     * Get the label of the variable field this equipment asks for.
+     * Determine whether this equipment asks if it is desktop or laptop units.
      */
-    public function etiquetaDetalle(): string
+    public function tieneFormato(): bool
+    {
+        return $this === self::Computadoras;
+    }
+
+    /**
+     * Get the label of the free-text field this equipment asks for.
+     *
+     * Devuelve `null` para los tipos que no la responden: el PDF solo la pide
+     * para computadoras (sistema operativo), kits de robótica (tipo de kits) y
+     * otros equipos (especificar). Devolver la etiqueta o `null` en el mismo
+     * método evita que exista un campo sin rótulo o al revés.
+     */
+    public function etiquetaDetalle(): ?string
     {
         return match ($this) {
-            self::Computadoras => 'Sistema operativo / tipo de equipos',
+            self::Computadoras => '¿Con qué sistema operativo?',
             self::KitsRobotica => 'Tipo de kits',
             self::Otros => 'Especificar',
-            default => 'Detalle',
+            self::TelescopiosPortatiles, self::ModemRouter => null,
         };
     }
 

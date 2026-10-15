@@ -8,6 +8,7 @@ use App\Enums\DiaSemanaEnum;
 use App\Enums\EstadoEquipoEnum;
 use App\Enums\EstadoProyectoMincytEnum;
 use App\Enums\FormacionContinuaEnum;
+use App\Enums\FormatoEquipoEnum;
 use App\Enums\FrecuenciaEnum;
 use App\Enums\InstalacionEnum;
 use App\Enums\InteresDemandaEnum;
@@ -218,6 +219,8 @@ class GuardarDiagnosticoRequest extends FormRequest
             'equipos.estado.*' => ['nullable', Rule::enum(EstadoEquipoEnum::class)],
             'equipos.detalle' => ['nullable', 'array'],
             'equipos.detalle.*' => ['nullable', 'string', 'max:255'],
+            'equipos.formato' => ['nullable', 'array'],
+            'equipos.formato.*' => ['nullable', Rule::enum(FormatoEquipoEnum::class)],
             'equipos.observaciones' => ['nullable', 'array'],
             'equipos.observaciones.*' => ['nullable', 'string', 'max:2000'],
 

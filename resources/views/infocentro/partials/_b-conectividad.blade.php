@@ -29,7 +29,15 @@
         </div>
 
         <div x-show="proveedorNecesitaNombre" x-cloak>
-            <x-input-label for="proveedor_nombre" :value="__('¿Cuál?')" />
+            <div x-show="proveedor === 'empresa_privada'" x-cloak>
+
+                <x-input-label for="proveedor_nombre" :value="__('¿Cuál empresa privada ?')" />
+            </div>
+            <div x-show="proveedor === 'red_comunitaria'" x-cloak>
+
+                <x-input-label for="proveedor_nombre" :value="__('¿Cuál red comunitaria/cooperativa?')" />
+            </div>
+            
             <x-text-input id="proveedor_nombre" name="proveedor_nombre" type="text" class="mt-1 block w-full" :value="old('proveedor_nombre', $infocentro->proveedor_nombre)" />
             <x-input-error class="mt-2" :messages="$errors->get('proveedor_nombre')" />
         </div>

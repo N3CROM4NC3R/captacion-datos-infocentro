@@ -124,6 +124,7 @@
                 vinculacionSac: @js(old('vinculacion_sac', $infocentro->vinculacion_sac?->value)),
                 vinculacionConsejos: @js(old('vinculacion_consejos', $infocentro->vinculacion_consejos?->value)),
                 vinculacionAutoridad: @json((bool) old('vinculacion_autoridad', $infocentro->vinculacion_autoridad)),
+                tieneFacilitadorTitular: @json((bool) old('tiene_facilitador_titular', $infocentro->tiene_facilitador_titular)),
                 consultasPopulares: @js(old('consultas_populares', $infocentro->consultas_populares?->value)),
                 ofertaAnual: @js(old('oferta_formativa_anual', $infocentro->oferta_formativa_anual?->value)),
                 suficienciaEquipo: @js(old('suficiencia_equipamiento', $infocentro->suficiencia_equipamiento?->value)),
@@ -136,6 +137,7 @@
                 vinculos: @js($vinculaciones),
                 estadosProyecto: @js(\App\Enums\EstadoProyectoMincytEnum::options()),
                 problemas: @js(old('problemas', $infocentro->problemas ?? [])),
+                actividades: @js(collect($actividades)->map(fn ($fila) => (bool) $fila['activa'])->all()),
             };
         </script>
     @endpush

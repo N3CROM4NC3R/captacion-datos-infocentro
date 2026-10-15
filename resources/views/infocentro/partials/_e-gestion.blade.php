@@ -57,13 +57,13 @@
         </div>
 
         <div>
-            <input type="hidden" name="vinculacion_autoridad" value="0" />
-            <label for="vinculacion_autoridad" class="inline-flex items-center">
-                <input id="vinculacion_autoridad" type="checkbox" name="vinculacion_autoridad" value="1" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
-                    x-model="vinculacionAutoridad" @checked(old('vinculacion_autoridad', $infocentro->vinculacion_autoridad)) />
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('E.3. ¿Está vinculado a la autoridad regional?') }}</span>
-            </label>
-            <x-input-error class="mt-2" :messages="$errors->get('vinculacion_autoridad')" />
+            <x-si-no
+                name="vinculacion_autoridad"
+                id="vinculacion_autoridad"
+                :pregunta="__('E.3. ¿Está vinculado a la autoridad regional?')"
+                model="vinculacionAutoridad"
+                :valor="(bool) old('vinculacion_autoridad', $infocentro->vinculacion_autoridad)"
+            />
         </div>
 
         <div x-show="vinculacionAutoridad" x-cloak class="grid gap-4 sm:grid-cols-2">

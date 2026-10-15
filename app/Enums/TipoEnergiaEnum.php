@@ -35,4 +35,18 @@ enum TipoEnergiaEnum: string
     {
         return $this !== self::Corpoelectrico;
     }
+
+    /**
+     * Get the label of the free-text field this source asks for.
+     *
+     * El PDF solo deja un espacio libre en la opción «Otra» del inventario de
+     * energía; el resto son casillas de estado.
+     */
+    public function etiquetaDetalle(): ?string
+    {
+        return match ($this) {
+            self::Otro => 'Especificar',
+            default => null,
+        };
+    }
 }

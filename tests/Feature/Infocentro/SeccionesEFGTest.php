@@ -244,7 +244,6 @@ test('se guarda el inventario de equipos', function () {
                 TipoEquipoEnum::Computadoras->value => EstadoEquipoEnum::Regular->value,
                 TipoEquipoEnum::KitsRobotica->value => EstadoEquipoEnum::Optimo->value,
             ],
-            'detalle' => [TipoEquipoEnum::Computadoras->value => 'Windows 10'],
             'observaciones' => [TipoEquipoEnum::Computadoras->value => 'Dos sin memoria'],
         ],
     ]))->assertSessionHasNoErrors();

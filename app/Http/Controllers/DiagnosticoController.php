@@ -67,9 +67,10 @@ class DiagnosticoController extends Controller
                     'ultimo_contacto' => $v->ultimo_contacto?->format('Y-m-d'),
                 ])->all();
 
-        // El PDF propone tres bloques; se muestran los guardados y al menos tres
-        // huecos, porque no hay tope de instituciones.
-        return array_pad($guardadas, 3, null);
+        // El número de bloques lo decide el contador de H.2, así que solo se
+        // devuelven las instituciones ya registradas: rellenar con filas vacías
+        // las haría aparecer en el formulario sin estar guardadas.
+        return $guardadas;
     }
 
     /**
@@ -126,6 +127,7 @@ class DiagnosticoController extends Controller
                 'fuera_servicio' => $request->old("equipos.fuera_servicio.{$tipo->value}", $fila?->fuera_servicio),
                 'estado' => $request->old("equipos.estado.{$tipo->value}", $fila?->estado?->value),
                 'detalle' => $request->old("equipos.detalle.{$tipo->value}", $fila?->detalle),
+                'formato' => $request->old("equipos.formato.{$tipo->value}", $fila?->formato?->value),
                 'observaciones' => $request->old("equipos.observaciones.{$tipo->value}", $fila?->observaciones),
             ];
         }
@@ -284,9 +286,14 @@ class DiagnosticoController extends Controller
         foreach (TipoEquipoEnum::cases() as $tipo) {
             $estado = $payload['estado'][$tipo->value] ?? null;
             $cantidad = $payload['cantidad'][$tipo->value] ?? null;
+            $formato = $tipo->tieneFormato() ? ($payload['formato'][$tipo->value] ?? null) : null;
+            $detalle = $this->textoOpcional($payload['detalle'][$tipo->value] ?? null);
 
-            // Sin cantidad ni estado el bloque no aporta nada, así que no se guarda.
-            if ($cantidad === null && $estado === null) {
+            // Sin cantidad, estado, formato ni detalle el bloque no aporta nada,
+            // así que no se guarda. `formato` y `detalle` cuentan porque elegir
+            // «portátiles» o describir un equipo suelto sigue siendo información
+            // válida aunque no haya cantidad.
+            if ($cantidad === null && $estado === null && $formato === null && $detalle === null) {
                 continue;
             }
 
@@ -296,7 +303,8 @@ class DiagnosticoController extends Controller
                 'funcionando' => $tipo->tieneDesglose() ? ($payload['funcionando'][$tipo->value] ?? null) : null,
                 'fuera_servicio' => $tipo->tieneDesglose() ? ($payload['fuera_servicio'][$tipo->value] ?? null) : null,
                 'estado' => $estado,
-                'detalle' => $this->textoOpcional($payload['detalle'][$tipo->value] ?? null),
+                'detalle' => $detalle,
+                'formato' => $formato,
                 'observaciones' => $this->textoOpcional($payload['observaciones'][$tipo->value] ?? null),
             ];
         }
@@ -318,9 +326,10 @@ class DiagnosticoController extends Controller
         foreach (TipoEnergiaEnum::cases() as $tipo) {
             $cantidad = $payload['cantidad'][$tipo->value] ?? null;
             $estado = $payload['estado'][$tipo->value] ?? null;
-            $detalle = $payload['detalle'][$tipo->value] ?? null;
+            $observaciones = $payload['observaciones'][$tipo->value] ?? null;
+            $detalle = $this->textoOpcional($payload['detalle'][$tipo->value] ?? null);
 
-            if ($cantidad === null && $estado === null && blank($detalle)) {
+            if ($cantidad === null && $estado === null && $detalle === null && blank($observaciones)) {
                 continue;
             }
 
@@ -328,8 +337,8 @@ class DiagnosticoController extends Controller
                 'tipo' => $tipo,
                 'cantidad' => $tipo->cantidadFija() ? $cantidad : null,
                 'estado' => $estado,
-                'detalle' => $this->textoOpcional($detalle),
-                'observaciones' => $this->textoOpcional($payload['observaciones'][$tipo->value] ?? null),
+                'detalle' => $detalle,
+                'observaciones' => $this->textoOpcional($observaciones),
             ];
         }
 

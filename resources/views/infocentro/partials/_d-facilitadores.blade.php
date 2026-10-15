@@ -5,13 +5,13 @@
 
     <div class="mt-4 space-y-4">
         <div>
-            <input type="hidden" name="tiene_facilitador_titular" value="0" />
-            <label for="tiene_facilitador_titular" class="inline-flex items-center">
-                <input id="tiene_facilitador_titular" type="checkbox" name="tiene_facilitador_titular" value="1" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
-                    @checked(old('tiene_facilitador_titular', $infocentro->tiene_facilitador_titular)) />
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('D.1. ¿Cuenta con facilitador/a titular?') }}</span>
-            </label>
-            <x-input-error class="mt-2" :messages="$errors->get('tiene_facilitador_titular')" />
+            <x-si-no
+            name="tiene_facilitador_titular"
+            id="tiene_facilitador_titular"
+            :pregunta="__('D.1. ¿Cuenta con facilitador/a titular?')"
+            model="tieneTitular"
+            :valor="(bool) old('tiene_facilitador_titular', $infocentro->tiene_facilitador_titular)"
+        />
         </div>
 
         <fieldset class="mt-6 space-y-6">

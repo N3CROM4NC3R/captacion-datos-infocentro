@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\EstadoEquipoEnum;
+use App\Enums\FormatoEquipoEnum;
 use App\Enums\TipoEquipoEnum;
 use Database\Factories\EquipoFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['tipo', 'cantidad', 'funcionando', 'fuera_servicio', 'estado', 'detalle', 'observaciones'])]
+#[Fillable(['tipo', 'cantidad', 'funcionando', 'fuera_servicio', 'estado', 'detalle', 'formato', 'observaciones'])]
 class Equipo extends Model
 {
     /** @use HasFactory<EquipoFactory> */
@@ -37,6 +38,7 @@ class Equipo extends Model
             'funcionando' => 'integer',
             'fuera_servicio' => 'integer',
             'estado' => EstadoEquipoEnum::class,
+            'formato' => FormatoEquipoEnum::class,
         ];
     }
 }

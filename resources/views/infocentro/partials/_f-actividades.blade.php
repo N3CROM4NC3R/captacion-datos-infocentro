@@ -15,6 +15,9 @@
                 $nivelActual = old("actividades.opcion_nivel.{$tipo->value}", $fila['opcion_nivel']);
                 $participantesActual = old("actividades.participantes.{$tipo->value}", $fila['participantes']);
                 $detalleActual = old("actividades.detalle.{$tipo->value}", $fila['detalle']);
+                // Alpine necesita las comillas: sin ellas `actividades[robotica]`
+                // sería una variable inexistente, no una clave del objeto.
+                $modeloActividad = "actividades['{$tipo->value}']";
             @endphp
 
             <fieldset class="rounded-lg border border-gray-200 dark:border-gray-700 p-4 space-y-4">
@@ -22,17 +25,16 @@
                     {{ $tipo->label() }}
                 </legend>
 
-                <div class="flex items-center gap-4">
-                    <input type="hidden" name="actividades[activa][{{ $tipo->value }}]" value="0" />
-                    <label class="inline-flex items-center gap-2">
-                        <input type="checkbox" name="actividades[activa][{{ $tipo->value }}]" value="1"
-                            class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
-                            @checked($fila['activa']) />
-                        <span class="text-sm text-gray-600 dark:text-gray-400">{{ __('Sí') }}</span>
-                    </label>
-                </div>
+                <x-si-no
+                        :name="'actividades[activa][' . $tipo->value . ']'"
+                        :id="'actividad_activa_' . $tipo->value"
+                        :pregunta="__('¿El infocentro desarrolla esta actividad?')"
+                        :model="$modeloActividad"
+                        :valor="$fila['activa']"
+                        :error="'actividades.activa.' . $tipo->value"
+                    />
 
-                <div x-show="{{ $fila['activa'] ? 'true' : 'false' }}" class="grid gap-4 sm:grid-cols-2">
+                <div x-show="actividades['{{ $tipo->value }}']" x-cloak class="grid gap-4 sm:grid-cols-2">
                     <div>
                         <x-input-label :for="'frecuencia_' . $tipo->value" :value="__('Frecuencia')" />
                         <x-select-input :id="'frecuencia_' . $tipo->value" name="actividades[frecuencia][{{ $tipo->value }}]" class="mt-1 block w-full">

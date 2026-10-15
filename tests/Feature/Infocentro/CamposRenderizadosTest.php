@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\FormatoEquipoEnum;
 use App\Enums\FrecuenciaEnum;
 use App\Enums\TipoActividadEnum;
 use App\Enums\TipoEnergiaEnum;
@@ -25,8 +26,16 @@ function camposDeEquipos(): array
 
         $campos[] = "{$base}[cantidad][{$tipo->value}]";
         $campos[] = "{$base}[estado][{$tipo->value}]";
-        $campos[] = "{$base}[detalle][{$tipo->value}]";
         $campos[] = "{$base}[observaciones][{$tipo->value}]";
+
+        // El PDF solo pide el campo libre en algunos tipos; el enum lo dice.
+        if ($tipo->etiquetaDetalle() !== null) {
+            $campos[] = "{$base}[detalle][{$tipo->value}]";
+        }
+
+        if ($tipo->tieneFormato()) {
+            $campos[] = "{$base}[formato][{$tipo->value}]";
+        }
 
         if ($tipo->tieneDesglose()) {
             $campos[] = "{$base}[funcionando][{$tipo->value}]";
@@ -48,8 +57,12 @@ function camposDeEnergias(): array
         $base = 'energias';
 
         $campos[] = "{$base}[estado][{$tipo->value}]";
-        $campos[] = "{$base}[detalle][{$tipo->value}]";
         $campos[] = "{$base}[observaciones][{$tipo->value}]";
+
+        // Solo la fuente «otra» deja un espacio libre en el PDF.
+        if ($tipo->etiquetaDetalle() !== null) {
+            $campos[] = "{$base}[detalle][{$tipo->value}]";
+        }
 
         if ($tipo->cantidadFija()) {
             $campos[] = "{$base}[cantidad][{$tipo->value}]";
@@ -163,12 +176,11 @@ test('los campos numéricos y de texto de F y G aceptan el valor guardado', func
             'cantidad' => ['computadoras' => 12],
             'funcionando' => ['computadoras' => 9],
             'fuera_servicio' => ['computadoras' => 3],
-            'detalle' => ['computadoras' => 'Linux Mint'],
+            'formato' => ['computadoras' => FormatoEquipoEnum::Ambas->value],
             'observaciones' => ['computadoras' => 'Faltan monitores'],
         ],
         'energias' => [
             'cantidad' => ['plantas_electricas' => 2],
-            'detalle' => ['plantas_electricas' => 'Diésel 5kVA'],
             'observaciones' => ['plantas_electricas' => 'Combustible inestable'],
         ],
         'actividades' => [
@@ -188,9 +200,7 @@ test('los campos numéricos y de texto de F y G aceptan el valor guardado', func
     // falla se comprueba la contención por separado.
     $esperado = [
         'value="12"' => 'equipos[cantidad]',
-        'value="Linux Mint"' => 'equipos[detalle]',
         'value="Faltan monitores"' => 'equipos[observaciones]',
-        'value="Diésel 5kVA"' => 'energias[detalle]',
         'value="Combustible inestable"' => 'energias[observaciones]',
         'value="18"' => 'actividades[participantes]',
         'value="Taller de sumo"' => 'actividades[detalle]',
