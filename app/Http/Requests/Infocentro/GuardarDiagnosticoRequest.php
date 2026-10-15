@@ -5,6 +5,7 @@ namespace App\Http\Requests\Infocentro;
 use App\Enums\CondicionEspacioEnum;
 use App\Enums\ConsultasPopularesEnum;
 use App\Enums\DiaSemanaEnum;
+use App\Enums\DimensionPerfilamientoEnum;
 use App\Enums\DocumentoAnexoEnum;
 use App\Enums\EstadoEquipoEnum;
 use App\Enums\EstadoProyectoMincytEnum;
@@ -19,6 +20,7 @@ use App\Enums\NivelOfimaticaEnum;
 use App\Enums\OfertaAnualEnum;
 use App\Enums\OperatividadEnum;
 use App\Enums\ParticipacionComunidadEnum;
+use App\Enums\PrioridadIntervencionEnum;
 use App\Enums\ProblemaTerritorioEnum;
 use App\Enums\ProveedorInternetEnum;
 use App\Enums\ServicioInternetEnum;
@@ -303,6 +305,16 @@ class GuardarDiagnosticoRequest extends FormRequest
             'firmas.*.nombre' => ['nullable', 'string', 'max:255'],
             'firmas.*.firma' => ['nullable', 'string', 'max:255'],
             'firmas.*.fecha' => ['nullable', 'date'],
+
+            // J.1 Puntuación por dimensiones. Las siete son obligatorias en
+            // bloque: empezar a perfilar y dejarlo a medias daría una
+            // clasificación sin sentido. Mientras el bloque no se toque, la
+            // ficha se guarda sin perfilar, que es el estado de las fichas que
+            // aún no ha pasado por el diagnosticador.
+            'puntuaciones' => ['nullable', 'array'],
+            'puntuaciones.*' => ['nullable', 'integer', Rule::in(range(0, DimensionPerfilamientoEnum::PUNTUACION_MAXIMA))],
+            'prioridad_intervencion' => ['nullable', Rule::enum(PrioridadIntervencionEnum::class)],
+            'recomendaciones' => ['nullable', 'string', 'max:2000'],
         ];
     }
 
@@ -376,7 +388,42 @@ class GuardarDiagnosticoRequest extends FormRequest
             $this->validarEquipos($validator);
             $this->validarVinculacionesMincyt($validator);
             $this->validarDocumentos($validator);
+            $this->validarPuntuaciones($validator);
         });
+    }
+
+    /**
+     * Check that the seven dimension scores are all present and real.
+     *
+     * `validarClaves()` no sirve aquí: solo recoge claves de valores que sean
+     * arrays, y una puntuación es un entero suelto.
+     */
+    private function validarPuntuaciones(Validator $validator): void
+    {
+        $puntuaciones = array_filter(
+            (array) $this->input('puntuaciones', []),
+            fn (mixed $valor): bool => $valor !== null && $valor !== '',
+        );
+
+        // Un bloque entero vacío es «sin perfilar», no un perfil a medias.
+        if ($puntuaciones === []) {
+            return;
+        }
+
+        foreach (DimensionPerfilamientoEnum::cases() as $dimension) {
+            if (! array_key_exists($dimension->value, $puntuaciones)) {
+                $validator->errors()->add(
+                    "puntuaciones.{$dimension->value}",
+                    __('Asigna una puntuación a esta dimensión.'),
+                );
+            }
+        }
+
+        foreach (array_keys($puntuaciones) as $clave) {
+            if (DimensionPerfilamientoEnum::tryFrom((string) $clave) === null) {
+                $validator->errors()->add("puntuaciones.$clave", __('Dimensión desconocida.'));
+            }
+        }
     }
 
     /**

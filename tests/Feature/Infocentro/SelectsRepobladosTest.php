@@ -19,10 +19,15 @@ use Database\Factories\VinculacionMincytFactory;
  */
 function columnasConEnum(): array
 {
+    // `tipo_infocentro` es un enum respaldado, pero no lo elige nadie: se
+    // deduce del total de J.1 y se pinta como Tarjeta, no como desplegable.
+    $derivadas = ['tipo_infocentro'];
+
     $columnas = [];
 
     foreach ((new Infocentro)->getCasts() as $columna => $cast) {
-        if (is_string($cast) && enum_exists($cast) && is_subclass_of($cast, BackedEnum::class)) {
+        if (is_string($cast) && enum_exists($cast) && is_subclass_of($cast, BackedEnum::class)
+            && ! in_array($columna, $derivadas, true)) {
             $columnas[$columna] = $cast;
         }
     }

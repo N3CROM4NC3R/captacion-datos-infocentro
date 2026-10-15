@@ -17,7 +17,7 @@
                 </div>
             @endif
 
-            {{-- Resumen de errores: la ficha tiene nueve secciones y algunos
+            {{-- Resumen de errores: la ficha tiene diez secciones y algunos
                  fallos (claves desconocidas, por ejemplo) no tienen un campo
                  visible donde mostrarse. --}}
             @if ($errors->any())
@@ -107,6 +107,12 @@
                     </div>
                 </div>
 
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 space-y-6">
+                        @include('infocentro.partials._perfilamiento')
+                    </div>
+                </div>
+
                 <div class="flex items-center justify-end">
                     <x-primary-button>{{ __('Guardar') }}</x-primary-button>
                 </div>
@@ -151,6 +157,8 @@
                 estadosProyecto: @js(\App\Enums\EstadoProyectoMincytEnum::options()),
                 problemas: @js(old('problemas', $infocentro->problemas ?? [])),
                 actividades: @js(collect($actividades)->map(fn ($fila) => (bool) $fila['activa'])->all()),
+                puntuaciones: @js(array_map(fn ($valor) => (string) $valor, $puntuaciones)),
+                tipos: @js($tiposInfocentro),
             };
         </script>
     @endpush

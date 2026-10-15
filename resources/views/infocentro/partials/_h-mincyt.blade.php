@@ -83,10 +83,13 @@
             </template>
 
             <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+                {{-- `sinInstituciones` es un getter: no admite `x-model` ni
+                     para leer ni para escribir, así que el espejo se marca con
+                     un atributo derivado. --}}
                 <label class="inline-flex items-center">
                     <input type="checkbox" disabled
                         class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-400 shadow-sm opacity-60"
-                        x-model="sinInstituciones" />
+                        x-bind:checked="Boolean(sinInstituciones)" />
                     <span class="ms-2 text-sm text-gray-500 dark:text-gray-500">{{ __('No') }}</span>
                 </label>
                 <p class="text-sm text-gray-500 dark:text-gray-400" x-show="sinInstituciones" x-cloak>

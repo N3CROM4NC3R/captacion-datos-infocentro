@@ -35,10 +35,15 @@
             <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Sí') }}</span>
         </label>
 
+        {{-- El espejo se marca con un atributo derivado, no con `x-model="!…"`.
+             `x-model` se compila como destino de una asignación, y `!expresión`
+             no lo es: Alpine lanza «Invalid left-hand side in assignment» al
+             arrancar y aborta el resto del árbol, dejando sin pintar todo lo
+             que venga después en la página. --}}
         <label class="inline-flex items-center">
             <input type="checkbox" disabled
                 class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-400 shadow-sm opacity-60"
-                x-model="!{{ $model }}" />
+                x-bind:checked="! (Boolean({{ $model }}))" />
             <span class="ms-2 text-sm text-gray-500 dark:text-gray-500">{{ __('No') }}</span>
         </label>
     </div>

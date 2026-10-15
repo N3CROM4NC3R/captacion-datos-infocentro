@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Enums\CargoFirmaEnum;
 use App\Enums\DiaSemanaEnum;
+use App\Enums\DimensionPerfilamientoEnum;
 use App\Enums\DocumentoAnexoEnum;
 use App\Enums\InstalacionEnum;
 use App\Enums\TipoActividadEnum;
 use App\Enums\TipoEnergiaEnum;
 use App\Enums\TipoEquipoEnum;
+use App\Enums\TipoInfocentroEnum;
 use App\Http\Requests\Infocentro\GuardarDiagnosticoRequest;
 use App\Models\Estado;
 use App\Models\Infocentro;
@@ -36,6 +38,8 @@ class DiagnosticoController extends Controller
         $municipioId = $request->old('municipio_id', $infocentro->municipio_id);
         $parroquiaId = $request->old('parroquia_id', $infocentro->parroquia_id);
 
+        $puntuacionesAEditar = $this->puntuacionesAEditar($request);
+
         return view('infocentro.diagnostico', [
             'infocentro' => $infocentro,
             'facilitadores' => $this->facilitadoresAEditar($request),
@@ -52,6 +56,22 @@ class DiagnosticoController extends Controller
             'dias' => DiaSemanaEnum::options(),
             'instalaciones' => InstalacionEnum::options(),
             'documentos' => $infocentro->documentosAnexos->keyBy(fn ($documento) => $documento->tipo->value),
+            'puntuaciones' => $puntuacionesAEditar,
+            // Indexado por el valor del enum (a, b, c) y en el orden de sus
+            // casos: el desplegable de la vista pinta el texto, pero es
+            // Alpine quien calcula el tipo, y busca el primer umbral que
+            // alcance el total.
+            'tiposInfocentro' => collect(TipoInfocentroEnum::cases())
+                ->mapWithKeys(fn (TipoInfocentroEnum $tipo): array => [
+                    $tipo->value => [
+                        'etiqueta' => $tipo->label(),
+                        'rango' => $tipo->rango(),
+                        'descripcion' => $tipo->descripcion(),
+                        'intervencion' => $tipo->intervencion(),
+                        'desde' => $tipo->desde(),
+                    ],
+                ])
+                ->all(),
         ]);
     }
 
@@ -174,12 +194,15 @@ class DiagnosticoController extends Controller
     {
         $infocentro = $request->user()->infocentro;
 
+        $puntuaciones = $this->puntuacionesValidadas($request);
+        $total = $puntuaciones === [] ? null : array_sum($puntuaciones);
+
         $datos = $request->safe()->except([
             'facilitadores', 'actividades', 'equipos', 'energias', 'vinculaciones',
-            'documentos', 'firmas',
+            'documentos', 'firmas', 'puntuaciones',
         ]);
 
-        DB::transaction(function () use ($infocentro, $datos, $request): void {
+        DB::transaction(function () use ($infocentro, $datos, $request, $puntuaciones, $total): void {
             $infocentro->update([
                 ...$datos,
                 'tiene_facilitador_titular' => $request->boolean('tiene_facilitador_titular'),
@@ -197,6 +220,14 @@ class DiagnosticoController extends Controller
                 // El bloque de firmas es fijo y se captura entero en cada
                 // guardado, a diferencia de los documentos anexos.
                 'firmas' => $this->firmasValidadas($request),
+                // El total y el tipo no vienen del formulario: se deducen de
+                // las siete puntuaciones, que es la única forma de que la
+                // clasificación no se contradiga a sí misma.
+                'puntuaciones' => $puntuaciones,
+                'puntuacion_total' => $total,
+                'tipo_infocentro' => $total === null
+                    ? null
+                    : TipoInfocentroEnum::desdePuntuacion($total),
             ]);
 
             // La ficha captura el estado completo en cada guardado, así que cada
@@ -370,6 +401,33 @@ class DiagnosticoController extends Controller
     }
 
     /**
+     * Build the dimension scores shown by the form, preferring the rejected
+     * submission so a validation error does not wipe what was chosen.
+     *
+     * @return array<string, int>
+     */
+    private function puntuacionesAEditar(Request $request): array
+    {
+        $guardadas = $request->user()->infocentro->puntuaciones ?? [];
+
+        if (is_array($request->old('puntuaciones'))) {
+            $guardadas = $request->old('puntuaciones');
+        }
+
+        $puntuaciones = [];
+
+        foreach (DimensionPerfilamientoEnum::cases() as $dimension) {
+            $valor = $guardadas[$dimension->value] ?? null;
+
+            if ($valor !== null && $valor !== '') {
+                $puntuaciones[$dimension->value] = (int) $valor;
+            }
+        }
+
+        return $puntuaciones;
+    }
+
+    /**
      * Build the signature block, dropping the people left blank.
      *
      * @return array<string, array<string, string>>
@@ -392,6 +450,29 @@ class DiagnosticoController extends Controller
         }
 
         return $firmas;
+    }
+
+    /**
+     * Normalise the dimension scores to integers keyed by dimension.
+     *
+     * Solo se guardan las dimensiones del enum: una clave desconocida se
+     * descarta aquí aunque hubiera pasado la validación.
+     *
+     * @return array<string, int>
+     */
+    private function puntuacionesValidadas(GuardarDiagnosticoRequest $request): array
+    {
+        $puntuaciones = [];
+
+        foreach (DimensionPerfilamientoEnum::cases() as $dimension) {
+            $valor = $request->input("puntuaciones.{$dimension->value}");
+
+            if ($valor !== null && $valor !== '') {
+                $puntuaciones[$dimension->value] = (int) $valor;
+            }
+        }
+
+        return $puntuaciones;
     }
 
     /**

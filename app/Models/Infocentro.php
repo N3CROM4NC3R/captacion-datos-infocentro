@@ -11,10 +11,12 @@ use App\Enums\MesaTecnicaEnum;
 use App\Enums\OfertaAnualEnum;
 use App\Enums\OperatividadEnum;
 use App\Enums\ParticipacionComunidadEnum;
+use App\Enums\PrioridadIntervencionEnum;
 use App\Enums\ProveedorInternetEnum;
 use App\Enums\ServicioInternetEnum;
 use App\Enums\SuficienciaEquipamientoEnum;
 use App\Enums\SuficienciaHorarioEnum;
+use App\Enums\TipoInfocentroEnum;
 use App\Enums\TipoServicioCantvEnum;
 use App\Enums\VinculacionEnum;
 use Database\Factories\InfocentroFactory;
@@ -92,6 +94,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
     'activo',
     'razon_cierre',
     'firmas',
+    'puntuaciones',
+    'puntuacion_total',
+    'tipo_infocentro',
+    'prioridad_intervencion',
+    'recomendaciones',
 ])]
 class Infocentro extends Model
 {
@@ -218,6 +225,10 @@ class Infocentro extends Model
             'interes_adultos_mayores' => InteresDemandaEnum::class,
             'ciencia_ciudadana' => 'boolean',
             'firmas' => 'array',
+            'puntuaciones' => 'array',
+            'puntuacion_total' => 'integer',
+            'tipo_infocentro' => TipoInfocentroEnum::class,
+            'prioridad_intervencion' => PrioridadIntervencionEnum::class,
         ];
     }
 

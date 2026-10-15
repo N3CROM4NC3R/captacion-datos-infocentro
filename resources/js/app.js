@@ -97,6 +97,60 @@ document.addEventListener('alpine:init', () => {
      * Cascading Estado -> Municipio -> Parroquia selects, plus the conditional
      * fields of sections B and C.
      */
+    Alpine.data('perfilamiento', () => {
+        const config = datos();
+        const puntuaciones = config.puntuaciones ?? {};
+
+        // Cada dimensión es una propiedad propia y no una clave de objeto:
+        // `x-model` se compila como destino de una asignación, así que
+        // `puntuaciones['conectividad']` no es un destino válido y Alpine
+        // lanza un SyntaxError que deja la sección entera sin pintar.
+        return {
+            puntuaciones,
+            tipos: config.tipos ?? {},
+
+            get total() {
+                return Object.values(this.puntuaciones).reduce(
+                    (suma, valor) => suma + (Number(valor) || 0),
+                    0,
+                );
+            },
+
+            puntuacionConectividad: String(puntuaciones.conectividad ?? ''),
+            puntuacionOperatividad: String(puntuaciones.operatividad ?? ''),
+            puntuacionFacilitadores: String(puntuaciones.facilitadores ?? ''),
+            puntuacionEquipamiento: String(puntuaciones.equipamiento ?? ''),
+            puntuacionArticulacionComunitaria: String(puntuaciones.articulacion_comunitaria ?? ''),
+            puntuacionOfertaFormativa: String(puntuaciones.oferta_formativa ?? ''),
+            puntuacionVinculacionMincyt: String(puntuaciones.vinculacion_mincyt ?? ''),
+
+            // Copia las propiedades enlazadas a los `x-model` —que son las que
+            // el usuario mueve— al objeto que suma el total. Sin esto el
+            // desplegable y el total cuentan cosas distintas.
+            recalcular() {
+                this.puntuaciones = {
+                    conectividad: this.puntuacionConectividad,
+                    operatividad: this.puntuacionOperatividad,
+                    facilitadores: this.puntuacionFacilitadores,
+                    equipamiento: this.puntuacionEquipamiento,
+                    articulacion_comunitaria: this.puntuacionArticulacionComunitaria,
+                    oferta_formativa: this.puntuacionOfertaFormativa,
+                    vinculacion_mincyt: this.puntuacionVinculacionMincyt,
+                };
+            },
+
+            // Los umbrales vienen del enum, en el mismo orden que la cadena
+            // desdePuntuacion(): el primero que alcanza el total es el suyo.
+            get tipoActual() {
+                return (
+                    Object.entries(this.tipos).find(
+                        ([, tipo]) => this.total >= tipo.desde,
+                    )?.[0] ?? 'c'
+                );
+            },
+        };
+    });
+
     Alpine.data('fichaDiagnostico', () => {
         const config = datos();
 

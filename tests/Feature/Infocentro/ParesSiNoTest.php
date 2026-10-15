@@ -75,25 +75,51 @@ test('la casilla de No espeja el estado real mediante Alpine', function () {
         ->assertOk()
         ->getContent();
 
-    // La de «Sí» manda en `model` y la de «No` en el inverso, de modo que no
-    // pueden quedar ambas marcadas. `toContain()` de Pest es variádico y no
-    // admite un segundo argumento de mensaje, así que se comprueba aparte.
-    preg_match_all('/<input[^>]*\bx-model="([^"]+)"[^>]*>/', $html, $modelos);
-
-    $ausentes = [];
-
-    // Los nombres son los del estado Alpine, que no coinciden siempre con la
-    // clave del payload: H.1 viaja como `vinculacionMincyt` pero se lee de
-    // `vinculado`.
-    foreach (['tieneTitular', 'vinculacionAutoridad', 'vinculado', 'cienciaCiudadana', 'sinInstituciones'] as $estado) {
-        $invertido = in_array('!'.$estado, $modelos[1], true);
-
-        if (! in_array($estado, $modelos[1], true) && ! $invertido) {
-            $ausentes[] = $estado;
-        }
+    // La de «Sí» manda en `model` y la de «No» en el inverso, de modo que no
+    // pueden quedar ambas marcadas. Los nombres son los del estado Alpine, que
+    // no coinciden siempre con la clave del payload: H.1 viaja como
+    // `vinculacionMincyt` pero se lee de `vinculado`.
+    // `sinInstituciones` es un getter, no una propiedad: se enlaza solo por
+    // `x-model` porque no tiene un «Sí» que lo mueva.
+    foreach (['tieneTitular', 'vinculacionAutoridad', 'vinculado', 'cienciaCiudadana'] as $estado) {
+        expect(str_contains($html, 'x-model="'.$estado.'"'))->toBeTrue(
+            "El par de «{$estado}» no expone su estado real.",
+        );
     }
 
-    expect($ausentes)->toBe([], 'Pares sin estado y espejo: '.implode(', ', $ausentes));
+    foreach (['tieneTitular', 'vinculacionAutoridad', 'vinculado', 'cienciaCiudadana'] as $estado) {
+        expect(str_contains($html, 'x-bind:checked="! (Boolean('.$estado.'))"'))->toBeTrue(
+            "El espejo de «{$estado}» no se deriva del estado real.",
+        );
+    }
+
+    // H.2 lleva su propio espejo, sobre un getter que no admite x-model.
+    expect(str_contains($html, 'x-bind:checked="Boolean(sinInstituciones)"'))->toBeTrue(
+        'El espejo de «sinInstituciones» no se deriva del estado real.',
+    );
+});
+
+test('ningún x-model usa una expresión que no sea un destino válido', function () {
+    $html = $this->actingAs(InfocentroUserFactory::new()->create())
+        ->get('/infocentro/diagnostico')
+        ->assertOk()
+        ->getContent();
+
+    // Alpine compila `x-model` como destino de una asignación, así que solo
+    // vale un identificador —con punto o corchete si el motor lo soporta—.
+    // Una negación, una llamada o un ternario llegan al evaluador como
+    // «Invalid left-hand side in assignment»: la excepción aborta el arranque
+    // y deja sin pintar todo lo que venga después en la página.
+    preg_match_all('/\bx-model="([^"]+)"/', $html, $modelos);
+
+    expect($modelos[1])->not->toBeEmpty();
+
+    $invalidos = array_values(array_filter(
+        $modelos[1],
+        fn (string $modelo): bool => ! preg_match('/^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\[[^\]]+\])*$/', trim($modelo)),
+    ));
+
+    expect($invalidos)->toBe([], 'x-model no puede ser destino de una asignación: '.implode(', ', $invalidos));
 });
 
 test('las expresiones Alpine de las actividades llevan comillas en la clave', function () {
@@ -113,10 +139,16 @@ test('las expresiones Alpine de las actividades llevan comillas en la clave', fu
     $malas = [];
 
     foreach (TipoActividadEnum::cases() as $tipo) {
-        foreach (["actividades['{$tipo->value}']", "!actividades['{$tipo->value}']"] as $esperada) {
-            if (! str_contains($decodificada, 'x-model="'.$esperada.'"')) {
-                $malas[] = $esperada;
-            }
+        $clave = "actividades['{$tipo->value}']";
+
+        if (! str_contains($decodificada, 'x-model="'.$clave.'"')) {
+            $malas[] = $clave;
+        }
+
+        // El espejo va con `x-bind:checked`: `x-model="!actividades[…]"`
+        // compila como destino de asignación y revienta el arranque de Alpine.
+        if (! str_contains($decodificada, 'x-bind:checked="! (Boolean('.$clave.'))"')) {
+            $malas[] = '!'.$clave;
         }
     }
 
