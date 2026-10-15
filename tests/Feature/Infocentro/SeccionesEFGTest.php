@@ -297,7 +297,7 @@ test('se guardan los sistemas de energia', function () {
                 TipoEnergiaEnum::PanelesSolares->value => 6,
             ],
             'estado' => [
-                TipoEnergiaEnum::Corpoelectrico->value => EstadoEquipoEnum::Regular->value,
+                TipoEnergiaEnum::Corpoelec->value => EstadoEquipoEnum::Regular->value,
                 TipoEnergiaEnum::PlantasElectricas->value => EstadoEquipoEnum::Bueno->value,
                 TipoEnergiaEnum::PanelesSolares->value => EstadoEquipoEnum::Optimo->value,
             ],
@@ -311,13 +311,13 @@ test('se guardan los sistemas de energia', function () {
         ->and($energia->estado)->toBe(EstadoEquipoEnum::Bueno);
 });
 
-test('la conexion de corpoelectrico no guarda cantidad', function () {
+test('la conexión de Corpoelec no guarda cantidad', function () {
     $user = InfocentroUserFactory::new()->create();
 
     $this->actingAs($user)->put('/infocentro/diagnostico', fichaExtendida([
         'energias' => [
-            'cantidad' => [TipoEnergiaEnum::Corpoelectrico->value => 3],
-            'estado' => [TipoEnergiaEnum::Corpoelectrico->value => EstadoEquipoEnum::Regular->value],
+            'cantidad' => [TipoEnergiaEnum::Corpoelec->value => 3],
+            'estado' => [TipoEnergiaEnum::Corpoelec->value => EstadoEquipoEnum::Regular->value],
         ],
     ]))->assertSessionHasNoErrors();
 

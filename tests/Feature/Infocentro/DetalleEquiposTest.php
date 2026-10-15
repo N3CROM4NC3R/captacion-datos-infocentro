@@ -24,7 +24,7 @@ test('telescopios y modem no piden campo libre', function () {
 
 test('solo la fuente de energía «otra» pide campo libre', function () {
     expect(TipoEnergiaEnum::Otro->etiquetaDetalle())->toBe('Especificar')
-        ->and(TipoEnergiaEnum::Corpoelectrico->etiquetaDetalle())->toBeNull()
+        ->and(TipoEnergiaEnum::Corpoelec->etiquetaDetalle())->toBeNull()
         ->and(TipoEnergiaEnum::PlantasElectricas->etiquetaDetalle())->toBeNull()
         ->and(TipoEnergiaEnum::PanelesSolares->etiquetaDetalle())->toBeNull()
         ->and(TipoEnergiaEnum::BateriasUps->etiquetaDetalle())->toBeNull();

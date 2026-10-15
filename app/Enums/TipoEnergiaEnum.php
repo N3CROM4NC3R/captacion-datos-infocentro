@@ -11,7 +11,7 @@ enum TipoEnergiaEnum: string
 {
     use ProvidesOptions;
 
-    case Corpoelectrico = 'corpoelectrico';
+    case Corpoelec = 'corpoelec';
     case PlantasElectricas = 'plantas_electricas';
     case PanelesSolares = 'paneles_solares';
     case BateriasUps = 'baterias_ups';
@@ -20,7 +20,7 @@ enum TipoEnergiaEnum: string
     public function label(): string
     {
         return match ($this) {
-            self::Corpoelectrico => 'Conexión eléctrica de Corpoeléctrico',
+            self::Corpoelec => 'Conexión eléctrica de Corpoelec',
             self::PlantasElectricas => 'Plantas eléctricas',
             self::PanelesSolares => 'Paneles solares',
             self::BateriasUps => 'Baterías / UPS',
@@ -33,7 +33,7 @@ enum TipoEnergiaEnum: string
      */
     public function cantidadFija(): bool
     {
-        return $this !== self::Corpoelectrico;
+        return $this !== self::Corpoelec;
     }
 
     /**
