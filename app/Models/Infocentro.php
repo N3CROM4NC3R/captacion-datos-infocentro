@@ -91,6 +91,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
     'ciencia_ciudadana_detalle',
     'activo',
     'razon_cierre',
+    'firmas',
 ])]
 class Infocentro extends Model
 {
@@ -143,6 +144,14 @@ class Infocentro extends Model
     public function vinculacionesMincyt(): HasMany
     {
         return $this->hasMany(VinculacionMincyt::class);
+    }
+
+    /**
+     * Get the documents the infocentro attaches to the diagnosis.
+     */
+    public function documentosAnexos(): HasMany
+    {
+        return $this->hasMany(DocumentoAnexo::class);
     }
 
     /**
@@ -208,6 +217,7 @@ class Infocentro extends Model
             'interes_jovenes' => InteresDemandaEnum::class,
             'interes_adultos_mayores' => InteresDemandaEnum::class,
             'ciencia_ciudadana' => 'boolean',
+            'firmas' => 'array',
         ];
     }
 

@@ -17,7 +17,7 @@
                 </div>
             @endif
 
-            {{-- Resumen de errores: la ficha tiene siete secciones y algunos
+            {{-- Resumen de errores: la ficha tiene nueve secciones y algunos
                  fallos (claves desconocidas, por ejemplo) no tienen un campo
                  visible donde mostrarse. --}}
             @if ($errors->any())
@@ -34,6 +34,7 @@
             <form
                 method="POST"
                 action="{{ route('infocentro.diagnostico.update') }}"
+                enctype="multipart/form-data"
                 class="space-y-8"
                 x-data="fichaDiagnostico()"
             >
@@ -91,6 +92,18 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 space-y-6">
                         @include('infocentro.partials._i-necesidades')
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 space-y-6">
+                        @include('infocentro.partials._j-documentos')
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 space-y-6">
+                        @include('infocentro.partials._firmas')
                     </div>
                 </div>
 

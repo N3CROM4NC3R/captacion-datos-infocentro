@@ -33,8 +33,12 @@ test('la ficha no puede escribir los campos que administra el panel', function (
 test('cada regla de la ficha apunta a una columna real', function () {
     $columnas = Schema::getColumnListing('infocentros');
 
-    // Contenedores del payload anidado, no columnas de infocentros.
-    $noColumnas = ['facilitadores', 'actividades', 'equipos', 'energias', 'vinculaciones'];
+    // Contenedores del payload anidado, no columnas de infocentros. Cada uno
+    // tiene su propia tabla (o se descarta) en DiagnosticoController::update().
+    $noColumnas = [
+        'facilitadores', 'actividades', 'equipos', 'energias', 'vinculaciones',
+        'documentos', 'documentos_etiqueta', 'documentos_eliminar',
+    ];
 
     $desconocidas = collect(array_keys((new GuardarDiagnosticoRequest)->rules()))
         ->reject(fn (string $campo): bool => str_contains($campo, '.')

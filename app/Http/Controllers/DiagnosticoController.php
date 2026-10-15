@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CargoFirmaEnum;
 use App\Enums\DiaSemanaEnum;
+use App\Enums\DocumentoAnexoEnum;
 use App\Enums\InstalacionEnum;
 use App\Enums\TipoActividadEnum;
 use App\Enums\TipoEnergiaEnum;
 use App\Enums\TipoEquipoEnum;
 use App\Http\Requests\Infocentro\GuardarDiagnosticoRequest;
 use App\Models\Estado;
+use App\Models\Infocentro;
 use App\Models\Municipio;
 use App\Models\Parroquia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class DiagnosticoController extends Controller
@@ -26,7 +30,7 @@ class DiagnosticoController extends Controller
     {
         $infocentro = $request->user()->infocentro;
 
-        $infocentro->load(['facilitadores', 'actividades', 'equipos', 'energias', 'vinculacionesMincyt']);
+        $infocentro->load(['facilitadores', 'actividades', 'equipos', 'energias', 'vinculacionesMincyt', 'documentosAnexos']);
 
         $estadoId = $request->old('estado_id', $infocentro->estado_id);
         $municipioId = $request->old('municipio_id', $infocentro->municipio_id);
@@ -47,6 +51,7 @@ class DiagnosticoController extends Controller
             'parroquiaId' => $parroquiaId,
             'dias' => DiaSemanaEnum::options(),
             'instalaciones' => InstalacionEnum::options(),
+            'documentos' => $infocentro->documentosAnexos->keyBy(fn ($documento) => $documento->tipo->value),
         ]);
     }
 
@@ -169,7 +174,10 @@ class DiagnosticoController extends Controller
     {
         $infocentro = $request->user()->infocentro;
 
-        $datos = $request->safe()->except(['facilitadores', 'actividades', 'equipos', 'energias', 'vinculaciones']);
+        $datos = $request->safe()->except([
+            'facilitadores', 'actividades', 'equipos', 'energias', 'vinculaciones',
+            'documentos', 'firmas',
+        ]);
 
         DB::transaction(function () use ($infocentro, $datos, $request): void {
             $infocentro->update([
@@ -186,6 +194,9 @@ class DiagnosticoController extends Controller
                 'razon_cierre' => $request->boolean('activo')
                     ? null
                     : $this->textoOpcional($request->input('razon_cierre')),
+                // El bloque de firmas es fijo y se captura entero en cada
+                // guardado, a diferencia de los documentos anexos.
+                'firmas' => $this->firmasValidadas($request),
             ]);
 
             // La ficha captura el estado completo en cada guardado, así que cada
@@ -206,6 +217,11 @@ class DiagnosticoController extends Controller
 
             $infocentro->vinculacionesMincyt()->delete();
             $infocentro->vinculacionesMincyt()->createMany($this->vinculacionesValidadas($request));
+
+            // Los documentos anexos sí se capturan enteras en cada guardado,
+            // pero no se reemplazan: quien edita puede haber tocado cualquier
+            // campo sin volver a elegir los archivos.
+            $this->guardarDocumentos($infocentro, $request);
         });
 
         return redirect()
@@ -351,6 +367,92 @@ class DiagnosticoController extends Controller
     private function textoOpcional(mixed $valor): ?string
     {
         return filled($valor) ? (string) $valor : null;
+    }
+
+    /**
+     * Build the signature block, dropping the people left blank.
+     *
+     * @return array<string, array<string, string>>
+     */
+    private function firmasValidadas(GuardarDiagnosticoRequest $request): array
+    {
+        $firmas = [];
+
+        foreach (CargoFirmaEnum::cases() as $cargo) {
+            $datos = (array) $request->input("firmas.{$cargo->value}", []);
+            $campos = array_filter([
+                'nombre' => $datos['nombre'] ?? null,
+                'firma' => $datos['firma'] ?? null,
+                'fecha' => $datos['fecha'] ?? null,
+            ], fn (mixed $valor): bool => filled($valor));
+
+            if ($campos !== []) {
+                $firmas[$cargo->value] = $campos;
+            }
+        }
+
+        return $firmas;
+    }
+
+    /**
+     * Store the documents attached in section J.
+     *
+     * A diferencia del resto de secciones, los archivos NO se borran en cada
+     * guardado: un `<input type="file">` llega vacío cuando el facilitador no
+     * toca ese campo, así que vaciar la colección tiraría a la basura lo ya
+     * subido. Solo se reemplaza el tipo que llega con archivo nuevo, y el
+     * borrado es una acción explícita.
+     *
+     * El archivo se escribe dentro de la transacción, así que una reversión
+     * deja el PDF huérfano en el disco. Es inocuo: la ruta es determinista y el
+     * siguiente guardado lo sobrescribe.
+     */
+    private function guardarDocumentos(Infocentro $infocentro, GuardarDiagnosticoRequest $request): void
+    {
+        $disco = Storage::disk(config('filesystems.default'));
+
+        foreach (DocumentoAnexoEnum::cases() as $tipo) {
+            $valor = $tipo->value;
+            $existente = $infocentro->documentosAnexos()->where('tipo', $valor)->first();
+
+            if ($request->boolean("documentos_eliminar.$valor")) {
+                $disco->delete($existente?->ruta ?? '');
+
+                $existente?->delete();
+
+                continue;
+            }
+
+            $archivo = $request->file("documentos.$valor");
+
+            if ($archivo === null) {
+                continue;
+            }
+
+            // Ruta determinista y sin nada del usuario dentro: escribir sobre
+            // el mismo destino sustituye el archivo anterior.
+            $ruta = "diagnostico/{$infocentro->id}/{$valor}.pdf";
+
+            abort_unless(
+                $archivo->storeAs("diagnostico/{$infocentro->id}", "{$valor}.pdf") !== false,
+                500,
+                __('No se pudo guardar el archivo adjunto.'),
+            );
+
+            $datos = [
+                'ruta' => $ruta,
+                'nombre_original' => $archivo->getClientOriginalName(),
+                'mime' => $archivo->getClientMimeType(),
+                'tamano' => $archivo->getSize(),
+                'etiqueta' => $tipo->etiquetaDetalle() === null
+                    ? null
+                    : $this->textoOpcional($request->input("documentos_etiqueta.$valor")),
+            ];
+
+            $existente === null
+                ? $infocentro->documentosAnexos()->create(['tipo' => $valor, ...$datos])
+                : $existente->update($datos);
+        }
     }
 
     /**

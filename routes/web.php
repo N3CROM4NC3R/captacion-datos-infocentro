@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\InfocentroController as AdminInfocentroController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\DiagnosticoController;
+use App\Http\Controllers\DocumentoAnexoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/catalogo/municipios', [CatalogoController::class, 'municipios'])->name('catalogo.municipios');
         Route::get('/catalogo/parroquias', [CatalogoController::class, 'parroquias'])->name('catalogo.parroquias');
     });
+
+    // Fuera de los grupos de rol a propósito: los documentos anexos los
+    // descarga tanto el infocentro dueño como el administrador. La
+    // comprobación de quién pregunta la hace el propio controlador.
+    Route::get('/documentos/{documento}', [DocumentoAnexoController::class, 'show'])->name('documentos.show');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -5,6 +5,7 @@ namespace App\Http\Requests\Infocentro;
 use App\Enums\CondicionEspacioEnum;
 use App\Enums\ConsultasPopularesEnum;
 use App\Enums\DiaSemanaEnum;
+use App\Enums\DocumentoAnexoEnum;
 use App\Enums\EstadoEquipoEnum;
 use App\Enums\EstadoProyectoMincytEnum;
 use App\Enums\FormacionContinuaEnum;
@@ -29,6 +30,7 @@ use App\Enums\TipoEquipoEnum;
 use App\Enums\TipoServicioCantvEnum;
 use App\Enums\VinculacionEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
@@ -275,6 +277,32 @@ class GuardarDiagnosticoRequest extends FormRequest
                 'string',
                 'max:2000',
             ],
+
+            // J. Documentos anexos. Cada tipo admite un único PDF; el original
+            // los marca con casillas, así que los seis van en el mismo POST.
+            // El archivo cuelga directamente de `documentos` y no de
+            // `documentos.archivo`: PHP reparte name/tmp_name/error/size por el
+            // primer nivel del nombre, así que con dos niveles el archivo ni
+            // siquiera llega a Laravel.
+            'documentos' => ['nullable', 'array'],
+            'documentos.*' => [
+                'nullable',
+                'file',
+                'mimes:pdf',
+                'max:'.DocumentoAnexoEnum::TAMANO_MAXIMO_KB,
+            ],
+            'documentos_etiqueta' => ['nullable', 'array'],
+            'documentos_etiqueta.*' => ['nullable', 'string', 'max:255'],
+            'documentos_eliminar' => ['nullable', 'array'],
+            'documentos_eliminar.*' => ['nullable', 'boolean'],
+
+            // FIRMAS. Los cuatro cargos que fija el original, cada uno con su
+            // nombre, su firma y su fecha.
+            'firmas' => ['nullable', 'array'],
+            'firmas.*' => ['nullable', 'array'],
+            'firmas.*.nombre' => ['nullable', 'string', 'max:255'],
+            'firmas.*.firma' => ['nullable', 'string', 'max:255'],
+            'firmas.*.fecha' => ['nullable', 'date'],
         ];
     }
 
@@ -323,6 +351,10 @@ class GuardarDiagnosticoRequest extends FormRequest
             'ciencia_ciudadana_detalle.required' => 'Indica cuáles son esas experiencias previas.',
             'problemas_otros.required' => 'Especifica cuáles son los otros problemas identificados.',
             'razon_cierre.required' => 'Indica por qué el infocentro está inactivo.',
+            'documentos.*.file' => 'Adjunta un archivo en PDF.',
+            'documentos.*.mimes' => 'El documento debe ser un archivo PDF.',
+            'documentos.*.max' => 'El documento no puede superar los 10 MB.',
+            'documentos_etiqueta.*.max' => 'La descripción no puede superar los 255 caracteres.',
         ];
     }
 
@@ -343,7 +375,86 @@ class GuardarDiagnosticoRequest extends FormRequest
             $this->validarActividades($validator);
             $this->validarEquipos($validator);
             $this->validarVinculacionesMincyt($validator);
+            $this->validarDocumentos($validator);
         });
+    }
+
+    /**
+     * Cross-check the attached documents (section J).
+     *
+     * `validarClaves()` no sirve aquí: solo recoge claves de valores que sean
+     * arrays, y un archivo subido es un `UploadedFile`, así que nunca detectaría
+     * un tipo desconocido.
+     */
+    private function validarDocumentos(Validator $validator): void
+    {
+        foreach ($this->clavesDocumentos() as $clave) {
+            if (DocumentoAnexoEnum::tryFrom($clave) === null) {
+                $validator->errors()->add("documentos.$clave", __('Tipo de documento desconocido.'));
+            }
+        }
+
+        foreach (DocumentoAnexoEnum::cases() as $tipo) {
+            $valor = $tipo->value;
+            $tieneArchivo = $this->hasFile("documentos.$valor");
+
+            // PHP descarta en silencio los archivos que superan su propio
+            // límite y deja la entrada con un error que `file` reporta como
+            // «debe ser un archivo». Aquí se explica qué pasó de verdad.
+            if ($this->archivoRechazadoPorServidor($valor)) {
+                $validator->errors()->add(
+                    "documentos.$valor",
+                    __('El archivo supera el tamaño que admite el servidor. Sube un PDF más pequeño.'),
+                );
+
+                continue;
+            }
+
+            if ($this->boolean("documentos_eliminar.$valor") && $tieneArchivo) {
+                $validator->errors()->add(
+                    "documentos_eliminar.$valor",
+                    __('No se puede marcar un documento para eliminar y subir otro del mismo tipo a la vez.'),
+                );
+
+                continue;
+            }
+
+            if ($tieneArchivo && $tipo->etiquetaDetalle() !== null && blank($this->input("documentos_etiqueta.$valor"))) {
+                $validator->errors()->add(
+                    "documentos_etiqueta.$valor",
+                    __('Indica qué documento es.'),
+                );
+            }
+        }
+    }
+
+    /**
+     * Get the document types present in the payload, from files and from text.
+     *
+     * @return array<int, string>
+     */
+    private function clavesDocumentos(): array
+    {
+        $claves = [];
+
+        foreach (['documentos', 'documentos_etiqueta', 'documentos_eliminar'] as $seccion) {
+            $claves = [...$claves, ...array_map(strval(...), array_keys((array) $this->input($seccion, [])))];
+        }
+
+        $claves = [...$claves, ...array_map(strval(...), array_keys((array) $this->file('documentos')))];
+
+        return array_values(array_unique($claves));
+    }
+
+    /**
+     * Determine whether PHP itself turned the upload away for being too large.
+     */
+    private function archivoRechazadoPorServidor(string $tipo): bool
+    {
+        $archivo = $this->file("documentos.$tipo");
+
+        return $archivo instanceof UploadedFile
+            && in_array($archivo->getError(), [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true);
     }
 
     /**
