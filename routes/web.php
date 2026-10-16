@@ -30,6 +30,13 @@ Route::middleware('auth')->group(function () {
         // no edita nada y porque la ruta de la ficha no cuelga del resource.
         Route::get('/fichas', [FichasController::class, 'index'])->name('fichas.index');
         Route::get('/fichas/{infocentro}', [FichasController::class, 'show'])->name('fichas.show');
+
+        // Vaciar una ficha. La confirmación va en página aparte porque el botón
+        // está en la fila del listado y es la única barrera: se lee lo que se
+        // pierde antes de decidir. Va antes de la ruta de arriba para que quede
+        // claro el orden, aunque con un segmento de más no se solapan.
+        Route::get('/fichas/{infocentro}/eliminar', [FichasController::class, 'eliminar'])->name('fichas.eliminar');
+        Route::delete('/fichas/{infocentro}', [FichasController::class, 'destroy'])->name('fichas.destroy');
     });
 
     Route::middleware('role:infocentro')->prefix('infocentro')->name('infocentro.')->group(function () {

@@ -7,15 +7,19 @@ use App\Enums\TipoInfocentroEnum;
 use App\Http\Controllers\Concerns\PresentaFicha;
 use App\Http\Controllers\Controller;
 use App\Models\Infocentro;
+use App\Support\VaciarFicha;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 /**
  * Consulta de las fichas de diagnóstico ya capturadas.
  *
- * Es de solo lectura: el panel existe para ver qué se ha capturado, no para
- * corregirlo. Editar sigue siendo cosa del panel de infocentros y de quien
- * lleva la ficha.
+ * De solo lectura, con una excepción: vaciar la ficha entera. No hay edición —
+corregir sigue siendo cosa del panel de infocentros y de quien lleva la ficha—
+ pero sí hay una forma de deshacer una captura que se hizo por error o que se
+ * capturó sobre un infocentro que no era. Sin vuelta atrás.
  */
 class FichasController extends Controller
 {
@@ -75,5 +79,64 @@ class FichasController extends Controller
     public function show(Infocentro $infocentro): View
     {
         return view('admin.fichas.show', $this->datosFicha($infocentro));
+    }
+
+    /**
+     * Ask for confirmation before discarding a ficha.
+     *
+     * El botón de eliminar está en la fila del listado, así que esta página es
+     * la única barrera. Por eso enseña qué se va a perder en vez de limitarse a
+     * un sí o no a ciegas.
+     */
+    public function eliminar(Infocentro $infocentro, VaciarFicha $vaciar): View
+    {
+        $this->exigirFicha($infocentro);
+
+        return view('admin.fichas.eliminar', [
+            'infocentro' => $infocentro,
+            'resumen' => $vaciar->resumen($infocentro),
+        ]);
+    }
+
+    /**
+     * Discard a ficha, leaving the infocentro in the catalog.
+     *
+     * Sin vuelta atrás: no hay copia ni papelera, y el proyecto no tiene soft
+     * deletes en ninguna otra parte. El infocentro sobrevive con su código y su
+     * nombre y vuelve a la lista de pendientes.
+     */
+    public function destroy(Infocentro $infocentro, VaciarFicha $vaciar): RedirectResponse
+    {
+        $this->exigirFicha($infocentro);
+
+        $codigo = $infocentro->codigo;
+        $borrados = count($vaciar->ejecutar($infocentro));
+
+        $aviso = "Ficha eliminada. $codigo ha vuelto a la lista de pendientes.";
+
+        if ($borrados > 0) {
+            $aviso .= match ($borrados) {
+                1 => ' Se ha borrado su documento adjunto.',
+                default => " Se han borrado sus $borrados documentos adjuntos.",
+            };
+        }
+
+        return redirect()
+            ->route('admin.fichas.index')
+            ->with('status', $aviso);
+    }
+
+    /**
+     * Both pages only make sense for a ficha that actually exists.
+     *
+     * El botón solo se pinta en las filas del módulo, que son las fichas
+     * guardadas, pero la ruta se puede escribir a mano. Sin esta comprobación,
+     * un infocentro del catálogo sin ficha podría acabar losing la dirección y
+     * el teléfono que gestiona el panel, sin haber tenido nunca ficha que
+     * vaciar.
+     */
+    private function exigirFicha(Infocentro $infocentro): void
+    {
+        abort_if($infocentro->diagnostico_guardado_at === null, Response::HTTP_NOT_FOUND);
     }
 }

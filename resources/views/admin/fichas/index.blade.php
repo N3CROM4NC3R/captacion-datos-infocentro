@@ -125,9 +125,19 @@
                                         </span>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4 text-end text-sm">
-                                        <a href="{{ route('admin.fichas.show', $ficha) }}" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
-                                            {{ __('Ver la ficha') }}
-                                        </a>
+                                        <div class="flex items-center justify-end gap-4">
+                                            <a href="{{ route('admin.fichas.show', $ficha) }}" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+                                                {{ __('Ver la ficha') }}
+                                            </a>
+
+                                            {{-- El enlace va a la página de confirmación, no borra
+                                                 directamente: la fila es el sitio más cómodo y
+                                                 por eso esta página es la única barrera. --}}
+                                            <a href="{{ route('admin.fichas.eliminar', $ficha) }}"
+                                                class="text-sm text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                                {{ __('Eliminar la ficha') }}
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
