@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\RoleEnum;
+use App\Http\Controllers\Admin\AdministradorController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\FichasController;
 use App\Http\Controllers\Admin\InfocentroController as AdminInfocentroController;
@@ -17,12 +17,13 @@ Route::get('/', fn () => redirect()->route('login'));
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function (Request $request) {
-        return $request->user()->hasRole(RoleEnum::Administrador)
+        return $request->user()->esAdministrador()
             ? redirect()->route('admin.dashboard')
             : redirect()->route('infocentro.diagnostico.edit');
     })->middleware('verified')->name('dashboard');
 
-    Route::middleware('role:administrador')->prefix('admin')->name('admin.')->group(function () {
+    // Los dos roles de administración. Spatie separa la lista con `|`.
+    Route::middleware('role:administrador|administrador_tecnico')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
         Route::resource('infocentros', AdminInfocentroController::class)->except(['show', 'destroy']);
 
@@ -42,6 +43,18 @@ Route::middleware('auth')->group(function () {
         // claro el orden, aunque con un segmento de más no se solapan.
         Route::get('/fichas/{infocentro}/eliminar', [FichasController::class, 'eliminar'])->name('fichas.eliminar');
         Route::delete('/fichas/{infocentro}', [FichasController::class, 'destroy'])->name('fichas.destroy');
+
+        // Gestión de los administradores generales. Solo el técnico entra aquí:
+        // un grupo anidado dentro del de arriba, para que el general siga viendo
+        // exactamente lo mismo que antes.
+        Route::middleware('role:administrador_tecnico')->prefix('administradores')->name('administradores.')->group(function () {
+            Route::get('/', [AdministradorController::class, 'index'])->name('index');
+            Route::get('/crear', [AdministradorController::class, 'create'])->name('create');
+            Route::post('/', [AdministradorController::class, 'store'])->name('store');
+            Route::get('/{administrador}/editar', [AdministradorController::class, 'edit'])->name('edit');
+            Route::patch('/{administrador}', [AdministradorController::class, 'update'])->name('update');
+            Route::delete('/{administrador}', [AdministradorController::class, 'destroy'])->name('destroy');
+        });
     });
 
     Route::middleware('role:infocentro')->prefix('infocentro')->name('infocentro.')->group(function () {

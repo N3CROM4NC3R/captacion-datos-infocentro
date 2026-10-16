@@ -367,6 +367,29 @@ document.addEventListener('alpine:init', () => {
           };
       });
 
+      /**
+       * Modal de eliminar un administrador general.
+       *
+       * Va por su cuenta y no reutilizando el de infocentros porque aquel trae
+       * los contadores de la ficha y las advertencias del catálogo, que aquí no
+       * existen: un administrador no tiene ficha ni infocentro.
+       */
+      Alpine.data('eliminarAdministrador', (detalle, base) => ({
+          detalle,
+          objetivo: null,
+
+          get action() {
+              return `${base}${this.objetivo?.id ?? ''}`;
+          },
+
+          abrir(id) {
+              this.objetivo = this.detalle[id] ? { id, ...this.detalle[id] } : null;
+
+              // El modal de Breeze solo se abre con su evento `open-modal`.
+              this.$dispatch('open-modal', 'eliminar-administrador');
+          },
+      }));
+
       Alpine.data('necesidades', () => {
         const config = datos();
 

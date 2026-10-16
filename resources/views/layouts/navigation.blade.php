@@ -12,7 +12,7 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @role('administrador')
+                    @role('administrador|administrador_tecnico')
                         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                             {{ __('Administración') }}
                         </x-nav-link>
@@ -20,6 +20,14 @@
                         <x-nav-link :href="route('admin.infocentros.index')" :active="request()->routeIs('admin.infocentros.*')">
                             {{ __('Infocentros') }}
                         </x-nav-link>
+
+                    {{-- Solo el técnico. Un administrador general ni ve el
+                         enlace ni puede llegar a la ruta. --}}
+                    @role('administrador_tecnico')
+                        <x-nav-link :href="route('admin.administradores.index')" :active="request()->routeIs('admin.administradores.*')">
+                            {{ __('Administradores') }}
+                        </x-nav-link>
+                    @endrole
                     @endrole
 
                     @role('infocentro')
@@ -79,7 +87,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            @role('administrador')
+            @role('administrador|administrador_tecnico')
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                     {{ __('Administración') }}
                 </x-responsive-nav-link>
@@ -87,6 +95,12 @@
                 <x-responsive-nav-link :href="route('admin.infocentros.index')" :active="request()->routeIs('admin.infocentros.*')">
                     {{ __('Infocentros') }}
                 </x-responsive-nav-link>
+
+            @role('administrador_tecnico')
+                      <x-responsive-nav-link :href="route('admin.administradores.index')" :active="request()->routeIs('admin.administradores.*')">
+                          {{ __('Administradores') }}
+                      </x-responsive-nav-link>
+            @endrole
             @endrole
 
             @role('infocentro')
