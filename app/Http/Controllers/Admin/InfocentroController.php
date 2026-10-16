@@ -6,6 +6,8 @@ use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Infocentro;
 use App\Models\User;
+use App\Support\EliminarInfocentro;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +17,16 @@ use Illuminate\View\View;
 
 class InfocentroController extends Controller
 {
+    /**
+     * Los únicos parámetros que se reenvían al volver de borrar un infocentro.
+     *
+     * Una lista corta a propósito: `redirect()` no debe recibir nada que venga
+     * de la petición sin decidir, y en este listado solo hay estos tres.
+     *
+     * @var list<string>
+     */
+    private const FILTROS_LISTADO = ['q', 'ficha', 'page'];
+
     /**
      * Display a listing of the infocentros.
      *
@@ -28,6 +40,13 @@ class InfocentroController extends Controller
 
         $infocentros = Infocentro::query()
             ->with('user')
+            // Los contadores que enseña el modal de eliminar. Con `withCount`
+            // son seis consultas agregadas para toda la página, no una por fila
+            // y por tabla.
+            ->withCount([
+                'facilitadores', 'equipos', 'energias',
+                'actividades', 'vinculacionesMincyt', 'documentosAnexos',
+            ])
             ->when($ficha === 'hecha', fn ($query) => $query->whereNotNull('diagnostico_guardado_at'))
             ->when($ficha === 'pendiente', fn ($query) => $query->whereNull('diagnostico_guardado_at'))
             ->when($busqueda !== '', fn ($query) => $query->where(function ($interno) use ($busqueda): void {
@@ -49,7 +68,70 @@ class InfocentroController extends Controller
             'busqueda' => $busqueda,
             'conFicha' => Infocentro::whereNotNull('diagnostico_guardado_at')->count(),
             'total' => Infocentro::count(),
+            'detalle' => $this->detalleParaModal($infocentros),
         ]);
+    }
+
+    /**
+     * Lo que el modal de eliminar necesita saber de cada fila.
+     *
+     * Va indexado por id para que el componente de Alpine lo busque por la que
+     * se pulsó, y en un único bloque de JSON en vez de quince copias del
+     * marcado del modal.
+     *
+     * @param  LengthAwarePaginator<int, Infocentro>  $infocentros
+     * @return array<int|string, array<string, mixed>>
+     */
+    private function detalleParaModal($infocentros): array
+    {
+        return $infocentros->getCollection()->mapWithKeys(fn (Infocentro $infocentro): array => [
+            $infocentro->id => [
+                'nombre' => $infocentro->nombre,
+                'codigo' => $infocentro->codigo,
+                'usuario' => $infocentro->user?->username,
+                'ficha' => $infocentro->diagnostico_guardado_at !== null,
+                'facilitadores' => $infocentro->facilitadores_count,
+                'equipos' => $infocentro->equipos_count,
+                'energias' => $infocentro->energias_count,
+                'actividades' => $infocentro->actividades_count,
+                'vinculaciones' => $infocentro->vinculaciones_mincyt_count,
+                'documentos' => $infocentro->documentos_anexos_count,
+            ],
+        ])->all();
+    }
+
+    /**
+     * Delete an infocentro with its account and its ficha.
+     *
+     * Sin vuelta atrás: no hay copia ni papelera. El catálogo se puede recargar
+     * desde el archivo maestro, pero eso no devuelve la ficha.
+     */
+    public function destroy(Request $request, Infocentro $infocentro, EliminarInfocentro $eliminar): RedirectResponse
+    {
+        $codigo = $infocentro->codigo;
+        $usuario = $infocentro->user?->username;
+        $borrados = $eliminar->ejecutar($infocentro);
+
+        $aviso = "Infocentro eliminado: $codigo.";
+
+        if ($usuario !== null) {
+            // `{$usuario}` y no `$usuario`: PHP cuenta los bytes altos como
+            // caracteres de identificador, así que con la comilla angular justo
+            // detrás el nombre de la variable salía siendo `usuario\xc2bb` y
+            // reventaba con «variable no definida».
+            $aviso .= " También se ha borrado su cuenta «{$usuario}».";
+        }
+
+        if ($borrados > 0) {
+            $aviso .= match ($borrados) {
+                1 => ' Y su documento adjunto.',
+                default => " Y sus $borrados documentos adjuntos.",
+            };
+        }
+
+        return redirect()
+            ->route('admin.infocentros.index', $request->only(self::FILTROS_LISTADO))
+            ->with('status', $aviso);
     }
 
     /**

@@ -323,7 +323,51 @@ document.addEventListener('alpine:init', () => {
     /**
      * I.1 multiselect plus the two Sí/No follow-ups of section I.
      */
-    Alpine.data('necesidades', () => {
+    /**
+       * Modal de eliminar un infocentro del listado.
+       *
+       * El detalle de cada fila llega indexado por id, en un único bloque de
+       * JSON, para no dejar quince copias del marcado del modal en el HTML. Los
+       * filtros salen de la URL de la propia página: así el botón y el borrado
+       * devuelven al mismo sitio con el mismo filtro puesto.
+       */
+      Alpine.data('eliminarInfocentro', (detalle, base) => {
+          const filtros = ['q', 'ficha', 'page'];
+
+          return {
+              detalle,
+              objetivo: null,
+
+              /** The listing this was opened from, for Cancel. */
+              get pagina() {
+                  return window.location.pathname + window.location.search;
+              },
+
+              /** The DELETE target for whoever is in the modal right now. */
+              get action() {
+                  const destino = new URL(base + (this.objetivo?.id ?? ''), window.location.origin);
+
+                  filtros.forEach((clave) => {
+                      const valor = new URLSearchParams(window.location.search).get(clave);
+
+                      if (valor !== null) destino.searchParams.set(clave, valor);
+                  });
+
+                  return destino.toString();
+              },
+
+              abrir(id) {
+                  this.objetivo = this.detalle[id] ? { id, ...this.detalle[id] } : null;
+
+                  // El modal de Breeze solo se abre con su evento `open-modal`,
+                  // así que hay que despacharlo aquí: sin esto el contenido se
+                  // carga en la página pero nunca se ve.
+                  this.$dispatch('open-modal', 'eliminar-infocentro');
+              },
+          };
+      });
+
+      Alpine.data('necesidades', () => {
         const config = datos();
 
         return {

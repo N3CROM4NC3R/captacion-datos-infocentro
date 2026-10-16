@@ -26,6 +26,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
         Route::resource('infocentros', AdminInfocentroController::class)->except(['show', 'destroy']);
 
+        // Fuera de la resource a propósito, como las rutas de las fichas: la
+        // resource no edita nada y porque borrar un infocentro se lleva su
+        // cuenta y su ficha, que es una decisión que merece verse escrita.
+        Route::delete('/infocentros/{infocentro}', [AdminInfocentroController::class, 'destroy'])->name('infocentros.destroy');
+
         // Consulta de lo capturado. Va aparte de la resource de arriba porque
         // no edita nada y porque la ruta de la ficha no cuelga del resource.
         Route::get('/fichas', [FichasController::class, 'index'])->name('fichas.index');
