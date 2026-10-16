@@ -364,8 +364,8 @@ test('al volver al listado de infocentros se conservan sus filtros', function ()
     // Sin esto, limpiar cinco fichas seguidas con `?ficha=hecha` tiraría el
     // filtro y la búsqueda en cada borrado.
     $this->actingAs($admin)
-        ->delete("/admin/fichas/{$infocentro->id}?origen=infocentros&q=muestra&ficha=hecha&page=2")
-        ->assertRedirect(route('admin.infocentros.index', ['q' => 'muestra', 'ficha' => 'hecha', 'page' => 2]));
+        ->delete("/admin/fichas/{$infocentro->id}?origen=infocentros&nombre=muestra&ficha=hecha&page=2")
+        ->assertRedirect(route('admin.infocentros.index', ['nombre' => 'muestra', 'ficha' => 'hecha', 'page' => 2]));
 });
 
 test('borrar desde el módulo de fichas sigue volviendo al módulo de fichas', function () {
@@ -464,17 +464,17 @@ test('los filtros del listado llegan a la confirmación', function () {
     // del listado filtrado. Si el enlace no lleva los filtros, la confirmación
     // no tiene con qué devolver al listado con ellos, y limpiar cinco fichas
     // seguidas obliga a reponer el filtro cada vez.
-    $listado = $this->actingAs($admin)->get('/admin/infocentros?ficha=hecha&q=muestra')->getContent();
+    $listado = $this->actingAs($admin)->get('/admin/infocentros?ficha=hecha&nombre=muestra')->getContent();
 
     expect(enlaceDeBorrado($listado, $infocentro, 'href')['query'])
-        ->toMatchArray(['origen' => 'infocentros', 'ficha' => 'hecha', 'q' => 'muestra']);
+        ->toMatchArray(['origen' => 'infocentros', 'ficha' => 'hecha', 'nombre' => 'muestra']);
 
     $confirmacion = $this->actingAs($admin)
-        ->get("/admin/fichas/{$infocentro->id}/eliminar?origen=infocentros&ficha=hecha&q=muestra")
+        ->get("/admin/fichas/{$infocentro->id}/eliminar?origen=infocentros&ficha=hecha&nombre=muestra")
         ->getContent();
 
     expect(enlaceDeBorrado($confirmacion, $infocentro, 'action')['query'])
-        ->toMatchArray(['origen' => 'infocentros', 'ficha' => 'hecha', 'q' => 'muestra']);
+        ->toMatchArray(['origen' => 'infocentros', 'ficha' => 'hecha', 'nombre' => 'muestra']);
 });
 
 test('los filtros del módulo de fichas llegan a la confirmación', function () {
@@ -499,7 +499,7 @@ test('la confirmación devuelve al listado con sus filtros', function () {
     $infocentro = infocentroConFichaGuardada(['nombre' => 'Infocentro de muestra — Cancelar']);
 
     $confirmacion = $this->actingAs($admin)
-        ->get("/admin/fichas/{$infocentro->id}/eliminar?origen=infocentros&ficha=hecha&q=muestra")
+        ->get("/admin/fichas/{$infocentro->id}/eliminar?origen=infocentros&ficha=hecha&nombre=muestra")
         ->getContent();
 
     // Cancelar es la salida de emergencia: tiene que devolver al sitio de
@@ -507,7 +507,7 @@ test('la confirmación devuelve al listado con sus filtros', function () {
     preg_match('#href="([^"]*\/admin\/infocentros\?[^"]*)"#', $confirmacion, $cancelar);
     parse_str((string) parse_url(html_entity_decode($cancelar[1] ?? ''), PHP_URL_QUERY), $query);
 
-    expect($query)->toMatchArray(['ficha' => 'hecha', 'q' => 'muestra']);
+    expect($query)->toMatchArray(['ficha' => 'hecha', 'nombre' => 'muestra']);
 });
 
 test('los enlaces sin filtros no cuelgan parámetros vacíos', function () {

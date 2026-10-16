@@ -20,21 +20,73 @@
             @endif
 
             <div class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-md bg-gray-50 px-4 py-3 text-sm dark:bg-gray-700/40">
-                <p class="text-gray-600 dark:text-gray-300">
-                    <span class="font-semibold">{{ number_format($conFicha) }}</span>
-                    {{ __('de') }}
-                    <span class="font-semibold">{{ number_format($total) }}</span>
-                    {{ __('infocentros tienen la ficha de diagnóstico guardada.') }}
-                </p>
+                {{-- Son dos hechos distintos y en una sola frase se leían mal:
+                     cuántos coinciden con los filtros y cuántos tienen ficha. --}}
+                <div class="flex flex-wrap gap-x-6 gap-y-1">
+                    @if ($hayFiltros)
+                        <p class="text-gray-600 dark:text-gray-300">
+                            <span class="font-semibold">{{ number_format($infocentros->total()) }}</span>
+                            {{ __('de') }}
+                            <span class="font-semibold">{{ number_format($total) }}</span>
+                            {{ __('infocentros coinciden con los filtros.') }}
+                        </p>
+                    @endif
+
+                    <p class="text-gray-600 dark:text-gray-300">
+                        <span class="font-semibold">{{ number_format($conFicha) }}</span>
+                        {{ __('de') }}
+                        <span class="font-semibold">{{ number_format($total) }}</span>
+                        {{ __('infocentros tienen la ficha de diagnóstico guardada.') }}
+                    </p>
+                </div>
                 <a href="{{ route('admin.fichas.index') }}" class="font-medium text-indigo-600 hover:underline dark:text-indigo-400">
                     {{ __('Ver las fichas capturadas') }}
                 </a>
             </div>
 
-            <form method="GET" action="{{ route('admin.infocentros.index') }}" class="mb-4 grid gap-3 sm:grid-cols-[1fr_auto_auto] sm:items-end">
+            {{-- Seis filtros en rejilla: en móvil se apilan, en portátil entran cuatro por
+                 fila y en grande los seis. Con cinco filtros activos saber
+                 cuántos de los 792 salen es la diferencia entre filtrar y
+                 adivinar. --}}
+            <form method="GET" action="{{ route('admin.infocentros.index') }}"
+                class="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 xl:items-end">
                 <div>
-                    <x-input-label for="q" :value="__('Buscar por nombre o código')" />
-                    <x-text-input id="q" name="q" type="search" class="mt-1 block w-full" :value="$busqueda" :placeholder="__('Nombre o código…')" />
+                    <x-input-label for="nombre" :value="__('Nombre')" />
+                    <x-text-input id="nombre" name="nombre" type="search" class="mt-1 block w-full" :value="$nombre" :placeholder="__('Nombre del infocentro…')" />
+                </div>
+
+                <div>
+                    <x-input-label for="codigo" :value="__('Código')" />
+                    <x-text-input id="codigo" name="codigo" type="search" class="mt-1 block w-full" :value="$codigo" :placeholder="__('COJ08…')" />
+                </div>
+
+                <div>
+                    <x-input-label for="estado" :value="__('Estado territorial')" />
+                    <x-select-input id="estado" name="estado" class="mt-1 block w-full">
+                        <option value="">{{ __('Todos') }}</option>
+                        @foreach ($estados as $opcion)
+                            <option value="{{ $opcion->id }}" @selected((string) $estado === (string) $opcion->id)>{{ $opcion->nombre }}</option>
+                        @endforeach
+                    </x-select-input>
+                </div>
+
+                <div>
+                    <x-input-label for="estatus" :value="__('Estatus')" />
+                    <x-select-input id="estatus" name="estatus" class="mt-1 block w-full">
+                        <option value="">{{ __('Todos') }}</option>
+                        <option value="activo" @selected($estatus === 'activo')>{{ __('Activo') }}</option>
+                        <option value="inactivo" @selected($estatus === 'inactivo')>{{ __('Inactivo') }}</option>
+                    </x-select-input>
+                </div>
+
+                <div>
+                    <x-input-label for="clasificacion" :value="__('Clasificación')" />
+                    <x-select-input id="clasificacion" name="clasificacion" class="mt-1 block w-full">
+                        <option value="">{{ __('Todas') }}</option>
+                        @foreach (\App\Enums\TipoInfocentroEnum::cases() as $tipo)
+                            <option value="{{ $tipo->value }}" @selected($clasificacion === $tipo->value)>{{ $tipo->label() }}</option>
+                        @endforeach
+                    </x-select-input>
                 </div>
 
                 <div>
@@ -46,9 +98,9 @@
                     </x-select-input>
                 </div>
 
-                <div class="flex gap-2">
+                <div class="flex gap-2 sm:col-span-2 lg:col-span-4 xl:col-span-6">
                     <x-primary-button>{{ __('Filtrar') }}</x-primary-button>
-                    @if ($busqueda !== '' || $ficha !== '')
+                    @if ($hayFiltros)
                         <a href="{{ route('admin.infocentros.index') }}" class="inline-flex items-center px-4 py-2 text-sm text-gray-600 hover:underline dark:text-gray-300">
                             {{ __('Limpiar') }}
                         </a>
@@ -133,7 +185,11 @@
                                                      son parte de la ruta van dentro del array. --}}
                                                 @php
                                                     $filtrosFila = array_filter([
-                                                        'q' => $busqueda,
+                                                        'nombre' => $nombre,
+                                                        'codigo' => $codigo,
+                                                        'estado' => $estado,
+                                                        'estatus' => $estatus,
+                                                        'clasificacion' => $clasificacion,
                                                         'ficha' => $ficha,
                                                         'page' => $infocentros->currentPage(),
                                                     ]);

@@ -146,7 +146,9 @@ class FichasController extends Controller
         ],
         'infocentros' => [
             'ruta' => 'admin.infocentros.index',
-            'filtros' => ['q', 'ficha', 'page'],
+            // Los mismos nombres que usa el listado de infocentros; si se
+            // quedara uno corto, la confirmación devolvería sin ese filtro.
+            'filtros' => ['nombre', 'codigo', 'estado', 'estatus', 'clasificacion', 'ficha', 'page'],
         ],
     ];
 

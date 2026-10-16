@@ -151,8 +151,8 @@ test('al borrar se vuelve al listado con sus filtros', function () {
     $infocentro = infocentroCompleto();
 
     $this->actingAs($admin)
-        ->delete("/admin/infocentros/{$infocentro->id}?q=abc&ficha=hecha&page=3")
-        ->assertRedirect(route('admin.infocentros.index', ['q' => 'abc', 'ficha' => 'hecha', 'page' => 3]));
+        ->delete("/admin/infocentros/{$infocentro->id}?nombre=abc&estatus=activo&ficha=hecha&page=3")
+        ->assertRedirect(route('admin.infocentros.index', ['nombre' => 'abc', 'estatus' => 'activo', 'ficha' => 'hecha', 'page' => 3]));
 });
 
 test('el aviso nombra el código y la cuenta que se han borrado', function () {
@@ -288,8 +288,8 @@ test('al volver no se reenvían parámetros que no son del listado', function ()
     // La redirección se construye con una lista corta de filtros, no con todo lo
     // que venga en la petición. Una URL manipulada no puede colar nada en ella.
     $this->actingAs($admin)
-        ->delete("/admin/infocentros/{$infocentro->id}?q=abc&inyectado=https%3A%2F%2Fotro-sitio.example")
-        ->assertRedirect(route('admin.infocentros.index', ['q' => 'abc']));
+        ->delete("/admin/infocentros/{$infocentro->id}?nombre=abc&clasificacion=a&inyectado=https%3A%2F%2Fotro-sitio.example")
+        ->assertRedirect(route('admin.infocentros.index', ['nombre' => 'abc', 'clasificacion' => 'a']));
 });
 
 test('el evento que abre el modal y su nombre no se desincronizan', function () {

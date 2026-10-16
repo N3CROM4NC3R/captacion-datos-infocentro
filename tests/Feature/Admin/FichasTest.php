@@ -134,14 +134,14 @@ test('el listado busca por nombre y por código', function () {
     $infocentro = infocentroConFicha();
     $otro = Infocentro::factory()->create();
 
-    $this->actingAs($admin)->get('/admin/infocentros?q='.urlencode($infocentro->nombre))
+    $this->actingAs($admin)->get('/admin/infocentros?nombre='.urlencode($infocentro->nombre))
         ->assertOk()
         ->assertSee($infocentro->nombre)
         ->assertDontSee($otro->nombre);
 
     // El código va en minúsculas en el catálogo, así que la búsqueda no
     // distingue mayúsculas: es un `ilike`, no un `where` exacto.
-    $this->actingAs($admin)->get('/admin/infocentros?q='.urlencode(strtolower($infocentro->codigo)))
+    $this->actingAs($admin)->get('/admin/infocentros?codigo='.urlencode(strtolower($infocentro->codigo)))
         ->assertOk()
         ->assertSee($infocentro->nombre)
         ->assertDontSee($otro->nombre);

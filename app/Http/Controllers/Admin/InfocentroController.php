@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\RoleEnum;
+use App\Enums\TipoInfocentroEnum;
 use App\Http\Controllers\Controller;
+use App\Models\Estado;
 use App\Models\Infocentro;
 use App\Models\User;
 use App\Support\EliminarInfocentro;
@@ -20,12 +22,16 @@ class InfocentroController extends Controller
     /**
      * Los únicos parámetros que se reenvían al volver de borrar un infocentro.
      *
+     * Tiene que ir en la misma clave que la lista `filtros` del componente Alpine
+     * que arma el `action` del modal: si una de las dos se queda corta, borrar
+     * devuelve al listado sin filtros y sin ningún error visible.
+     *
      * Una lista corta a propósito: `redirect()` no debe recibir nada que venga
      * de la petición sin decidir, y en este listado solo hay estos tres.
      *
      * @var list<string>
      */
-    private const FILTROS_LISTADO = ['q', 'ficha', 'page'];
+    private const FILTROS_LISTADO = ['nombre', 'codigo', 'estado', 'estatus', 'clasificacion', 'ficha', 'page'];
 
     /**
      * Display a listing of the infocentros.
@@ -36,7 +42,21 @@ class InfocentroController extends Controller
     public function index(Request $request): View
     {
         $ficha = $request->query('ficha');
-        $busqueda = trim((string) $request->query('q', ''));
+        $nombre = trim((string) $request->query('nombre', ''));
+        $codigo = trim((string) $request->query('codigo', ''));
+        $estatus = $request->query('estatus');
+        $clasificacion = $request->query('clasificacion');
+
+        // El estado territorial se valida contra la lista real, igual que los
+        // desplegables: un `?estado=inventado` se ignora en vez de meter un id
+        // cualquiera en la consulta.
+        //
+        // La comparación va de string a string. `in_array` en modo estricto
+        // compararía `'1'` contra el `1` entero de la base y nunca casaría,
+        // con lo que el filtro no filtraría nada y parecería puesto.
+        $estados = Estado::orderBy('nombre')->get(['id', 'nombre']);
+        $pedido = (string) $request->query('estado');
+        $estado = in_array($pedido, $estados->pluck('id')->map(strval(...))->all(), true) ? $pedido : '';
 
         $infocentros = Infocentro::query()
             ->with('user')
@@ -49,27 +69,63 @@ class InfocentroController extends Controller
             ])
             ->when($ficha === 'hecha', fn ($query) => $query->whereNotNull('diagnostico_guardado_at'))
             ->when($ficha === 'pendiente', fn ($query) => $query->whereNull('diagnostico_guardado_at'))
-            ->when($busqueda !== '', fn ($query) => $query->where(function ($interno) use ($busqueda): void {
-                // `LOWER(...) LIKE` en vez de `ilike`: la base de producción es
-                // PostgreSQL pero las pruebas corren sobre SQLite, y `ilike` no
-                // existe ahí. Bajar las dos partes cumple en los dos motores.
-                $patron = '%'.mb_strtolower($busqueda).'%';
-                $interno->whereRaw('LOWER(nombre) LIKE ?', [$patron])
-                    ->orWhereRaw('LOWER(codigo) LIKE ?', [$patron]);
-            }))
+            ->when($nombre !== '', fn ($query) => $query->whereRaw(
+                'LOWER(nombre) LIKE ?',
+                [$this->patron($nombre)],
+            ))
+            ->when($codigo !== '', fn ($query) => $query->whereRaw(
+                'LOWER(codigo) LIKE ?',
+                [$this->patron($codigo)],
+            ))
+            ->when($estado !== '', fn ($query) => $query->where('estado_id', $estado))
+            ->when($estatus === 'activo', fn ($query) => $query->where('activo', true))
+            ->when($estatus === 'inactivo', fn ($query) => $query->where('activo', false))
+            ->when(
+                in_array($clasificacion, array_column(TipoInfocentroEnum::cases(), 'value'), true),
+                fn ($query) => $query->where('tipo_infocentro', $clasificacion),
+            )
             ->orderBy('nombre')
             ->paginate(15)
             // Sin esto, `links()` regenera la paginación y tira los filtros.
             ->withQueryString();
 
+        $fichaLimpia = in_array($ficha, ['hecha', 'pendiente'], true) ? $ficha : '';
+        $estatusLimpio = in_array($estatus, ['activo', 'inactivo'], true) ? $estatus : '';
+        $clasificacionLimpia = in_array($clasificacion, array_column(TipoInfocentroEnum::cases(), 'value'), true) ? $clasificacion : '';
+
         return view('admin.infocentros.index', [
             'infocentros' => $infocentros,
-            'ficha' => in_array($ficha, ['hecha', 'pendiente'], true) ? $ficha : '',
-            'busqueda' => $busqueda,
+            'ficha' => $fichaLimpia,
+            'nombre' => $nombre,
+            'codigo' => $codigo,
+            'estados' => $estados,
+            'estado' => $estado,
+            'estatus' => $estatusLimpio,
+            'clasificacion' => $clasificacionLimpia,
+            // Solo se ofrece «Limpiar» si hay algo que limpiar: un enlace que no
+            // hace nada es peor que no tenerlo.
+            'hayFiltros' => $nombre !== ''
+                || $codigo !== ''
+                || $estado !== ''
+                || $estatusLimpio !== ''
+                || $clasificacionLimpia !== ''
+                || $fichaLimpia !== '',
             'conFicha' => Infocentro::whereNotNull('diagnostico_guardado_at')->count(),
             'total' => Infocentro::count(),
             'detalle' => $this->detalleParaModal($infocentros),
         ]);
+    }
+
+    /**
+     * The pattern a text filter matches on.
+     *
+     * `LOWER(...) LIKE` en vez de `ilike`: la base de producción es PostgreSQL
+     * pero las pruebas corren sobre SQLite, y `ilike` no existe ahí. Bajar las
+     * dos partes cumple en los dos motores.
+     */
+    private function patron(string $texto): string
+    {
+        return '%'.mb_strtolower($texto).'%';
     }
 
     /**

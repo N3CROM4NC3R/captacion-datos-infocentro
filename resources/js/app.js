@@ -332,7 +332,7 @@ document.addEventListener('alpine:init', () => {
        * devuelven al mismo sitio con el mismo filtro puesto.
        */
       Alpine.data('eliminarInfocentro', (detalle, base) => {
-          const filtros = ['q', 'ficha', 'page'];
+          const filtros = ['nombre', 'codigo', 'estado', 'estatus', 'clasificacion', 'ficha', 'page'];
 
           return {
               detalle,
