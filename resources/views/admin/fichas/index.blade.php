@@ -130,10 +130,22 @@
                                                 {{ __('Ver la ficha') }}
                                             </a>
 
-                                            {{-- El enlace va a la página de confirmación, no borra
-                                                 directamente: la fila es el sitio más cómodo y
-                                                 por eso esta página es la única barrera. --}}
-                                            <a href="{{ route('admin.fichas.eliminar', $ficha) }}"
+                                            {{-- Los filtros del listado viajan en el enlace para que la
+                                                 confirmación pueda devolver aquí con ellos puestos:
+                                                 si se pierden, limpiar cinco fichas seguidas con un
+                                                 filtro puesto obliga a reponerlo cada vez.
+
+                                                 Los vacíos se quitan con `array_filter` para no
+                                                 dejar `?q=&tipo=` colgando de la URL. --}}
+                                            @php
+                                                $filtrosFila = array_filter([
+                                                    'q' => $busqueda,
+                                                    'tipo' => $tipo,
+                                                    'prioridad' => $prioridad,
+                                                    'page' => $fichas->currentPage(),
+                                                ]);
+                                            @endphp
+                                            <a href="{{ route('admin.fichas.eliminar', ['infocentro' => $ficha, 'origen' => 'fichas'] + $filtrosFila) }}"
                                                 class="text-sm text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
                                                 {{ __('Eliminar la ficha') }}
                                             </a>

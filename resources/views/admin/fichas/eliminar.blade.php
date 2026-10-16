@@ -49,12 +49,12 @@
                             ];
                         @endphp
 
-                        @foreach ($detalle as $clave => $etiqueta)
+                        @foreach ($detalle as $seccion => $etiqueta)
                             <div class="flex items-baseline justify-between gap-4 py-2">
                                 <dt class="text-gray-600 dark:text-gray-400">{{ $etiqueta }}</dt>
-                                <dd class="font-medium tabular-nums {{ $resumen[$clave] === 0 ? 'text-gray-300 dark:text-gray-600' : 'text-gray-900 dark:text-gray-100' }}">
-                                    {{ number_format($resumen[$clave]) }}
-                                    @if ($clave === 'documentos' && $resumen[$clave] > 0)
+                                <dd class="font-medium tabular-nums {{ $resumen[$seccion] === 0 ? 'text-gray-300 dark:text-gray-600' : 'text-gray-900 dark:text-gray-100' }}">
+                                    {{ number_format($resumen[$seccion]) }}
+                                    @if ($seccion === 'documentos' && $resumen[$seccion] > 0)
                                         <span class="text-xs font-normal text-gray-500 dark:text-gray-400">{{ __('y sus archivos') }}</span>
                                     @endif
                                 </dd>
@@ -90,15 +90,30 @@
                 </div>
 
                 <div class="flex flex-wrap items-center justify-end gap-3 border-t border-gray-200 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-gray-900/30">
-                    <a href="{{ route('admin.fichas.index') }}"
+                    {{-- Cancelar devuelve al listado del que se vino, con sus
+                         filtros puestos.
+
+                         `$origen`, `$ruta` y `$filtros` llegan del controlador.
+                         Conviene que no coincidan con ningún nombre que se use
+                         en un `@foreach` de esta misma vista: Blade no aísla el
+                         scope y la última vuelta del bucle se queda con el
+                         valor, que fue como el formulario acabó enviando
+                         `origen=documentos`. --}}
+                    <a href="{{ route($ruta, $filtros) }}"
                         class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
                         {{ __('Cancelar') }}
                     </a>
 
                     {{-- El botón destructivo va a la derecha porque es el que más
                          cuesta pulsar por descuido, y el que parece el seguro es
-                         el de cancelar. --}}
-                    <form method="POST" action="{{ route('admin.fichas.destroy', $infocentro) }}">
+                         el de cancelar. El origen y los filtros viajan en la URL
+                         del propio formulario y no en un campo oculto: Chrome
+                         rellena los ocultos con lo que autocompletó antes y
+                         llegó a mandar a un sitio que no era. --}}
+                    {{-- Los parámetros van dentro del array: como tercer argumento, `route()`
+                         los leería como $absolute y el origen y los filtros se
+                         quedarían por el camino. --}}
+                    <form method="POST" action="{{ route('admin.fichas.destroy', array_merge(['infocentro' => $infocentro, 'origen' => $origen], $filtros)) }}" autocomplete="off">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">

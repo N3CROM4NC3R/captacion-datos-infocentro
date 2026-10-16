@@ -316,3 +316,207 @@ test('el motivo de cierre se va con la ficha', function () {
     expect($infocentro->activo)->toBeFalse()
         ->and($infocentro->razon_cierre)->toBeNull();
 });
+
+test('el botón sale en el listado de infocentros que tienen ficha', function () {
+    $admin = AdminFactory::new()->create();
+    $infocentro = infocentroConFichaGuardada();
+
+    $this->actingAs($admin)
+        ->get('/admin/infocentros')
+        ->assertSee("/admin/fichas/{$infocentro->id}/eliminar?origen=infocentros", false);
+});
+
+test('el botón no sale en las filas que no tienen ficha', function () {
+    $admin = AdminFactory::new()->create();
+    $sinFicha = Infocentro::factory()->create(['nombre' => 'Infocentro sin ficha de prueba']);
+
+    // Un botón que lleva a un 404 es peor que no tener botón: la ruta exige que
+    // exista la ficha precisamente para que no se pueda vaciar un registro del
+    // catálogo que nunca la tuvo.
+    $this->actingAs($admin)
+        ->get('/admin/infocentros')
+        ->assertSee('Infocentro sin ficha de prueba')
+        ->assertDontSee("/admin/fichas/{$sinFicha->id}/eliminar", false);
+
+    $conFicha = infocentroConFichaGuardada();
+
+    // Y en la misma página, la que sí tiene ficha, sí lo muestra.
+    $this->actingAs($admin)
+        ->get('/admin/infocentros')
+        ->assertSee("/admin/fichas/{$conFicha->id}/eliminar", false);
+});
+
+test('borrar desde el listado de infocentros devuelve al listado de infocentros', function () {
+    $admin = AdminFactory::new()->create();
+    $infocentro = infocentroConFichaGuardada();
+
+    $this->actingAs($admin)
+        ->delete("/admin/fichas/{$infocentro->id}?origen=infocentros")
+        ->assertRedirect(route('admin.infocentros.index'));
+
+    expect($infocentro->refresh()->diagnostico_guardado_at)->toBeNull();
+});
+
+test('al volver al listado de infocentros se conservan sus filtros', function () {
+    $admin = AdminFactory::new()->create();
+    $infocentro = infocentroConFichaGuardada();
+
+    // Sin esto, limpiar cinco fichas seguidas con `?ficha=hecha` tiraría el
+    // filtro y la búsqueda en cada borrado.
+    $this->actingAs($admin)
+        ->delete("/admin/fichas/{$infocentro->id}?origen=infocentros&q=muestra&ficha=hecha&page=2")
+        ->assertRedirect(route('admin.infocentros.index', ['q' => 'muestra', 'ficha' => 'hecha', 'page' => 2]));
+});
+
+test('borrar desde el módulo de fichas sigue volviendo al módulo de fichas', function () {
+    $admin = AdminFactory::new()->create();
+    $infocentro = infocentroConFichaGuardada();
+
+    $this->actingAs($admin)
+        ->delete("/admin/fichas/{$infocentro->id}")
+        ->assertRedirect(route('admin.fichas.index'));
+});
+
+test('los filtros del módulo de fichas también sobreviven', function () {
+    $admin = AdminFactory::new()->create();
+    $infocentro = infocentroConFichaGuardada(extra: ['puntuaciones' => lasSieteDimensiones()]);
+
+    $this->actingAs($admin)
+        ->delete("/admin/fichas/{$infocentro->id}?tipo=a&prioridad=alta&q=muestra")
+        ->assertRedirect(route('admin.fichas.index', ['q' => 'muestra', 'tipo' => 'a', 'prioridad' => 'alta']));
+});
+
+test('un origen desconocido cae al módulo de fichas y no rompe el redirect', function () {
+    $admin = AdminFactory::new()->create();
+    $infocentro = infocentroConFichaGuardada();
+
+    // No se puede producir un open redirect porque `redirect()` solo recibe
+    // nombres de ruta de una lista fija, pero un valor inventado tampoco puede
+    // dejar la redirección a medias.
+    $this->actingAs($admin)
+        ->delete('/admin/fichas/'.$infocentro->id.'?origen='.urlencode('https://otro-sitio.example'))
+        ->assertRedirect(route('admin.fichas.index'));
+});
+
+test('la confirmación vuelve al listado del que se vino', function () {
+    $admin = AdminFactory::new()->create();
+    $infocentro = infocentroConFichaGuardada();
+
+    $this->actingAs($admin)
+        ->get("/admin/fichas/{$infocentro->id}/eliminar?origen=infocentros&ficha=hecha")
+        ->assertOk()
+        // El botón de cancelar es la salida de emergencia: tiene que devolver
+        // al sitio de origen, con el filtro puesto.
+        ->assertSee('/admin/infocentros?ficha=hecha', false)
+        // El origen viaja en la URL del formulario, no en un campo oculto: los
+        // ocultos los rellena el navegador con lo que autocompletó antes.
+        // La URL se escribe a mano y se escapa como Blade la escapa en el HTML.
+        ->assertSee(
+            e("/admin/fichas/{$infocentro->id}?origen=infocentros&ficha=hecha"),
+            false,
+        );
+});
+
+test('el origen no viaja en un campo oculto que el navegador pueda rellenar', function () {
+    $admin = AdminFactory::new()->create();
+    $infocentro = infocentroConFichaGuardada();
+
+    // Chrome rellena los campos ocultos con lo que autocompletó antes, y aquí lo
+    // hizo: el botón de eliminar mandaba al módulo de fichas en vez de al
+    // listado de origen. Va en la URL del formulario, que el navegador no toca.
+    $this->actingAs($admin)
+        ->get("/admin/fichas/{$infocentro->id}/eliminar?origen=infocentros")
+        ->assertOk()
+        ->assertDontSee('type="hidden" name="origen"', false);
+});
+
+/**
+ * Saca de un HTML el enlace de borrado de una fila y lo devuelve troceado.
+ *
+ * Se parsea a mano en vez de reconstruir la URL con `route()`: si el test usa
+ * la misma llamada que la vista, los dos se equivocan juntos y el guard pasa
+ * con un enlace al que le faltan los filtros.
+ *
+ * @return array{url: string, query: array<string, string>}
+ */
+function enlaceDeBorrado(string $html, Infocentro $infocentro, string $selector): array
+{
+    // El `?` es lo que distingue estas URLs de la de «Ver la ficha», que va al
+    // mismo id pero sin query. Con el `[^"]*` de en medio sirve para el enlace a
+    // la confirmación, que lleva `/eliminar`, y para el action del formulario,
+    // que no lo lleva.
+    $aguja = '/admin/fichas/'.$infocentro->id;
+    preg_match('#'.$selector.'="([^"]*'.preg_quote($aguja, '#').'[^"]*\?[^"]*)"#', $html, $encontrado);
+
+    $url = html_entity_decode($encontrado[1] ?? '', ENT_QUOTES);
+    parse_str((string) parse_url($url, PHP_URL_QUERY), $query);
+
+    return ['url' => $url, 'query' => array_map(strval(...), $query)];
+}
+
+test('los filtros del listado llegan a la confirmación', function () {
+    $admin = AdminFactory::new()->create();
+    // El nombre tiene que llevar «muestra» o la búsqueda del listado no lo
+    // encuentra y el guard pasa sin comprobar nada.
+    $infocentro = infocentroConFichaGuardada(['nombre' => 'Infocentro de muestra — Filtros']);
+
+    // Se recorre el camino que de verdad recorre una persona: el enlace sale
+    // del listado filtrado. Si el enlace no lleva los filtros, la confirmación
+    // no tiene con qué devolver al listado con ellos, y limpiar cinco fichas
+    // seguidas obliga a reponer el filtro cada vez.
+    $listado = $this->actingAs($admin)->get('/admin/infocentros?ficha=hecha&q=muestra')->getContent();
+
+    expect(enlaceDeBorrado($listado, $infocentro, 'href')['query'])
+        ->toMatchArray(['origen' => 'infocentros', 'ficha' => 'hecha', 'q' => 'muestra']);
+
+    $confirmacion = $this->actingAs($admin)
+        ->get("/admin/fichas/{$infocentro->id}/eliminar?origen=infocentros&ficha=hecha&q=muestra")
+        ->getContent();
+
+    expect(enlaceDeBorrado($confirmacion, $infocentro, 'action')['query'])
+        ->toMatchArray(['origen' => 'infocentros', 'ficha' => 'hecha', 'q' => 'muestra']);
+});
+
+test('los filtros del módulo de fichas llegan a la confirmación', function () {
+    $admin = AdminFactory::new()->create();
+    // Con las siete a 3 el total es 21 y sale tipo A, que es lo que pide el
+    // filtro: con un 2 en todas serían 14 y la lista salía vacía.
+    $infocentro = infocentroConFichaGuardada(
+        ['nombre' => 'Infocentro de muestra — Módulo'],
+        ['puntuaciones' => collect(DimensionPerfilamientoEnum::cases())
+            ->mapWithKeys(fn ($d): array => [$d->value => '3'])
+            ->all()],
+    );
+
+    $listado = $this->actingAs($admin)->get('/admin/fichas?tipo=a&q=muestra')->getContent();
+
+    expect(enlaceDeBorrado($listado, $infocentro, 'href')['query'])
+        ->toMatchArray(['origen' => 'fichas', 'tipo' => 'a', 'q' => 'muestra']);
+});
+
+test('la confirmación devuelve al listado con sus filtros', function () {
+    $admin = AdminFactory::new()->create();
+    $infocentro = infocentroConFichaGuardada(['nombre' => 'Infocentro de muestra — Cancelar']);
+
+    $confirmacion = $this->actingAs($admin)
+        ->get("/admin/fichas/{$infocentro->id}/eliminar?origen=infocentros&ficha=hecha&q=muestra")
+        ->getContent();
+
+    // Cancelar es la salida de emergencia: tiene que devolver al sitio de
+    // origen y no perder el filtro.
+    preg_match('#href="([^"]*\/admin\/infocentros\?[^"]*)"#', $confirmacion, $cancelar);
+    parse_str((string) parse_url(html_entity_decode($cancelar[1] ?? ''), PHP_URL_QUERY), $query);
+
+    expect($query)->toMatchArray(['ficha' => 'hecha', 'q' => 'muestra']);
+});
+
+test('los enlaces sin filtros no cuelgan parámetros vacíos', function () {
+    $admin = AdminFactory::new()->create();
+    $infocentro = infocentroConFichaGuardada(['nombre' => 'Infocentro de muestra — Sin filtros']);
+
+    $listado = $this->actingAs($admin)->get('/admin/fichas')->getContent();
+    $query = enlaceDeBorrado($listado, $infocentro, 'href')['query'];
+
+    expect($query['origen'])->toBe('fichas')
+        ->and(array_filter($query, fn (string $valor): bool => $valor === ''))->toBeEmpty();
+});

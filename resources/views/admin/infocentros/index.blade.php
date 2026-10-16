@@ -105,9 +105,39 @@
                                         @endif
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4 text-end text-sm">
-                                        <a href="{{ route('admin.infocentros.edit', $infocentro) }}" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
-                                            {{ __('Editar') }}
-                                        </a>
+                                        <div class="flex items-center justify-end gap-4">
+                                            <a href="{{ route('admin.infocentros.edit', $infocentro) }}" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+                                                {{ __('Editar') }}
+                                            </a>
+
+                                            {{-- Solo cuando hay ficha: la ruta devuelve
+                                                 404 sin ella, y un botón que lleva a un
+                                                 404 es peor que no tener botón. `Editar`
+                                                 queda sola en su celda, así que sigue siendo
+                                                 la única acción de la fila que no destruye
+                                                 nada. --}}
+                                            @if ($infocentro->diagnostico_guardado_at)
+                                                {{-- Los filtros del listado viajan en el enlace para
+                                                     que la confirmación devuelva aquí con ellos
+                                                     puestos, y `array_filter` deja fuera los vacíos
+                                                     para no colgar `?q=&ficha=` de la URL.
+
+                                                     `route()` toma el tercer argumento como
+                                                     $absolute, no como parámetros extra: los que no
+                                                     son parte de la ruta van dentro del array. --}}
+                                                @php
+                                                    $filtrosFila = array_filter([
+                                                        'q' => $busqueda,
+                                                        'ficha' => $ficha,
+                                                        'page' => $infocentros->currentPage(),
+                                                    ]);
+                                                @endphp
+                                                <a href="{{ route('admin.fichas.eliminar', ['infocentro' => $infocentro, 'origen' => 'infocentros'] + $filtrosFila) }}"
+                                                    class="text-sm text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                                    {{ __('Eliminar la ficha') }}
+                                                </a>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
