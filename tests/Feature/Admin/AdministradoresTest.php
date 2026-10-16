@@ -3,30 +3,10 @@
 use App\Enums\RoleEnum;
 use App\Models\Infocentro;
 use App\Models\User;
-use Database\Factories\AdminFactory;
 use Database\Factories\InfocentroUserFactory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-
-/**
- * Un administrador técnico, el único que entra al módulo de administradores.
- */
-function administradorTecnicoDePrueba(): User
-{
-    $tecnico = User::factory()->create(['infocentro_id' => null]);
-    $tecnico->assignRole(Role::findOrCreate(RoleEnum::AdministradorTecnico));
-
-    return $tecnico;
-}
-
-/**
- * @param  array<string, mixed>  $atributos
- */
-function administradorGeneralDePrueba(array $atributos = []): User
-{
-    return AdminFactory::new()->create($atributos);
-}
 
 test('el técnico entra a todo lo que entra el administrador general', function () {
     $tecnico = administradorTecnicoDePrueba();

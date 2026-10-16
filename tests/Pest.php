@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\PermisoSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\PermissionRegistrar;
@@ -23,7 +24,7 @@ pest()
     ->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->beforeEach(function () {
-        $this->seed(RoleSeeder::class);
+        $this->seed([RoleSeeder::class, PermisoSeeder::class]);
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
     })
@@ -58,4 +59,56 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+/*
+|--------------------------------------------------------------------------
+| Ayudantes de las pruebas de administración
+|--------------------------------------------------------------------------
+|
+| Viven aquí y no en un fichero de pruebas porque los usan varios a la vez, y
+| un fichero de pruebas solo existe para cuando se ejecuta ese fichero.
+|
+*/
+
+use App\Enums\PermisoAdminEnum;
+use App\Enums\RoleEnum;
+use App\Models\User;
+use Database\Factories\AdminFactory;
+use Spatie\Permission\Models\Role;
+
+/**
+ * Un administrador técnico, el único que entra al módulo de administradores.
+ */
+function administradorTecnicoDePrueba(): User
+{
+    $tecnico = User::factory()->create(['infocentro_id' => null]);
+    $tecnico->assignRole(Role::findOrCreate(RoleEnum::AdministradorTecnico));
+
+    // Los cuatro, como el seeder: el middleware no tiene un caso especial para el
+    // técnico, así que si no los tuviera se quedaría fuera de su propio panel.
+    $tecnico->syncPermissions(array_column(PermisoAdminEnum::cases(), 'value'));
+
+    app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+    return $tecnico;
+}
+
+/**
+ * Un administrador general con los cuatro permisos, como los que ya existían
+ * cuando se migraron.
+ *
+ * @param  array<string, mixed>  $atributos
+ */
+function administradorGeneralDePrueba(array $atributos = []): User
+{
+    return AdminFactory::new()->create($atributos);
+}
+
+/**
+ * Un administrador general que solo puede mirar.
+ */
+function administradorQueSoloVe(): User
+{
+    return AdminFactory::new()->soloViendo()->create();
 }

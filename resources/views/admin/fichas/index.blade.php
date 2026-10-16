@@ -145,10 +145,12 @@
                                                     'page' => $fichas->currentPage(),
                                                 ]);
                                             @endphp
+                                            @can('infocentros.eliminar')
                                             <a href="{{ route('admin.fichas.eliminar', ['infocentro' => $ficha, 'origen' => 'fichas'] + $filtrosFila) }}"
                                                 class="text-sm text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
                                                 {{ __('Eliminar la ficha') }}
                                             </a>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>

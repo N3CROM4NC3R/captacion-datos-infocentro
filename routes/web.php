@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PermisoAdminEnum;
 use App\Http\Controllers\Admin\AdministradorController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\FichasController;
@@ -24,25 +25,66 @@ Route::middleware('auth')->group(function () {
 
     // Los dos roles de administración. Spatie separa la lista con `|`.
     Route::middleware('role:administrador|administrador_tecnico')->prefix('admin')->name('admin.')->group(function () {
+        // El panel no lleva middleware a propósito: lo comprueba el propio
+        // controlador. Detrás del middleware, un administrador sin «ver» recibiría
+        // un 403 sin más, cuando lo que necesita es que le digan que su cuenta no
+        // tiene permisos y a quién pedírselos. El contenido —los recuentos de
+        // infocentros— sí queda detrás de «ver».
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
-        Route::resource('infocentros', AdminInfocentroController::class)->except(['show', 'destroy']);
+
+        // Cada ruta lleva su permiso. Se escriben una a una en vez de agrupar
+        // porque el reparto no es uniforme: el listado es de «ver» pero el alta
+        // es de «crear», y un grupo por permiso los dejaría abiertos de más.
+        Route::get('/infocentros', [AdminInfocentroController::class, 'index'])
+            ->middleware('permiso:'.PermisoAdminEnum::Ver->value)
+            ->name('infocentros.index');
+
+        // Las rutas de la resource se escriben una a una en vez de usar
+        // `Route::resource()->middleware([...])`: eso no reparte el middleware por
+        // acción, se lo pone a todas. Con el array por acción, editar exigía
+        // también «crear» y nadie que no pudiera dar de alta un infocentro podía
+        // corregir uno existente.
+        Route::get('/infocentros/create', [AdminInfocentroController::class, 'create'])
+            ->middleware('permiso:'.PermisoAdminEnum::Crear->value)
+            ->name('infocentros.create');
+        Route::post('/infocentros', [AdminInfocentroController::class, 'store'])
+            ->middleware('permiso:'.PermisoAdminEnum::Crear->value)
+            ->name('infocentros.store');
+        Route::get('/infocentros/{infocentro}/edit', [AdminInfocentroController::class, 'edit'])
+            ->middleware('permiso:'.PermisoAdminEnum::Editar->value)
+            ->name('infocentros.edit');
+        Route::match(['put', 'patch'], '/infocentros/{infocentro}', [AdminInfocentroController::class, 'update'])
+            ->middleware('permiso:'.PermisoAdminEnum::Editar->value)
+            ->name('infocentros.update');
 
         // Fuera de la resource a propósito, como las rutas de las fichas: la
         // resource no edita nada y porque borrar un infocentro se lleva su
         // cuenta y su ficha, que es una decisión que merece verse escrita.
-        Route::delete('/infocentros/{infocentro}', [AdminInfocentroController::class, 'destroy'])->name('infocentros.destroy');
+        Route::delete('/infocentros/{infocentro}', [AdminInfocentroController::class, 'destroy'])
+            ->middleware('permiso:'.PermisoAdminEnum::Eliminar->value)
+            ->name('infocentros.destroy');
 
         // Consulta de lo capturado. Va aparte de la resource de arriba porque
         // no edita nada y porque la ruta de la ficha no cuelga del resource.
-        Route::get('/fichas', [FichasController::class, 'index'])->name('fichas.index');
-        Route::get('/fichas/{infocentro}', [FichasController::class, 'show'])->name('fichas.show');
+        Route::get('/fichas', [FichasController::class, 'index'])
+            ->middleware('permiso:'.PermisoAdminEnum::Ver->value)
+            ->name('fichas.index');
+        Route::get('/fichas/{infocentro}', [FichasController::class, 'show'])
+            ->middleware('permiso:'.PermisoAdminEnum::Ver->value)
+            ->name('fichas.show');
 
         // Vaciar una ficha. La confirmación va en página aparte porque el botón
         // está en la fila del listado y es la única barrera: se lee lo que se
         // pierde antes de decidir. Va antes de la ruta de arriba para que quede
         // claro el orden, aunque con un segmento de más no se solapan.
-        Route::get('/fichas/{infocentro}/eliminar', [FichasController::class, 'eliminar'])->name('fichas.eliminar');
-        Route::delete('/fichas/{infocentro}', [FichasController::class, 'destroy'])->name('fichas.destroy');
+        // Eliminar una ficha y vaciarla se lleva el mismo trabajo de campo
+        // que borrar el infocentro, así que comparten permiso.
+        Route::get('/fichas/{infocentro}/eliminar', [FichasController::class, 'eliminar'])
+            ->middleware('permiso:'.PermisoAdminEnum::Eliminar->value)
+            ->name('fichas.eliminar');
+        Route::delete('/fichas/{infocentro}', [FichasController::class, 'destroy'])
+            ->middleware('permiso:'.PermisoAdminEnum::Eliminar->value)
+            ->name('fichas.destroy');
 
         // Gestión de los administradores generales. Solo el técnico entra aquí:
         // un grupo anidado dentro del de arriba, para que el general siga viendo

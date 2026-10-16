@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\PermisoAdminEnum;
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -13,6 +14,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 /**
  * Gestión de las cuentas de administrador general.
@@ -78,6 +80,7 @@ class AdministradorController extends Controller
         ]);
 
         $admin->assignRole(Role::findOrCreate(RoleEnum::Administrador));
+        $this->asignarPermisos($admin, $request->input('permisos', []));
 
         return redirect()
             ->route('admin.administradores.index')
@@ -114,6 +117,7 @@ class AdministradorController extends Controller
         }
 
         $administrador->save();
+        $this->asignarPermisos($administrador, $request->input('permisos', []));
 
         return redirect()
             ->route('admin.administradores.index')
@@ -141,6 +145,31 @@ class AdministradorController extends Controller
         return redirect()
             ->route('admin.administradores.index')
             ->with('status', "Administrador general «{$username}» eliminado.");
+    }
+
+    /**
+     * Sync the permissions a general administrator holds.
+     *
+     * Vienen del formulario y se filtran contra el enum antes de tocar nada: un
+     * `permisos` con un nombre que no existe no llega a `syncPermissions` ni
+     * podría colarse en la tabla de permisos de Spatie.
+     *
+     * @param  array<int, string>  $pedidos
+     */
+    private function asignarPermisos(User $administrador, array $pedidos): void
+    {
+        $validos = collect(PermisoAdminEnum::cases())
+            ->filter(fn (PermisoAdminEnum $permiso): bool => in_array($permiso->value, $pedidos, true))
+            ->map(fn (PermisoAdminEnum $permiso): string => $permiso->value)
+            ->all();
+
+        $administrador->syncPermissions($validos);
+
+        // Spatie cachea la lista de permisos del proceso. Sin limpiarlo, el
+        // cambio no se vería hasta que esa caché se vaciara por otra vía, que
+        // es justo el forgotCachedPermissions que ya hace el proyecto con los
+        // roles.
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 
     /**

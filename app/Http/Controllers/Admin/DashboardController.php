@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\TipoInfocentroEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Infocentro;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -22,8 +23,16 @@ class DashboardController extends Controller
      * distinta —`true`/`false` frente a `1`/`0`, y la nula como cadena vacía— y
      * leer el grupo por clave solo funcionaría en uno de los dos motores.
      */
-    public function __invoke(): View
+    public function __invoke(Request $request): View
     {
+        // La ruta exige el permiso «ver», así que llegar aquí sin él solo pasa
+        // si al técnico le quitó también ese. En vez de una página de error se le
+        // dice qué ha ocurrido y a quién pedirlo: un 403 seco no dice nada de
+        // qué hacer.
+        if ($request->user()->cant('infocentros.ver')) {
+            return view('admin.sin-permisos');
+        }
+
         $activos = Infocentro::where('activo', true)->count();
         $inactivos = Infocentro::where('activo', false)->count();
 

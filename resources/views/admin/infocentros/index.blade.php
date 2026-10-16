@@ -5,9 +5,11 @@
                 {{ __('Infocentros') }}
             </h2>
 
+            @can('infocentros.crear')
             <a href="{{ route('admin.infocentros.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                 {{ __('Nuevo infocentro') }}
             </a>
+            @endcan
         </div>
     </x-slot>
 
@@ -164,9 +166,11 @@
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4 text-end text-sm">
                                         <div class="flex items-center justify-end gap-4">
+                                            @can('infocentros.editar')
                                             <a href="{{ route('admin.infocentros.edit', $infocentro) }}" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
                                                 {{ __('Editar') }}
                                             </a>
+                                            @endcan
 
                                             {{-- Solo cuando hay ficha: la ruta devuelve
                                                  404 sin ella, y un botón que lleva a un
@@ -194,19 +198,23 @@
                                                         'page' => $infocentros->currentPage(),
                                                     ]);
                                                 @endphp
+                                                @can('infocentros.eliminar')
                                                 <a href="{{ route('admin.fichas.eliminar', ['infocentro' => $infocentro, 'origen' => 'infocentros'] + $filtrosFila) }}"
                                                     class="text-sm text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
                                                     {{ __('Eliminar la ficha') }}
                                                 </a>
+                                                @endcan
                                             @endif
 
                                             {{-- Abre el modal. No borra nada: el borrado solo
                                                  pasa por el formulario de dentro. --}}
-                                            <button type="button"
-                                                @click="$dispatch('abrir-infocentro', {{ $infocentro->id }})"
-                                                class="text-sm text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                                                {{ __('Eliminar infocentro') }}
-                                            </button>
+                                            @can('infocentros.eliminar')
+                                                <button type="button"
+                                                    @click="$dispatch('abrir-infocentro', {{ $infocentro->id }})"
+                                                    class="text-sm text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                                    {{ __('Eliminar infocentro') }}
+                                                </button>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>

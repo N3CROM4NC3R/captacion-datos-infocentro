@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PermisoAdminEnum;
 use App\Enums\RoleEnum;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 /**
  * Seed the administration accounts.
@@ -51,6 +53,16 @@ class AdminUserSeeder extends Seeder
             );
 
             $admin->assignRole(Role::findOrCreate($rol));
+
+            // Las dos cuentas sembradas se llevan los cuatro permisos. El
+            // general porque es lo que podía hacer todo el mundo hasta que
+            // estos permisos existieron —si no, un despliegue le quitaría lo que
+            // tenía—, y el técnico porque así el middleware no necesita un caso
+            // especial para él. Los que se dan de alta luego desde el panel sí
+            // nacen con solo ver.
+            $admin->syncPermissions(array_column(PermisoAdminEnum::cases(), 'value'));
         }
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }
