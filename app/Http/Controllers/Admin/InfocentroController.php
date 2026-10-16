@@ -17,16 +17,38 @@ class InfocentroController extends Controller
 {
     /**
      * Display a listing of the infocentros.
+     *
+     * Los filtros van en la query y no en el navegador: así el estado queda
+     * en la URL, se puede compartir y sobrevive a la paginación.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
+        $ficha = $request->query('ficha');
+        $busqueda = trim((string) $request->query('q', ''));
+
         $infocentros = Infocentro::query()
             ->with('user')
+            ->when($ficha === 'hecha', fn ($query) => $query->whereNotNull('diagnostico_guardado_at'))
+            ->when($ficha === 'pendiente', fn ($query) => $query->whereNull('diagnostico_guardado_at'))
+            ->when($busqueda !== '', fn ($query) => $query->where(function ($interno) use ($busqueda): void {
+                // `LOWER(...) LIKE` en vez de `ilike`: la base de producción es
+                // PostgreSQL pero las pruebas corren sobre SQLite, y `ilike` no
+                // existe ahí. Bajar las dos partes cumple en los dos motores.
+                $patron = '%'.mb_strtolower($busqueda).'%';
+                $interno->whereRaw('LOWER(nombre) LIKE ?', [$patron])
+                    ->orWhereRaw('LOWER(codigo) LIKE ?', [$patron]);
+            }))
             ->orderBy('nombre')
-            ->paginate(15);
+            ->paginate(15)
+            // Sin esto, `links()` regenera la paginación y tira los filtros.
+            ->withQueryString();
 
         return view('admin.infocentros.index', [
             'infocentros' => $infocentros,
+            'ficha' => in_array($ficha, ['hecha', 'pendiente'], true) ? $ficha : '',
+            'busqueda' => $busqueda,
+            'conFicha' => Infocentro::whereNotNull('diagnostico_guardado_at')->count(),
+            'total' => Infocentro::count(),
         ]);
     }
 

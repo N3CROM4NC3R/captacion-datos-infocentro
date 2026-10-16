@@ -99,6 +99,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
     'tipo_infocentro',
     'prioridad_intervencion',
     'recomendaciones',
+    'diagnostico_guardado_at',
+    'diagnostico_actualizado_at',
 ])]
 class Infocentro extends Model
 {
@@ -229,6 +231,8 @@ class Infocentro extends Model
             'puntuacion_total' => 'integer',
             'tipo_infocentro' => TipoInfocentroEnum::class,
             'prioridad_intervencion' => PrioridadIntervencionEnum::class,
+            'diagnostico_guardado_at' => 'datetime',
+            'diagnostico_actualizado_at' => 'datetime',
         ];
     }
 

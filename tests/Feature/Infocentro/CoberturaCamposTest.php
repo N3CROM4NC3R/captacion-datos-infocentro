@@ -14,10 +14,13 @@ use Illuminate\Support\Facades\Schema;
 $camposSoloAdmin = ['codigo'];
 
 test('todo campo que la ficha edita tiene regla de validación', function () use ($camposSoloAdmin) {
-    // `puntuacion_total` y `tipo_infocentro` no los escribe nadie: se deducen
-    // de `puntuaciones` en cada guardado, así que no tienen por qué tener
-    // regla propia.
-    $derivados = ['puntuacion_total', 'tipo_infocentro'];
+    // `puntuacion_total`, `tipo_infocentro` y las dos fechas de la ficha no los
+    // escribe nadie: se deducen en cada guardado, así que no tienen por qué
+    // tener regla propia.
+    $derivados = [
+        'puntuacion_total', 'tipo_infocentro',
+        'diagnostico_guardado_at', 'diagnostico_actualizado_at',
+    ];
 
     $editables = collect((new Infocentro)->getFillable())
         ->reject(fn (string $campo): bool => in_array($campo, $camposSoloAdmin, true)

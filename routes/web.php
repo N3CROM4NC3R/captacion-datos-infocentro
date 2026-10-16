@@ -2,6 +2,7 @@
 
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\FichasController;
 use App\Http\Controllers\Admin\InfocentroController as AdminInfocentroController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\DiagnosticoController;
@@ -24,6 +25,11 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:administrador')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
         Route::resource('infocentros', AdminInfocentroController::class)->except(['show', 'destroy']);
+
+        // Consulta de lo capturado. Va aparte de la resource de arriba porque
+        // no edita nada y porque la ruta de la ficha no cuelga del resource.
+        Route::get('/fichas', [FichasController::class, 'index'])->name('fichas.index');
+        Route::get('/fichas/{infocentro}', [FichasController::class, 'show'])->name('fichas.show');
     });
 
     Route::middleware('role:infocentro')->prefix('infocentro')->name('infocentro.')->group(function () {
