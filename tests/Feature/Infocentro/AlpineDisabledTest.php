@@ -111,7 +111,31 @@ test('los tres desplegables se guardan y se repueblan en cascada', function () {
     // pueden marcarse en el HTML: lo que debe llegar es el valor en el payload
     // que Alpine usa para seleccionarlas. `@js()` sobre un entero emite un
     // número desnudo, no JSON.
-    expect($html)->toContain('seleccion:')
-        ->and($html)->toContain('municipio: '.$municipio->id)
-        ->and($html)->toContain('parroquia: '.$parroquia->id);
+    // Municipio y parroquia pintan sus opciones con <template x-for>, así que no
+    // pueden marcarse en el HTML: lo que debe llegar es el valor en el payload
+    // que Alpine usa para seleccionarlas.
+    //
+    // Con la ficha ya guardada la página es la de solo lectura, que publica el
+    // payload como JSON. Se decodifica en vez de buscar texto suelto, porque
+    // `@js()` escapa las comillas y el formato del formulario editable no es
+    // el de aquí.
+    expect($html)->toContain('seleccion')
+        ->and(payloadDeFicha($html)['seleccion'])
+        ->toMatchArray([
+            'estado' => $estado->id,
+            'municipio' => $municipio->id,
+            'parroquia' => $parroquia->id,
+        ]);
 });
+
+/**
+ * El payload `window.datosFicha` de la página, ya decodificado.
+ *
+ * @return array<string, mixed>
+ */
+function payloadDeFicha(string $html): array
+{
+    preg_match("/window\\.datosFicha = JSON\\.parse\\('(.*?)'\\)/s", $html, $encontrado);
+
+    return json_decode(str_replace(['\\u0022', '\\\\'], ['"', '\\'], $encontrado[1] ?? '{}'), true) ?: [];
+}

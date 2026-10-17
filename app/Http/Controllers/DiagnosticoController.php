@@ -24,17 +24,30 @@ class DiagnosticoController extends Controller
 
     /**
      * Display the diagnosis form for the signed in user's infocentro.
+     *
+     * Una ficha ya guardada se enseña en solo lectura en vez del formulario: es
+     * lo mismo que ve el administrador desde el panel, con los mismos partials
+     * dentro de un `fieldset disabled`.
      */
     public function edit(Request $request): View
     {
-        return view('infocentro.diagnostico', $this->datosFicha(
-            $request->user()->infocentro,
-            $request,
-        ));
+        $infocentro = $request->user()->infocentro;
+
+        $vista = $infocentro->diagnostico_guardado_at === null
+            ? 'infocentro.diagnostico'
+            : 'infocentro.diagnostico-guardada';
+
+        return view($vista, $this->datosFicha($infocentro, $request));
     }
 
     /**
      * Persist the diagnosis form for the signed in user's infocentro.
+     *
+     * El corte de «ya está guardada» no está aquí sino en el middleware
+     * `ficha-abierta`: el `FormRequest` de abajo valida antes de que esta acción
+     * se ejecute, así que un corte aquí llegaría tarde y quien reintentara el
+     * guardado se llevaría los errores de validación de un formulario que ya
+     * no puede usarse.
      */
     public function update(GuardarDiagnosticoRequest $request): RedirectResponse
     {

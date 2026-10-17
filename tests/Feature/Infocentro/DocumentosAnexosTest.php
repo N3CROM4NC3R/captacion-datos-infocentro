@@ -217,10 +217,11 @@ test('un input de archivo vacío no cuenta como documento', function () {
     expect(DocumentoAnexo::count())->toBe(0);
 });
 
-test('guardar la ficha de nuevo conserva los documentos ya subidos', function () {
+test('una ficha guardada no deja ni corregir campos ni tocar los documentos', function () {
     $user = InfocentroUserFactory::new()->create();
 
     guardarFichaComoNavegador($user, [
+        'telefono' => '04121234567',
         'documentos' => [
             DocumentoAnexoEnum::FotosEspacio->value => pdfFalso('espacio.pdf'),
             DocumentoAnexoEnum::ConvenioSac->value => pdfFalso('convenio.pdf'),
@@ -228,39 +229,47 @@ test('guardar la ficha de nuevo conserva los documentos ya subidos', function ()
     ])->assertSessionHasNoErrors();
 
     $primera = DocumentoAnexo::orderBy('tipo')->get()->keyBy(fn ($d) => $d->tipo->value);
+    $telefono = $user->infocentro->refresh()->telefono;
 
-    // El facilitador corrige un campo de la sección B y vuelve a guardar sin
-    // volver a elegir los archivos. Un input de archivo llega vacío cuando no
-    // se toca, así que borrarlos todos tiraría lo ya subido.
+    // Antes esto comprobaba que un segundo guardado conservaba los archivos ya
+    // subidos, porque un input de archivo llega vacío cuando no se toca y
+    // borrarlos todos tiraría lo ya subido. Con la ficha cerrada ese segundo
+    // guardado no entra: ni toca el campo ni los documentos.
     guardarFichaComoNavegador($user, [
-        'telefono' => '04121234567',
-        'documentos' => [DocumentoAnexoEnum::FotosEspacio->value => pdfFalso()],
-    ])->assertSessionHasNoErrors();
+        'telefono' => '00000000',
+        'documentos' => [DocumentoAnexoEnum::FotosEspacio->value => pdfFalso('otro.pdf')],
+    ])->assertSessionHas('aviso');
 
     expect(DocumentoAnexo::count())->toBe(2)
-        ->and($user->infocentro->documentosAnexos()->where('tipo', 'fotos_espacio')->sole()->created_at)
-        ->toEqual($primera['fotos_espacio']->created_at)
+        ->and($user->infocentro->documentosAnexos()->where('tipo', 'fotos_espacio')->sole()->nombre_original)
+        ->toBe($primera['fotos_espacio']->nombre_original)
         ->and($user->infocentro->documentosAnexos()->where('tipo', 'convenio_sac')->sole()->created_at)
         ->toEqual($primera['convenio_sac']->created_at)
-        ->and($user->infocentro->refresh()->telefono)->toBe('04121234567');
+        ->and($user->infocentro->refresh()->telefono)->toBe($telefono);
 });
 
-test('volver a subir un documento del mismo tipo lo sustituye', function () {
+test('un documento ya subido no se puede sustituir', function () {
     $user = InfocentroUserFactory::new()->create();
 
     guardarFichaComoNavegador($user, [
         'documentos' => [DocumentoAnexoEnum::FotosEspacio->value => pdfFalso('v1.pdf')],
     ])->assertSessionHasNoErrors();
 
+    $ruta = DocumentoAnexo::sole()->ruta;
+
+    // Antes este test comprobaba que resubir el mismo tipo lo sustituía. Con la
+    // ficha cerrada el segundo guardado no entra, así que el documento que se
+    // queda es el primero.
     guardarFichaComoNavegador($user, [
         'documentos' => [DocumentoAnexoEnum::FotosEspacio->value => pdfFalso('v2.pdf')],
-    ])->assertSessionHasNoErrors();
+    ])->assertSessionHas('aviso');
 
     expect(DocumentoAnexo::count())->toBe(1)
-        ->and(DocumentoAnexo::sole()->nombre_original)->toBe('v2.pdf');
+        ->and(DocumentoAnexo::sole()->nombre_original)->toBe('v1.pdf')
+        ->and(Storage::disk('local')->exists($ruta))->toBeTrue();
 });
 
-test('marcar un documento para eliminar borra el archivo del disco', function () {
+test('un documento guardado ya no se puede quitar desde la ficha', function () {
     $user = InfocentroUserFactory::new()->create();
 
     guardarFichaComoNavegador($user, [
@@ -271,14 +280,16 @@ test('marcar un documento para eliminar borra el archivo del disco', function ()
 
     expect(Storage::disk('local')->exists($ruta))->toBeTrue();
 
+    // Antes esto comprobaba que marcar el documento para eliminar borraba su
+    // archivo. Con la ficha cerrada el guardado no entra, así que el documento
+    // sigue ahí con su archivo. Quitarlo ahora es cosa del administrador, que
+    // vacía la ficha entera.
     guardarFichaComoNavegador($user, [
         'documentos_eliminar' => [DocumentoAnexoEnum::FotosEspacio->value => '1'],
-    ])->assertSessionHasNoErrors();
+    ])->assertSessionHas('aviso');
 
-    expect(DocumentoAnexo::count())->toBe(0)
-        ->and(Storage::disk('local')->exists($ruta))->toBeFalse(
-            'El archivo debe desaparecer del disco al quitar el documento.',
-        );
+    expect(DocumentoAnexo::count())->toBe(1)
+        ->and(Storage::disk('local')->exists($ruta))->toBeTrue();
 });
 
 test('el infocentro descarga su propio documento', function () {

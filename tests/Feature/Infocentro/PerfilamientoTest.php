@@ -336,12 +336,15 @@ test('los tres rangos cubren los 21 totales sin huecos ni solapes', function () 
         ->and(max($umbrales))->toBeLessThan(DimensionPerfilamientoEnum::TOTAL_MAXIMO);
 });
 
-test('guardar de nuevo recalcula el total al cambiar las puntuaciones', function () {
+test('una ficha guardada conserva su total aunque se manden otras puntuaciones', function () {
     $user = InfocentroUserFactory::new()->create();
 
     guardarPerfil($user, puntuacionesDeEjemplo())->assertSessionHasNoErrors();
     expect($user->infocentro->refresh()->tipo_infocentro)->toBe(TipoInfocentroEnum::A);
 
+    // El total y la clasificación se deducen en cada guardado, pero como la
+    // ficha se cierra al guardarla, ya no hay un segundo guardado donde
+    // recalcularlos: se quedan los del primero.
     guardarPerfil($user, puntuacionesDeEjemplo([
         'conectividad' => 0,
         'operatividad' => 0,
@@ -350,12 +353,12 @@ test('guardar de nuevo recalcula el total al cambiar las puntuaciones', function
         'articulacion_comunitaria' => 0,
         'oferta_formativa' => 0,
         'vinculacion_mincyt' => 0,
-    ]))->assertSessionHasNoErrors();
+    ]))->assertSessionHas('aviso');
 
     $infocentro = $user->infocentro->refresh();
 
-    expect($infocentro->puntuacion_total)->toBe(0)
-        ->and($infocentro->tipo_infocentro)->toBe(TipoInfocentroEnum::C);
+    expect($infocentro->puntuacion_total)->toBe(21)
+        ->and($infocentro->tipo_infocentro)->toBe(TipoInfocentroEnum::A);
 });
 
 test('las puntuaciones y la clasificación vuelven a pintarse al recargar', function () {
@@ -383,13 +386,15 @@ test('las puntuaciones y la clasificación vuelven a pintarse al recargar', func
 test('una puntuación rechazada no borra lo que ya estaba guardado', function () {
     $user = InfocentroUserFactory::new()->create();
 
-    guardarPerfil($user, puntuacionesDeEjemplo([
-        'conectividad' => 2,
-    ]))->assertSessionHasNoErrors();
+    // La ficha arranca con una conectividad ya guardada. Es un estado que no
+    // sale de un guardado por el formulario —guardar cierra la ficha— sino de
+    // los datos que trae el infocentro; sirve para distinguir «se pinta lo que
+    // se acaba de enviar» de «se pinta lo que hay en el registro».
+    $user->infocentro->update(['puntuaciones' => ['conectividad' => 5]]);
 
-    // Segundo guardado donde la conectividad baja a 1 pero falta otra
-    // dimensión: la vista debe enseñar lo que se acaba de enviar, no lo que
-    // había quedado guardado antes del rechazo.
+    // Guardado donde la conectividad baja a 1 pero falta otra dimensión: la
+    // vista debe enseñar lo que se acaba de enviar, no lo que había quedado
+    // guardado antes del rechazo.
     $puntuaciones = puntuacionesDeEjemplo(['conectividad' => 1]);
     unset($puntuaciones[DimensionPerfilamientoEnum::Facilitadores->value]);
 

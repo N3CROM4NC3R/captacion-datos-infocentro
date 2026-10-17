@@ -78,7 +78,7 @@ test('guardar la ficha deja constancia de cuándo se hizo', function () {
         ->and($infocentro->diagnostico_actualizado_at)->not->toBeNull();
 });
 
-test('la fecha del primer guardado no se sobrescribe al volver a guardar', function () {
+test('una ficha guardada no se vuelve a escribir', function () {
     $user = InfocentroUserFactory::new()->create();
     $infocentro = $user->infocentro;
 
@@ -88,15 +88,18 @@ test('la fecha del primer guardado no se sobrescribe al volver a guardar', funct
 
     $this->travel(1)->days();
 
-    guardarFichaDePrueba($infocentro, ['telefono' => '04121234567'])->assertSessionHasNoErrors();
+    // Antes esto volaba: la fecha del primer guardado se quedaba clavada y la
+    // última edición avanzaba. Ahora la ficha se cierra al guardarla y este
+    // segundo intento no llega a tocar nada.
+    guardarFichaDePrueba($infocentro, ['telefono' => '04121234567'])
+        ->assertRedirect(route('infocentro.diagnostico.edit'))
+        ->assertSessionHas('aviso');
 
     $infocentro->refresh();
 
-    // `guardado_at` es la marca de que se completó, así que se queda clavada;
-    // `actualizado_at` es la de la última edición, y sí avanza.
     expect($infocentro->diagnostico_guardado_at->timestamp)->toBe($primera->timestamp)
-        ->and($infocentro->diagnostico_actualizado_at->timestamp)->toBeGreaterThan($primera->timestamp)
-        ->and($infocentro->telefono)->toBe('04121234567');
+        ->and($infocentro->diagnostico_actualizado_at->timestamp)->toBe($primera->timestamp)
+        ->and($infocentro->telefono)->not->toBe('04121234567');
 });
 
 test('un guardado rechazado no deja marca de ficha hecha', function () {

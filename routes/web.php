@@ -101,7 +101,10 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:infocentro')->prefix('infocentro')->name('infocentro.')->group(function () {
         Route::get('/diagnostico', [DiagnosticoController::class, 'edit'])->name('diagnostico.edit');
-        Route::put('/diagnostico', [DiagnosticoController::class, 'update'])->name('diagnostico.update');
+        // Una ficha guardada se cierra: el middleware corta antes de validar.
+        Route::put('/diagnostico', [DiagnosticoController::class, 'update'])
+            ->middleware('ficha-abierta')
+            ->name('diagnostico.update');
 
         Route::get('/catalogo/municipios', [CatalogoController::class, 'municipios'])->name('catalogo.municipios');
         Route::get('/catalogo/parroquias', [CatalogoController::class, 'parroquias'])->name('catalogo.parroquias');
@@ -114,7 +117,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';

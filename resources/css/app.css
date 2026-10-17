@@ -8,6 +8,17 @@
     [x-cloak] {
         display: none !important;
     }
+
+    /* Los campos dentro de un `fieldset disabled` —la ficha ya guardada, tal
+       como se ve en el panel y en la del facilitador— no responden, pero con
+       estos estilos de Tailwind se ven igual que los editables y parece un
+       fallo. Atenuarlos deja claro que ahí no se escribe. */
+    fieldset[disabled] input:not([type='hidden']),
+    fieldset[disabled] select,
+    fieldset[disabled] textarea {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
 }
 
 @theme {
